@@ -1,0 +1,1077 @@
+{
+  "civilizations": [
+    {
+      "id": "fertile-crescent",
+      "name": "Fertile Crescent",
+      "region": "Southwest Asia",
+      "hearth": { "lat": 33.5, "lng": 43.0 },
+      "axisContext": "east-west",
+      "color": "#00a896",
+      "sortOrder": 1,
+      "summary": "The Fertile Crescent — spanning modern Iraq, Syria, and the Levant — hosted the densest concentration of wild domesticable plants and large mammals on Earth. Its east–west latitude meant innovations could diffuse rapidly across similar climates. It became the template for civilizational complexity that Diamond's thesis treats as the paradigm case.",
+      "chainStrength": {
+        "biogeography": "strong",
+        "domesticable-species": "strong",
+        "food-production": "strong",
+        "surplus": "strong",
+        "specialization": "strong",
+        "writing": "strong",
+        "technology": "strong",
+        "political-complexity": "strong",
+        "epidemic-disease": "strong"
+      }
+    },
+    {
+      "id": "east-asia",
+      "name": "East Asia",
+      "region": "China (Yellow & Yangtze Rivers)",
+      "hearth": { "lat": 34.0, "lng": 113.0 },
+      "axisContext": "east-west",
+      "color": "#b8960c",
+      "sortOrder": 2,
+      "summary": "The Yellow and Yangtze river valleys independently developed agriculture based on millet and rice — entirely separate from the Fertile Crescent. Its east–west orientation facilitated rapid diffusion across temperate East Asia. China developed one of the world's longest-running literate, bureaucratic states.",
+      "chainStrength": {
+        "biogeography": "strong",
+        "domesticable-species": "strong",
+        "food-production": "strong",
+        "surplus": "strong",
+        "specialization": "strong",
+        "writing": "strong",
+        "technology": "strong",
+        "political-complexity": "strong",
+        "epidemic-disease": "strong"
+      }
+    },
+    {
+      "id": "indus-valley",
+      "name": "Indus Valley",
+      "region": "South Asia (Pakistan & NW India)",
+      "hearth": { "lat": 25.0, "lng": 67.0 },
+      "axisContext": "east-west",
+      "color": "#5a7fb5",
+      "sortOrder": 3,
+      "summary": "The Indus Valley civilization reached remarkable scale and standardization — uniform weights, planned cities with sewerage — before a still-debated collapse around 1900 BCE. Its writing system remains undeciphered, and whether it constitutes a 'state' is genuinely contested. Diamond treats it as a beneficiary of Fertile Crescent crop and animal diffusion.",
+      "chainStrength": {
+        "biogeography": "strong",
+        "domesticable-species": "strong",
+        "food-production": "strong",
+        "surplus": "strong",
+        "specialization": "strong",
+        "writing": "moderate",
+        "technology": "strong",
+        "political-complexity": "moderate",
+        "epidemic-disease": "moderate"
+      }
+    },
+    {
+      "id": "mesoamerica",
+      "name": "Mesoamerica",
+      "region": "Mexico & Central America",
+      "hearth": { "lat": 19.0, "lng": -99.0 },
+      "axisContext": "north-south",
+      "color": "#7a9e5c",
+      "sortOrder": 4,
+      "summary": "Mesoamerica independently developed maize, writing, monumental architecture, and sophisticated calendars. However, it had almost no domesticable large mammals: no horse, cattle, sheep, or goats. This single gap cascaded — no plough, no wheel for transport, fewer crowd diseases to confer immunity. The north–south axis slowed crop and idea diffusion across climate zones.",
+      "chainStrength": {
+        "biogeography": "moderate",
+        "domesticable-species": "weak",
+        "food-production": "moderate",
+        "surplus": "moderate",
+        "specialization": "moderate",
+        "writing": "moderate",
+        "technology": "moderate",
+        "political-complexity": "moderate",
+        "epidemic-disease": "weak"
+      }
+    },
+    {
+      "id": "andean",
+      "name": "Andean South America",
+      "region": "Peru, Bolivia & the Pacific coast",
+      "hearth": { "lat": -13.0, "lng": -74.0 },
+      "axisContext": "north-south",
+      "color": "#c4966a",
+      "sortOrder": 5,
+      "summary": "The Andes domesticated the llama and alpaca — the only large domesticated animals in the Americas — alongside a diverse crop suite (potato, quinoa, cotton). The coastal desert and highland divide created a productive complementary ecology. Caral, possibly the oldest city in the Americas, predates the Egyptian pyramids. The absence of a script (quipu's writing status is debated) remains a distinctive feature.",
+      "chainStrength": {
+        "biogeography": "moderate",
+        "domesticable-species": "moderate",
+        "food-production": "strong",
+        "surplus": "moderate",
+        "specialization": "moderate",
+        "writing": "weak",
+        "technology": "moderate",
+        "political-complexity": "moderate",
+        "epidemic-disease": "weak"
+      }
+    },
+    {
+      "id": "sub-saharan-sahel",
+      "name": "Sub-Saharan Sahel",
+      "region": "West & Central Africa",
+      "hearth": { "lat": 12.0, "lng": 0.0 },
+      "axisContext": "fragmented",
+      "color": "#c0392b",
+      "sortOrder": 6,
+      "summary": "The Sahel and sub-Saharan Africa independently domesticated sorghum, pearl millet, and African yams. African pastoralists independently domesticated cattle. Intriguingly, sub-Saharan Africa developed iron smelting among the earliest in the world — possibly independently of Eurasian iron. Diamond's thesis is most contested here: Africa's ecological barriers (the Sahara, tropical disease belts) and geographic fragmentation, not any lack of ingenuity, shaped its divergent trajectory.",
+      "chainStrength": {
+        "biogeography": "moderate",
+        "domesticable-species": "moderate",
+        "food-production": "moderate",
+        "surplus": "moderate",
+        "specialization": "moderate",
+        "writing": "absent",
+        "technology": "moderate",
+        "political-complexity": "moderate",
+        "epidemic-disease": "context-specific"
+      }
+    },
+    {
+      "id": "eastern-north-america",
+      "name": "Eastern North America",
+      "region": "Mississippi Valley & Eastern Woodlands",
+      "hearth": { "lat": 38.5, "lng": -90.0 },
+      "axisContext": "north-south",
+      "color": "#8a7aad",
+      "sortOrder": 7,
+      "summary": "Eastern North America developed its own agricultural complex based on sunflower, goosefoot, and other crops — independent of Mesoamerican maize, which arrived late (~700 CE). The Hopewell interaction sphere created vast trade networks. Cahokia (~1000–1200 CE) was among the largest pre-Columbian cities north of Mexico. The north–south axis and limited crop suite constrained political scale.",
+      "chainStrength": {
+        "biogeography": "weak",
+        "domesticable-species": "weak",
+        "food-production": "weak",
+        "surplus": "weak",
+        "specialization": "weak",
+        "writing": "absent",
+        "technology": "weak",
+        "political-complexity": "weak",
+        "epidemic-disease": "absent"
+      }
+    },
+    {
+      "id": "new-guinea",
+      "name": "New Guinea Highlands",
+      "region": "Papua New Guinea",
+      "hearth": { "lat": -5.5, "lng": 145.0 },
+      "axisContext": "isolated",
+      "color": "#a0a8b0",
+      "sortOrder": 8,
+      "summary": "New Guinea developed one of the world's earliest agricultural systems — taro, yam, and banana cultivation by 7,000 BCE. Yet state-level political organization never emerged. This is a crucial puzzle for Diamond's framework: agriculture alone does not produce states. Scholars point to the rugged highland terrain fragmenting populations, the absence of domesticable large mammals, and ecological constraints on surplus. New Guinea illustrates that the causal chain can be strong at one link and broken at another.",
+      "chainStrength": {
+        "biogeography": "moderate",
+        "domesticable-species": "weak",
+        "food-production": "strong",
+        "surplus": "weak",
+        "specialization": "weak",
+        "writing": "absent",
+        "technology": "weak",
+        "political-complexity": "absent",
+        "epidemic-disease": "absent"
+      }
+    },
+    {
+      "id": "aboriginal-australia",
+      "name": "Aboriginal Australia",
+      "region": "Australia",
+      "hearth": { "lat": -25.0, "lng": 134.0 },
+      "axisContext": "isolated",
+      "color": "#8a7d65",
+      "sortOrder": 9,
+      "summary": "Aboriginal Australians developed extraordinarily sophisticated systems of land management, astronomy, and long-distance exchange — but not agriculture in the strict sense. The continent had no native domesticable cereals and no domesticable large mammals besides the dingo (itself an introduction). Diamond treats Australia as the deliberate contrast case: geographic isolation, an unfavorable endowment of species, and the world's most arid inhabited continent produced a different but not lesser form of cultural complexity.",
+      "chainStrength": {
+        "biogeography": "weak",
+        "domesticable-species": "absent",
+        "food-production": "absent",
+        "surplus": "absent",
+        "specialization": "absent",
+        "writing": "absent",
+        "technology": "absent",
+        "political-complexity": "absent",
+        "epidemic-disease": "absent"
+      }
+    }
+  ],
+
+  "milestones": [
+    {
+      "id": "fc-sedentism",
+      "civilizationId": "fertile-crescent",
+      "type": "sedentism",
+      "title": "Natufian Sedentism",
+      "date": -12500,
+      "contested": false,
+      "causalExplanation": "The Natufian culture of the Levant established permanent or semi-permanent villages — the first sedentary hunter-gatherers on record — by intensively harvesting wild cereals. Sedentism preceded and enabled agriculture: people began storing grain, tending wild stands, and accidentally selecting for traits useful to humans.",
+      "caveat": "Some scholars argue Natufian sedentism was a response to the Younger Dryas climatic crisis, not a step on an inevitable trajectory toward agriculture."
+    },
+    {
+      "id": "fc-plant-dom",
+      "civilizationId": "fertile-crescent",
+      "type": "plant-domestication",
+      "title": "Founder Crop Domestication",
+      "date": -9500,
+      "contested": false,
+      "causalExplanation": "The Fertile Crescent was home to the ancestors of emmer wheat, einkorn wheat, barley, lentils, peas, and flax — the 'founder crops'. Wild ancestors were large-seeded, easy to store, and genetically primed for rapid domestication. No other region had an equivalent density of nutritious, storable, domesticable plants.",
+      "caveat": "The transition to agriculture was gradual and regionally variable. Recent work suggests multiple independent domestication events within the Fertile Crescent rather than a single origin point."
+    },
+    {
+      "id": "fc-animal-dom",
+      "civilizationId": "fertile-crescent",
+      "type": "animal-domestication",
+      "title": "Domestication of Sheep, Goat, Cattle & Pig",
+      "date": -9000,
+      "contested": false,
+      "causalExplanation": "The Fertile Crescent's wild fauna included the progenitors of four of the world's most important domesticated animals: sheep (from mouflon), goat (from bezoar ibex), cattle (from aurochs), and pig (from wild boar). These animals provided meat, milk, fiber, traction, and manure — and were the source of the crowd diseases (smallpox, measles, influenza) that later devastated populations without livestock immunity.",
+      "caveat": "Cattle were domesticated independently at least twice — in Southwest Asia and in Africa — complicating simple diffusion narratives."
+    },
+    {
+      "id": "fc-pottery",
+      "civilizationId": "fertile-crescent",
+      "type": "pottery",
+      "title": "Pottery Production",
+      "date": -7000,
+      "contested": false,
+      "causalExplanation": "Pottery enabled the storage, cooking, and fermentation of food surpluses — extending the shelf life of grain, allowing dairy processing, and enabling new dietary patterns. It followed rather than led agriculture in Southwest Asia.",
+      "caveat": null
+    },
+    {
+      "id": "fc-metallurgy",
+      "civilizationId": "fertile-crescent",
+      "type": "metallurgy",
+      "title": "Copper Smelting",
+      "date": -5000,
+      "contested": false,
+      "causalExplanation": "Copper smelting in the Fertile Crescent and Anatolia was among the world's earliest, later developing into bronze alloys with tin. Metalworking required specialized artisans, reliable trade networks for ore, and social hierarchies capable of organizing production — itself evidence of the specialization enabled by agricultural surplus.",
+      "caveat": null
+    },
+    {
+      "id": "fc-social-strat",
+      "civilizationId": "fertile-crescent",
+      "type": "social-stratification",
+      "title": "Emergence of Social Hierarchy",
+      "date": -6500,
+      "contested": false,
+      "causalExplanation": "Differentiated burial goods, elite residences, and evidence of tribute systems from the Ubaid period onward document the emergence of social hierarchy. Surplus food allowed some individuals to specialize in administration, craft production, and religion rather than farming.",
+      "caveat": null
+    },
+    {
+      "id": "fc-trade",
+      "civilizationId": "fertile-crescent",
+      "type": "long-distance-trade",
+      "title": "Long-Distance Trade Networks",
+      "date": -4000,
+      "contested": false,
+      "causalExplanation": "Obsidian, lapis lazuli, copper, and tin traveled thousands of kilometers across Southwest Asia and beyond. Trade accelerated the diffusion of technology, crops, animals, and ideas across the east–west Eurasian axis.",
+      "caveat": null
+    },
+    {
+      "id": "fc-urbanism",
+      "civilizationId": "fertile-crescent",
+      "type": "urbanism",
+      "title": "First Cities (Uruk period)",
+      "date": -3500,
+      "contested": false,
+      "causalExplanation": "Uruk in southern Mesopotamia grew to perhaps 50,000 inhabitants by 3000 BCE — the world's first undisputed city. Urban density accelerated specialization, record-keeping, monumental construction, and the spread of infectious disease. The city was the crucible in which writing became indispensable.",
+      "caveat": null
+    },
+    {
+      "id": "fc-writing",
+      "civilizationId": "fertile-crescent",
+      "type": "writing",
+      "title": "Cuneiform Script",
+      "date": -3200,
+      "contested": false,
+      "causalExplanation": "Cuneiform emerged from accounting tokens used to track grain and livestock — an administrative technology before it was a literary one. Writing enabled political control at scale, the transmission of knowledge across generations, and the codification of law. Diamond emphasizes writing as a multiplier of all other advantages.",
+      "caveat": null
+    },
+    {
+      "id": "fc-monumental",
+      "civilizationId": "fertile-crescent",
+      "type": "monumental-architecture",
+      "title": "Mesopotamian Ziggurats",
+      "date": -3000,
+      "contested": false,
+      "causalExplanation": "Monumental temple complexes served as administrative centers, grain redistribution hubs, and symbols of political power. Their construction required surplus, specialization, and organized coercive authority.",
+      "caveat": null
+    },
+    {
+      "id": "fc-state",
+      "civilizationId": "fertile-crescent",
+      "type": "state-formation",
+      "title": "Sumerian City-States",
+      "date": -3000,
+      "contested": false,
+      "causalExplanation": "The Sumerian city-states of Ur, Uruk, and Lagash developed professional armies, tax collection, law codes, and bureaucratic administration — the defining features of a state. This political complexity was the culmination of the full causal chain: geography → domestication → surplus → specialization → writing and power.",
+      "caveat": null
+    },
+    {
+      "id": "fc-disease",
+      "civilizationId": "fertile-crescent",
+      "type": "epidemic-disease",
+      "title": "Emergence of Crowd Diseases",
+      "date": -2500,
+      "contested": false,
+      "causalExplanation": "Living in dense cities alongside domesticated animals enabled the zoonotic origin of epidemic diseases: smallpox, measles, and influenza. Millennia of exposure built partial population immunity. When Eurasian peoples later contacted isolated populations, these diseases traveled faster than armies — accounting for up to 90% of Indigenous mortality in post-contact Americas.",
+      "caveat": "The timing of specific disease emergence is difficult to establish archaeologically. The diseases that devastated the Americas were products of centuries of Eurasian co-evolution with livestock."
+    },
+
+    {
+      "id": "ea-pottery",
+      "civilizationId": "east-asia",
+      "type": "pottery",
+      "title": "Earliest Known Pottery",
+      "date": -18000,
+      "contested": true,
+      "causalExplanation": "Pottery fragments from Xianrendong Cave in Jiangxi, China, date to 18,000–17,000 BCE — among the world's oldest. East Asian pottery predates agriculture by millennia, suggesting it was initially used by mobile hunter-gatherers for food processing, not grain storage.",
+      "caveat": "These dates are contested. Pottery may have been invented independently multiple times across East Asia and elsewhere."
+    },
+    {
+      "id": "ea-sedentism",
+      "civilizationId": "east-asia",
+      "type": "sedentism",
+      "title": "Settled Village Life",
+      "date": -9000,
+      "contested": false,
+      "causalExplanation": "By 9000 BCE, sedentary communities in the Wei and Luo river valleys were harvesting wild millet and managing landscapes. Sedentism preceded full agricultural dependence, as in Southwest Asia.",
+      "caveat": null
+    },
+    {
+      "id": "ea-plant-dom",
+      "civilizationId": "east-asia",
+      "type": "plant-domestication",
+      "title": "Millet & Rice Domestication",
+      "date": -7500,
+      "contested": false,
+      "causalExplanation": "Foxtail and broomcorn millet were domesticated in the Yellow River basin; rice in the Yangtze Delta — two independent centers of plant domestication within China. Rice in particular supported extraordinarily dense populations in the wet subtropics.",
+      "caveat": null
+    },
+    {
+      "id": "ea-animal-dom",
+      "civilizationId": "east-asia",
+      "type": "animal-domestication",
+      "title": "Pig & Chicken Domestication",
+      "date": -7000,
+      "contested": false,
+      "causalExplanation": "Pigs were domesticated from wild boar in China independently of Southwest Asian domestication. Chickens originated in Southeast Asia/China. Crucially, China also had access to Eurasian cattle and horses via diffusion, giving it the full complement of large domesticated animals.",
+      "caveat": null
+    },
+    {
+      "id": "ea-social-strat",
+      "civilizationId": "east-asia",
+      "type": "social-stratification",
+      "title": "Yangshao Hierarchy",
+      "date": -5000,
+      "contested": false,
+      "causalExplanation": "The Yangshao culture of the Yellow River valley shows differentiated burials, large communal storage facilities, and craft specialization — markers of emerging social hierarchy supported by millet agriculture.",
+      "caveat": null
+    },
+    {
+      "id": "ea-trade",
+      "civilizationId": "east-asia",
+      "type": "long-distance-trade",
+      "title": "Jade Exchange Networks",
+      "date": -4000,
+      "contested": false,
+      "causalExplanation": "Jade objects moved hundreds of kilometers across Neolithic China, evidence of long-distance exchange networks that also transmitted agricultural techniques, pottery styles, and social practices.",
+      "caveat": null
+    },
+    {
+      "id": "ea-monumental",
+      "civilizationId": "east-asia",
+      "type": "monumental-architecture",
+      "title": "Liangzhu & Longshan Earthworks",
+      "date": -3300,
+      "contested": false,
+      "causalExplanation": "Liangzhu culture built large earthen platforms and complex water management systems requiring coordinated labor. This presupposes surplus accumulation and the authority to mobilize workers.",
+      "caveat": null
+    },
+    {
+      "id": "ea-urbanism",
+      "civilizationId": "east-asia",
+      "type": "urbanism",
+      "title": "Early Urban Centres (Erlitou)",
+      "date": -2000,
+      "contested": true,
+      "causalExplanation": "Erlitou in the Yellow River valley, dating to ~1900–1500 BCE, is the earliest candidate for an urban center in East Asia, with a palatial complex, bronze workshops, and dense settlement. Whether it represents the legendary Xia dynasty remains actively debated.",
+      "caveat": "The identification of Erlitou with the Xia dynasty is contested. Some archaeologists dispute whether Erlitou qualifies as 'urban' by comparative standards."
+    },
+    {
+      "id": "ea-state",
+      "civilizationId": "east-asia",
+      "type": "state-formation",
+      "title": "Shang Dynasty State",
+      "date": -1600,
+      "contested": false,
+      "causalExplanation": "The Shang dynasty (c. 1600–1046 BCE) is the first archaeologically attested Chinese state: a hereditary monarchy with professional scribes, a standing army, ritual specialists, and a network of subordinate city-states. Its oracle bone records document a fully literate administration.",
+      "caveat": null
+    },
+    {
+      "id": "ea-metallurgy",
+      "civilizationId": "east-asia",
+      "type": "metallurgy",
+      "title": "Bronze Casting",
+      "date": -1600,
+      "contested": false,
+      "causalExplanation": "Shang bronze casting reached extraordinary technical sophistication — ritual vessels of complex multi-piece mold construction. Bronze was a technology of elite power, used for weapons, ritual objects, and display. China may have independently developed bronze casting or adopted it via Central Asian diffusion.",
+      "caveat": "The degree of independent vs. diffused development of Chinese bronze metallurgy is debated."
+    },
+    {
+      "id": "ea-writing",
+      "civilizationId": "east-asia",
+      "type": "writing",
+      "title": "Oracle Bone Script",
+      "date": -1200,
+      "contested": true,
+      "causalExplanation": "Oracle bone inscriptions from the Shang dynasty (~1200 BCE) are the earliest undisputed Chinese writing, used for divination records. Earlier symbols from Neolithic sites may represent proto-writing but are not yet recognized as a fully functional script.",
+      "caveat": "Some claim Neolithic pottery symbols as early writing; this is contested. Oracle bone script remains our earliest certifiable Chinese writing system."
+    },
+
+    {
+      "id": "iv-sedentism",
+      "civilizationId": "indus-valley",
+      "type": "sedentism",
+      "title": "Mehrgarh Village Settlement",
+      "date": -7000,
+      "contested": false,
+      "causalExplanation": "Mehrgarh in modern Balochistan (Pakistan) represents one of South Asia's earliest farming villages, showing barley cultivation and mud-brick architecture from ~7000 BCE — predating the mature Indus civilization by 4,000 years and illustrating the slow accumulation of agricultural complexity.",
+      "caveat": null
+    },
+    {
+      "id": "iv-plant-dom",
+      "civilizationId": "indus-valley",
+      "type": "plant-domestication",
+      "title": "Wheat & Barley Cultivation",
+      "date": -6500,
+      "contested": false,
+      "causalExplanation": "Mehrgarh farmers cultivated wheat and barley — crops that originated in the Fertile Crescent and diffused eastward. This is a textbook case of the Eurasian east–west diffusion axis enabling rapid crop transfer across similar latitudes.",
+      "caveat": null
+    },
+    {
+      "id": "iv-animal-dom",
+      "civilizationId": "indus-valley",
+      "type": "animal-domestication",
+      "title": "Zebu Cattle Domestication",
+      "date": -6000,
+      "contested": false,
+      "causalExplanation": "Zebu cattle were domesticated independently in South Asia from the wild aurochs. Along with sheep, goats, and later water buffalo, they supported the dense agricultural communities that eventually coalesced into Indus cities.",
+      "caveat": null
+    },
+    {
+      "id": "iv-pottery",
+      "civilizationId": "indus-valley",
+      "type": "pottery",
+      "title": "Wheel-Thrown Pottery",
+      "date": -5500,
+      "contested": false,
+      "causalExplanation": "Pottery at Mehrgarh and later sites reflects growing craft specialization and the use of the potter's wheel — indicating dedicated artisans supported by surplus food.",
+      "caveat": null
+    },
+    {
+      "id": "iv-metallurgy",
+      "civilizationId": "indus-valley",
+      "type": "metallurgy",
+      "title": "Copper & Bronze Metalwork",
+      "date": -3000,
+      "contested": false,
+      "causalExplanation": "Indus artisans worked copper and later bronze to produce tools, weapons, and ornaments traded across the region. The standardized weights of the Indus system imply metalwork was embedded in a regulated exchange economy.",
+      "caveat": null
+    },
+    {
+      "id": "iv-trade",
+      "civilizationId": "indus-valley",
+      "type": "long-distance-trade",
+      "title": "Trade with Mesopotamia",
+      "date": -2700,
+      "contested": false,
+      "causalExplanation": "Indus seals, carnelian beads, and cotton textiles appear in Mesopotamian archaeological contexts, documenting maritime trade along the Persian Gulf. The Indus civilization was embedded in the first Eurasian long-distance trade network.",
+      "caveat": null
+    },
+    {
+      "id": "iv-urbanism",
+      "civilizationId": "indus-valley",
+      "type": "urbanism",
+      "title": "Mohenjo-daro & Harappa",
+      "date": -2600,
+      "contested": false,
+      "causalExplanation": "At its peak (~2600–1900 BCE), the Indus civilization had dozens of cities with planned street grids, standardized brick sizes, public granaries, and covered sewerage — a level of urban engineering unmatched until Rome. Mohenjo-daro may have held 40,000–80,000 people.",
+      "caveat": null
+    },
+    {
+      "id": "iv-monumental",
+      "civilizationId": "indus-valley",
+      "type": "monumental-architecture",
+      "title": "Great Bath & Granary",
+      "date": -2600,
+      "contested": false,
+      "causalExplanation": "Mohenjo-daro's Great Bath — a watertight bitumen-lined pool — and its 'Great Granary' imply civic institutions capable of mobilizing labor and redistributing resources, even if the precise political form remains unknown.",
+      "caveat": null
+    },
+    {
+      "id": "iv-writing",
+      "civilizationId": "indus-valley",
+      "type": "writing",
+      "title": "Indus Script",
+      "date": -2500,
+      "contested": true,
+      "causalExplanation": "The Indus script appears on thousands of seals, tablets, and objects — but has never been deciphered. Whether it encodes a full language, a proto-writing system, or something else entirely is unknown. Its undecipherability means Indus political and social structure cannot be read from their own records.",
+      "caveat": "The Indus script remains undeciphered. Some scholars dispute that it constitutes 'writing' in the full linguistic sense. This is one of archaeology's great open questions."
+    },
+    {
+      "id": "iv-state",
+      "civilizationId": "indus-valley",
+      "type": "state-formation",
+      "title": "Urban Polity (nature contested)",
+      "date": -2600,
+      "contested": true,
+      "causalExplanation": "The Indus civilization achieved remarkable standardization across a vast area — uniform weights, consistent urban plans, shared iconography — suggesting some form of coordinated political authority. Yet no palaces, royal burials, or clear warrior elite have been identified, unlike in Mesopotamia or Egypt.",
+      "caveat": "The political structure of the Indus civilization is genuinely unknown. It may have been a confederation, a theocracy, a merchant republic, or something with no modern analogue. This is a major caveat for Diamond-style arguments about state formation."
+    },
+
+    {
+      "id": "meso-plant-dom",
+      "civilizationId": "mesoamerica",
+      "type": "plant-domestication",
+      "title": "Maize Domestication from Teosinte",
+      "date": -7000,
+      "contested": true,
+      "causalExplanation": "Maize was painstakingly bred from teosinte — a grass with tiny, rock-hard kernels — in Mexico's Balsas Valley. This domestication took thousands of years of human selection and is one of the most dramatic transformations of a plant in human history. The slow, gradual process contrasts with the relatively rapid domestication of Fertile Crescent founder crops.",
+      "caveat": "Dates for maize domestication range from 9,000 to 6,700 BCE depending on method. Early maize was a minor supplement, not a staple, for millennia."
+    },
+    {
+      "id": "meso-sedentism",
+      "civilizationId": "mesoamerica",
+      "type": "sedentism",
+      "title": "Permanent Village Settlement",
+      "date": -4000,
+      "contested": false,
+      "causalExplanation": "Permanent agricultural villages appear in the Mexican highlands and Pacific coast by 4000–3000 BCE, sustained by the 'Three Sisters' complex: maize, squash, and beans — a nutritionally complete but entirely plant-based system.",
+      "caveat": null
+    },
+    {
+      "id": "meso-animal-dom",
+      "civilizationId": "mesoamerica",
+      "type": "animal-domestication",
+      "title": "Turkey & Dog Domestication",
+      "date": -2000,
+      "contested": false,
+      "causalExplanation": "Mesoamerica domesticated the turkey and the dog — but no large traction animals. No horse, cattle, sheep, goat, or pig. This single geographic accident eliminated the plough, wheeled transport, cavalry, and the crowd diseases born of livestock cohabitation. It is the central pivot of Diamond's analysis of the Americas.",
+      "caveat": null
+    },
+    {
+      "id": "meso-pottery",
+      "civilizationId": "mesoamerica",
+      "type": "pottery",
+      "title": "Ceramic Production",
+      "date": -2500,
+      "contested": false,
+      "causalExplanation": "Pottery appeared across Mesoamerica, enabling food storage and preparation that supported growing sedentary populations. Ceramic traditions became markers of cultural identity and were traded across the region.",
+      "caveat": null
+    },
+    {
+      "id": "meso-social-strat",
+      "civilizationId": "mesoamerica",
+      "type": "social-stratification",
+      "title": "Olmec Elite Emergence",
+      "date": -1600,
+      "contested": false,
+      "causalExplanation": "The Olmec of the Gulf Coast (c. 1600–400 BCE) represent Mesoamerica's earliest documented complex society: colossal carved heads weighing up to 44 tons, evidence of a powerful ruling class who could command labor and long-distance trade in jade, obsidian, and magnetite.",
+      "caveat": null
+    },
+    {
+      "id": "meso-monumental",
+      "civilizationId": "mesoamerica",
+      "type": "monumental-architecture",
+      "title": "Olmec Ceremonial Centres",
+      "date": -1200,
+      "contested": false,
+      "causalExplanation": "San Lorenzo and La Venta feature large earthen mounds, stone monuments, and elaborate drainage systems — evidence of organized labor, political authority, and ritual complexity that would be elaborated by all subsequent Mesoamerican civilizations.",
+      "caveat": null
+    },
+    {
+      "id": "meso-trade",
+      "civilizationId": "mesoamerica",
+      "type": "long-distance-trade",
+      "title": "Mesoamerican Exchange Networks",
+      "date": -1000,
+      "contested": false,
+      "causalExplanation": "Obsidian, jade, cacao, turquoise, and feathers moved across Mesoamerica via foot-borne merchant systems. Without draft animals or the wheel, all transport was human-carried. This constrained the volume and speed of trade, limiting the scale of economic integration.",
+      "caveat": null
+    },
+    {
+      "id": "meso-writing",
+      "civilizationId": "mesoamerica",
+      "type": "writing",
+      "title": "Zapotec & Olmec Script",
+      "date": -600,
+      "contested": true,
+      "causalExplanation": "Writing emerged independently in Mesoamerica, with Zapotec script at Monte Albán dating to c. 500 BCE. The Maya script, fully deciphered in the 20th century, is a sophisticated logosyllabic system capable of recording history, ritual, and astronomy in detail.",
+      "caveat": "Which Mesoamerican writing system is 'first' is debated. Some assign priority to Olmec symbols (~900 BCE); others to Zapotec or to the Isthmian script (~300 BCE)."
+    },
+    {
+      "id": "meso-urbanism",
+      "civilizationId": "mesoamerica",
+      "type": "urbanism",
+      "title": "Teotihuacan",
+      "date": -100,
+      "contested": false,
+      "causalExplanation": "Teotihuacan in central Mexico reached 125,000+ inhabitants by 450 CE — one of the largest cities in the world at that time. Its apartment compounds, craft workshops, and multi-ethnic neighborhoods reveal a complex urban economy. Yet the city lacked a royal tomb or unambiguous palace, suggesting a political form unlike Mesopotamian monarchy.",
+      "caveat": null
+    },
+    {
+      "id": "meso-state",
+      "civilizationId": "mesoamerica",
+      "type": "state-formation",
+      "title": "Monte Albán State",
+      "date": -500,
+      "contested": false,
+      "causalExplanation": "Monte Albán, founded ~500 BCE in Oaxaca, is among Mesoamerica's earliest attested states: a defensible hilltop capital with public buildings, writing, a calendar, and evidence of military conquest and tribute extraction.",
+      "caveat": null
+    },
+    {
+      "id": "meso-metallurgy",
+      "civilizationId": "mesoamerica",
+      "type": "metallurgy",
+      "title": "Copper & Gold Metalwork",
+      "date": 600,
+      "contested": false,
+      "causalExplanation": "Metalworking arrived in Mesoamerica very late — around 600–900 CE via diffusion from South America — and was used primarily for ornament and ritual objects rather than tools or weapons. The absence of iron metallurgy until contact meant Mesoamerican armies fought with obsidian-edged weapons against Spanish steel.",
+      "caveat": "This extremely late adoption of metallurgy is itself striking evidence that geographic isolation from Eurasian innovations had concrete technological consequences."
+    },
+
+    {
+      "id": "andean-plant-dom",
+      "civilizationId": "andean",
+      "type": "plant-domestication",
+      "title": "Potato, Quinoa & Cotton Domestication",
+      "date": -5000,
+      "contested": false,
+      "causalExplanation": "The Andes produced an extraordinary diversity of crops adapted to high-altitude environments: potato (over 3,000 varieties), quinoa, maize, cotton, and many others. This crop diversity supported Andean populations at altitudes where most Old World staples cannot grow.",
+      "caveat": null
+    },
+    {
+      "id": "andean-sedentism",
+      "civilizationId": "andean",
+      "type": "sedentism",
+      "title": "Coastal & Highland Settlements",
+      "date": -5500,
+      "contested": false,
+      "causalExplanation": "Rich marine resources on the Pacific coast allowed sedentary settlement even before full agriculture, while highland communities developed terraced agriculture. The complementarity of coast and highland ecosystems drove early exchange.",
+      "caveat": null
+    },
+    {
+      "id": "andean-animal-dom",
+      "civilizationId": "andean",
+      "type": "animal-domestication",
+      "title": "Llama, Alpaca & Guinea Pig",
+      "date": -3500,
+      "contested": false,
+      "causalExplanation": "The Americas' only domesticated large mammals were Andean: llamas (as pack animals and meat) and alpacas (as fiber producers). Guinea pigs provided protein. Llamas could carry ~30–45 kg — useful but far less powerful than horses or oxen. This modest advantage still gave Andean civilizations a step up over other American cultures.",
+      "caveat": null
+    },
+    {
+      "id": "andean-monumental",
+      "civilizationId": "andean",
+      "type": "monumental-architecture",
+      "title": "Caral — Oldest City in the Americas",
+      "date": -2600,
+      "contested": false,
+      "causalExplanation": "Caral in Peru's Supe Valley (~2600–2000 BCE) featured large platform mounds, sunken circular plazas, and an estimated population of 3,000. It is contemporary with Egypt's pyramid age and predates the Olmec by over a millennium — evidence that urban complexity was not simply imported from Mesoamerica.",
+      "caveat": null
+    },
+    {
+      "id": "andean-pottery",
+      "civilizationId": "andean",
+      "type": "pottery",
+      "title": "Ceramic Tradition",
+      "date": -2000,
+      "contested": false,
+      "causalExplanation": "Curiously, Caral had no pottery — subsisting without it for centuries. When pottery did appear, it enabled new forms of food storage and preparation that supported further population growth.",
+      "caveat": null
+    },
+    {
+      "id": "andean-metallurgy",
+      "civilizationId": "andean",
+      "type": "metallurgy",
+      "title": "Gold, Silver & Copper Metalwork",
+      "date": -1500,
+      "contested": false,
+      "causalExplanation": "Andean metallurgy developed independently and reached extraordinary sophistication — gold and silver work of stunning technical quality, later bronze alloys. Unlike Europe and Asia, Andean metalworking was oriented toward prestige and ritual rather than weapons and tools.",
+      "caveat": null
+    },
+    {
+      "id": "andean-trade",
+      "civilizationId": "andean",
+      "type": "long-distance-trade",
+      "title": "Andean Exchange Networks",
+      "date": -2000,
+      "contested": false,
+      "causalExplanation": "Shell (Spondylus), obsidian, and textiles moved across the Andes and coastal regions through llama caravan and maritime networks. The reciprocity-based exchange system underpinned the later Inca redistributive economy.",
+      "caveat": null
+    },
+    {
+      "id": "andean-state",
+      "civilizationId": "andean",
+      "type": "state-formation",
+      "title": "Wari & Tiwanaku States",
+      "date": 600,
+      "contested": false,
+      "causalExplanation": "Wari (Peru) and Tiwanaku (Bolivia) ~600–1000 CE were the Andes' first expansive imperial states, with road networks, administrative centers, and iconographic programs spread across hundreds of kilometers.",
+      "caveat": null
+    },
+
+    {
+      "id": "ssa-pottery",
+      "civilizationId": "sub-saharan-sahel",
+      "type": "pottery",
+      "title": "Saharan Pottery — Among World's Earliest",
+      "date": -10000,
+      "contested": true,
+      "causalExplanation": "Pottery from the Saharan/Sahel region (modern Mali, Niger, Sudan) dates to ~10,000 BCE, among the world's oldest — predating both Fertile Crescent and Chinese pottery by over a millennium. This is a critical counterpoint to simple diffusion narratives: Africa was not a passive recipient of Old World innovations.",
+      "caveat": "Some of the earliest dates are disputed. The relationship between Saharan and later African pottery traditions is an active research area."
+    },
+    {
+      "id": "ssa-animal-dom",
+      "civilizationId": "sub-saharan-sahel",
+      "type": "animal-domestication",
+      "title": "Independent Cattle Domestication",
+      "date": -7000,
+      "contested": true,
+      "causalExplanation": "Cattle were domesticated independently in the Sahara/northeastern Africa from the wild aurochs — a separate domestication from Southwest Asia. African pastoralism spread with the drying Sahara, pushing cattle-keeping peoples southward and seeding later African food-producing cultures.",
+      "caveat": "Whether African cattle domestication was fully independent or involved some gene flow from Southwest Asian stock is debated."
+    },
+    {
+      "id": "ssa-sedentism",
+      "civilizationId": "sub-saharan-sahel",
+      "type": "sedentism",
+      "title": "Sahel Village Communities",
+      "date": -5000,
+      "contested": false,
+      "causalExplanation": "Permanent villages sustained by sorghum and millet cultivation developed across the West African Sahel by ~5000–3000 BCE, forming the agricultural base for later complex societies.",
+      "caveat": null
+    },
+    {
+      "id": "ssa-plant-dom",
+      "civilizationId": "sub-saharan-sahel",
+      "type": "plant-domestication",
+      "title": "Sorghum, Pearl Millet & Yam Domestication",
+      "date": -4000,
+      "contested": false,
+      "causalExplanation": "Sorghum was domesticated in the Chad basin, pearl millet in the western Sahara/Sahel, and yam in West African forests — all entirely independent of Eurasian or Mesoamerican domestications. Africa's crops were well-adapted to tropical conditions that Eurasian crops handle poorly.",
+      "caveat": null
+    },
+    {
+      "id": "ssa-social-strat",
+      "civilizationId": "sub-saharan-sahel",
+      "type": "social-stratification",
+      "title": "Hierarchical Polities in the Sahel",
+      "date": -2000,
+      "contested": false,
+      "causalExplanation": "By the second millennium BCE, differentiated burial sites and evidence of tribute in the Sahel point to emerging hierarchies. Iron metallurgy accelerated this process by enabling more productive agriculture and more effective weapons.",
+      "caveat": null
+    },
+    {
+      "id": "ssa-metallurgy",
+      "civilizationId": "sub-saharan-sahel",
+      "type": "metallurgy",
+      "title": "Sub-Saharan Iron Smelting",
+      "date": -1500,
+      "contested": true,
+      "causalExplanation": "Iron smelting in sub-Saharan Africa — particularly in the Great Lakes region (modern Tanzania/Rwanda) — may predate iron use in many parts of Europe and Asia, with some sites dating to 1500–1000 BCE. Africans may have developed iron smelting independently, or via very early diffusion from the Middle East. Either way, Africa was a world leader in iron technology at a remarkably early date.",
+      "caveat": "Dates for early African iron smelting are contested. Some sites previously dated to ~1500 BCE have been revised. The question of independent invention vs. diffusion from the Middle East remains open."
+    },
+    {
+      "id": "ssa-trade",
+      "civilizationId": "sub-saharan-sahel",
+      "type": "long-distance-trade",
+      "title": "Trans-Saharan Trade Beginnings",
+      "date": -1000,
+      "contested": false,
+      "causalExplanation": "Gold, salt, ivory, and enslaved people moved across the Sahara via camel caravan routes from at least 1000 BCE, connecting sub-Saharan Africa to Mediterranean and North African markets. These networks accelerated state formation along the Niger and Senegal rivers.",
+      "caveat": null
+    },
+    {
+      "id": "ssa-state",
+      "civilizationId": "sub-saharan-sahel",
+      "type": "state-formation",
+      "title": "Ghana Empire Precursors",
+      "date": 300,
+      "contested": false,
+      "causalExplanation": "The Kingdom of Ghana (not to be confused with modern Ghana) emerged in the western Sahel around 300–400 CE, controlling gold and salt trade routes. It was the first of a succession of large West African empires — Ghana, Mali, Songhai — that rivaled contemporaneous states in scale and sophistication.",
+      "caveat": null
+    },
+
+    {
+      "id": "ena-plant-dom",
+      "civilizationId": "eastern-north-america",
+      "type": "plant-domestication",
+      "title": "Eastern Agricultural Complex",
+      "date": -3000,
+      "contested": false,
+      "causalExplanation": "Eastern North America developed its own crop suite — sunflower, sumpweed, goosefoot, maygrass, and erect knotweed — independently of Mesoamerican agriculture. These crops were nutritious but less productive than maize, limiting population densities. Maize itself arrived from Mesoamerica only around 700–900 CE.",
+      "caveat": null
+    },
+    {
+      "id": "ena-pottery",
+      "civilizationId": "eastern-north-america",
+      "type": "pottery",
+      "title": "Early Ceramic Traditions",
+      "date": -2500,
+      "contested": false,
+      "causalExplanation": "Pottery appears in the southeastern US by ~2500 BCE (Stallings Island, South Carolina) — coeval with similar developments along the Atlantic coast. Ceramic technology enabled food storage and processing for semi-sedentary communities.",
+      "caveat": null
+    },
+    {
+      "id": "ena-sedentism",
+      "civilizationId": "eastern-north-america",
+      "type": "sedentism",
+      "title": "Permanent Settlements",
+      "date": -2000,
+      "contested": false,
+      "causalExplanation": "Permanent villages sustained by the Eastern Agricultural Complex appeared across the Ohio and Mississippi valleys. Population density remained low compared to Eurasian agricultural zones, constraining specialization and political scale.",
+      "caveat": null
+    },
+    {
+      "id": "ena-trade",
+      "civilizationId": "eastern-north-america",
+      "type": "long-distance-trade",
+      "title": "Hopewell Exchange Network",
+      "date": -200,
+      "contested": false,
+      "causalExplanation": "The Hopewell Interaction Sphere (~100 BCE–500 CE) moved copper from Lake Superior, obsidian from Yellowstone, mica from the Appalachians, and marine shells from the Gulf Coast across thousands of kilometers — one of the most extensive exchange systems in the ancient Americas.",
+      "caveat": null
+    },
+    {
+      "id": "ena-social-strat",
+      "civilizationId": "eastern-north-america",
+      "type": "social-stratification",
+      "title": "Cahokia Chiefdom",
+      "date": 900,
+      "contested": false,
+      "causalExplanation": "Cahokia (~900–1300 CE) near modern St. Louis was the largest pre-Columbian city north of Mexico, with ~10,000–20,000 inhabitants. Its central Monks Mound is larger by volume than Egypt's Great Pyramid. Cahokia's rapid growth followed the adoption of maize agriculture, illustrating how a more productive crop unlocked larger political scale.",
+      "caveat": null
+    },
+    {
+      "id": "ena-monumental",
+      "civilizationId": "eastern-north-america",
+      "type": "monumental-architecture",
+      "title": "Monks Mound & Cahokia Complex",
+      "date": 1000,
+      "contested": false,
+      "causalExplanation": "Cahokia's monumental earthwork complex — over 120 mounds across 5 square miles — required organized mass labor and coercive authority. It was abandoned by ~1350 CE, possibly due to environmental degradation, climate change, or political fragmentation.",
+      "caveat": null
+    },
+
+    {
+      "id": "ng-sedentism",
+      "civilizationId": "new-guinea",
+      "type": "sedentism",
+      "title": "Highland Village Settlement",
+      "date": -8000,
+      "contested": false,
+      "causalExplanation": "The rugged New Guinea highlands supported permanent settlements sustained by intensive root-crop cultivation. Highland populations were geographically fragmented by steep ridges and valleys, limiting the size of political units that could form.",
+      "caveat": null
+    },
+    {
+      "id": "ng-plant-dom",
+      "civilizationId": "new-guinea",
+      "type": "plant-domestication",
+      "title": "Taro, Yam & Banana Cultivation",
+      "date": -7000,
+      "contested": true,
+      "causalExplanation": "New Guinea may have been one of the world's earliest centers of plant domestication, with taro and banana cultivation from ~7000 BCE. The Kuk Swamp site provides evidence of systematic drainage and garden management remarkably early. This makes New Guinea's lack of state formation all the more instructive: early agriculture is necessary but not sufficient for political complexity.",
+      "caveat": "The precise timing and nature of New Guinea's early cultivation is debated. Some archaeologists distinguish between 'cultivation' and 'domestication' here."
+    },
+    {
+      "id": "ng-animal-dom",
+      "civilizationId": "new-guinea",
+      "type": "animal-domestication",
+      "title": "Pig Introduction & Keeping",
+      "date": -5000,
+      "contested": false,
+      "causalExplanation": "Pigs were introduced to New Guinea from Southeast Asia and became central to exchange ceremonies (the Moka and Tee cycles). Yet pigs alone do not provide traction, cannot carry loads, and do not yield crowd diseases the way cattle and horses do.",
+      "caveat": null
+    },
+    {
+      "id": "ng-trade",
+      "civilizationId": "new-guinea",
+      "type": "long-distance-trade",
+      "title": "Exchange Ceremonialism",
+      "date": 500,
+      "contested": false,
+      "causalExplanation": "New Guinean exchange cycles — including the offshore Kula ring documented by Malinowski — moved prestige objects, stone axe heads, and pigs across hundreds of kilometers. These networks built political alliances but did not generate the centralized surplus accumulation that produced states elsewhere.",
+      "caveat": null
+    },
+    {
+      "id": "ng-social-strat",
+      "civilizationId": "new-guinea",
+      "type": "social-stratification",
+      "title": "Big Man Political Systems",
+      "date": 500,
+      "contested": false,
+      "causalExplanation": "New Guinea's political organization reached the 'big man' level — charismatic leaders who accumulate followers through generosity, never through inherited coercive authority. Positions could not be passed to children; authority dissolved at death. The terrain fragmented populations into thousands of mutually hostile groups speaking 800+ languages, preventing the aggregation that produces states.",
+      "caveat": null
+    },
+
+    {
+      "id": "au-animal-dom",
+      "civilizationId": "aboriginal-australia",
+      "type": "animal-domestication",
+      "title": "Dingo Adoption",
+      "date": -3500,
+      "contested": true,
+      "causalExplanation": "The dingo arrived in Australia from Southeast Asia ~3,500 BCE, possibly brought by peoples who briefly settled the north. Whether it was 'domesticated' by Aboriginal Australians or simply tolerated as a camp follower is debated. It became important for hunting — but Australia had no other domesticable large animals.",
+      "caveat": "The dingo's status as domesticated vs. semi-wild is debated. It is genetically an Asian domestic dog lineage."
+    },
+    {
+      "id": "au-trade",
+      "civilizationId": "aboriginal-australia",
+      "type": "long-distance-trade",
+      "title": "Stone Axe Exchange Networks",
+      "date": -5000,
+      "contested": false,
+      "causalExplanation": "Stone axe heads quarried at specific sites (e.g., Mount William in Victoria) traveled thousands of kilometers across Australia via complex exchange chains — evidence of sophisticated social networks, maintained obligations, and extensive geographic knowledge. Trade functioned without agriculture, markets, or political hierarchy.",
+      "caveat": null
+    },
+    {
+      "id": "au-social-strat",
+      "civilizationId": "aboriginal-australia",
+      "type": "social-stratification",
+      "title": "Complex Ceremonial & Kinship Systems",
+      "date": -3000,
+      "contested": true,
+      "causalExplanation": "Aboriginal Australian societies maintained extraordinarily complex kinship systems, ceremonial cycles, and relationships with country — systems that organized social life, inheritance, and intergroup obligations with great sophistication. Some areas showed signs of differential status. Yet this complexity did not map onto the agricultural surplus → state pathway.",
+      "caveat": "Whether Australian societies showed 'social stratification' in the archaeological sense is contested. Hierarchies existed but were situational, age- and skill-based, not institutionalized across generations in the way agricultural states develop."
+    }
+  ],
+
+  "diffusionEvents": [
+    {
+      "id": "diff-wheat-europe",
+      "innovation": "Wheat & Barley Farming",
+      "fromId": "fertile-crescent",
+      "toRegion": { "lat": 48.0, "lng": 16.0, "name": "Central Europe" },
+      "approxDate": -5500,
+      "axisAlong": "latitude",
+      "description": "Wheat and barley farming spread westward from Anatolia into Europe along the Mediterranean coast and Danube corridor — traveling across similar latitudes with compatible climates. The diffusion took ~2,000 years to cross the continent.",
+      "strength": "strong"
+    },
+    {
+      "id": "diff-wheat-indus",
+      "innovation": "Wheat & Barley Farming",
+      "fromId": "fertile-crescent",
+      "toRegion": { "lat": 27.0, "lng": 68.0, "name": "Indus Plain" },
+      "approxDate": -6000,
+      "axisAlong": "latitude",
+      "description": "Fertile Crescent crops diffused eastward to the Indus Valley across a belt of similar subtropical dry climate — one of the canonical examples of east–west axis enabling crop spread.",
+      "strength": "strong"
+    },
+    {
+      "id": "diff-cattle-africa",
+      "innovation": "Cattle Pastoralism",
+      "fromId": "fertile-crescent",
+      "toRegion": { "lat": 5.0, "lng": 25.0, "name": "East Africa" },
+      "approxDate": -4000,
+      "axisAlong": "meridional",
+      "description": "Cattle-keeping spread from Northeast Africa southward — but crossed dramatically different climate zones, slowing diffusion. Tropical diseases (trypanosomiasis) halted cattle spread in much of sub-Saharan Africa.",
+      "strength": "weak"
+    },
+    {
+      "id": "diff-writing-indus",
+      "innovation": "Writing Concept",
+      "fromId": "fertile-crescent",
+      "toRegion": { "lat": 25.0, "lng": 67.0, "name": "Indus Valley" },
+      "approxDate": -2700,
+      "axisAlong": "latitude",
+      "description": "Whether the Indus script was stimulated by knowledge of Mesopotamian writing (stimulus diffusion) or invented independently is debated. The two systems coexisted through maritime trade contact.",
+      "strength": "moderate"
+    },
+    {
+      "id": "diff-iron-africa",
+      "innovation": "Iron Smelting",
+      "fromId": "fertile-crescent",
+      "toRegion": { "lat": -2.0, "lng": 30.0, "name": "Great Lakes Region" },
+      "approxDate": -1000,
+      "axisAlong": "meridional",
+      "description": "Iron technology's spread into sub-Saharan Africa is debated: some argue diffusion from the Middle East; others argue independent invention. Either way, African iron smelting was remarkably early and sophisticated.",
+      "strength": "moderate"
+    },
+    {
+      "id": "diff-maize-north",
+      "innovation": "Maize Cultivation",
+      "fromId": "mesoamerica",
+      "toRegion": { "lat": 38.0, "lng": -90.0, "name": "Eastern North America" },
+      "approxDate": 700,
+      "axisAlong": "meridional",
+      "description": "Maize spread northward from Mesoamerica through the US Southwest and into the Eastern Woodlands — but the north–south journey crossed multiple climate zones, taking thousands of years and requiring substantial crop adaptation. The contrast with east–west Eurasian diffusion is Diamond's key argument.",
+      "strength": "weak"
+    },
+    {
+      "id": "diff-rice-sea",
+      "innovation": "Rice Cultivation",
+      "fromId": "east-asia",
+      "toRegion": { "lat": 10.0, "lng": 106.0, "name": "Southeast Asia" },
+      "approxDate": -3000,
+      "axisAlong": "meridional",
+      "description": "Rice cultivation spread southward from the Yangtze delta into Southeast Asia, carried by Austronesian and other agricultural expansions. The spread was slower than comparable east–west diffusion in Eurasia.",
+      "strength": "moderate"
+    },
+    {
+      "id": "diff-bronze-europe",
+      "innovation": "Bronze Technology",
+      "fromId": "fertile-crescent",
+      "toRegion": { "lat": 50.0, "lng": 10.0, "name": "Western Europe" },
+      "approxDate": -2000,
+      "axisAlong": "latitude",
+      "description": "Bronze metallurgy spread rapidly across Europe along the east–west axis, transforming weapons, agriculture, and social hierarchies. European Bronze Age cultures emerged within centuries of Near Eastern bronze, illustrating how the axis orientation accelerated technology transfer.",
+      "strength": "strong"
+    }
+  ],
+
+  "causalChain": {
+    "links": [
+      {
+        "id": "biogeography",
+        "label": "Biogeography",
+        "description": "The geographic endowment of a region: its latitude (axis orientation), area, climate, and — most critically — its suite of wild plant and animal species amenable to domestication."
+      },
+      {
+        "id": "domesticable-species",
+        "label": "Domesticable Species",
+        "description": "The availability of wild plant species with large seeds, perennial roots, or other traits enabling cultivation; and animal species that are gregarious, hierarchical, non-territorial, and calm enough to live among humans."
+      },
+      {
+        "id": "food-production",
+        "label": "Food Production",
+        "description": "The successful transition to agriculture and/or pastoralism as the primary mode of subsistence, generating reliable caloric supply."
+      },
+      {
+        "id": "surplus",
+        "label": "Food Surplus",
+        "description": "Agricultural productivity exceeding immediate consumption needs, enabling food storage, population growth, and the support of non-farming specialists."
+      },
+      {
+        "id": "specialization",
+        "label": "Specialization",
+        "description": "Labor specialization — the emergence of full-time artisans, soldiers, scribes, priests, and administrators supported by the surplus produced by a farming majority."
+      },
+      {
+        "id": "writing",
+        "label": "Writing & Record-Keeping",
+        "description": "The development of writing or equivalent record-keeping systems, enabling information storage, long-distance administration, legal codification, and the cumulative transmission of technical knowledge."
+      },
+      {
+        "id": "technology",
+        "label": "Technology",
+        "description": "Technological innovation cumulating through specialization and writing: metallurgy, the wheel, the plough, maritime navigation, and military technology."
+      },
+      {
+        "id": "political-complexity",
+        "label": "Political Complexity",
+        "description": "The emergence of states, empires, and professional armies capable of organizing and projecting power at scale — the political form that ultimately drove contact, conquest, and colonization."
+      },
+      {
+        "id": "epidemic-disease",
+        "label": "Epidemic Disease",
+        "description": "Crowd diseases originating from cohabitation with domesticated animals (smallpox from cattle, influenza from pigs and birds, measles from cattle). After millennia of exposure, Eurasian populations built partial immunity; those who had not were catastrophically vulnerable at first contact."
+      }
+    ]
+  }
+}
