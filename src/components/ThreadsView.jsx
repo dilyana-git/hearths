@@ -1,13 +1,13 @@
-import React, { useMemo, useRef, useState, useEffect, useCallback } from 'react';
+import React, { useMemo, useRef, useState, useCallback } from 'react';
 import * as d3 from 'd3';
-import { TIME_DOMAIN, TYPE_META, ERAS, AXIS_LABELS, AXIS_COLORS, formatYear, SORT_OPTIONS } from '../utils/constants';
+import { TIME_DOMAIN, TYPE_META, ERAS, AXIS_COLORS, formatYear } from '../utils/constants';
 
-const TRACK_H = 64;
-const TRACK_GAP = 14;
-const TOP_H = 72;
+const TRACK_H = 62;
+const TRACK_GAP = 10;
+const TOP_H = 68;
 const NODE_R = 7;
-const PX_PER_YEAR = 0.148;
-const SVG_PAD_RIGHT = 40;
+const PX_PER_YEAR = 0.150;
+const SVG_PAD_RIGHT = 60;
 
 const SVG_W = Math.ceil((TIME_DOMAIN[1] - TIME_DOMAIN[0]) * PX_PER_YEAR) + SVG_PAD_RIGHT;
 
@@ -18,7 +18,7 @@ function xFromYear(year) {
 function computeLayout(milestones) {
   const sorted = [...milestones].sort((a, b) => a.date - b.date);
   const center = TRACK_H / 2;
-  const yOptions = [0, -20, +20, -38, +38];
+  const yOptions = [0, -20, +20, -36, +36];
   const placed = [];
 
   return sorted.map(m => {
@@ -28,7 +28,7 @@ function computeLayout(milestones) {
       const y = center + dy;
       if (y - NODE_R < 3 || y + NODE_R > TRACK_H - 3) continue;
       const overlaps = placed.some(p =>
-        Math.abs(p.x - x) < NODE_R * 2 + 1 && Math.abs(p.dy - dy) < NODE_R * 2 + 1
+        Math.abs(p.x - x) < NODE_R * 2 + 2 && Math.abs(p.dy - dy) < NODE_R * 2 + 2
       );
       if (!overlaps) { yOff = dy; break; }
     }
@@ -44,14 +44,17 @@ function sortCivs(civs, sortBy) {
   return copy.sort((a, b) => a.sortOrder - b.sortOrder);
 }
 
-// Time axis ticks
 const MAJOR_TICKS = d3.range(-12000, 1501, 2000).filter(y => y >= TIME_DOMAIN[0] && y <= TIME_DOMAIN[1]);
-const MINOR_TICKS = d3.range(-12500, 1501, 500).filter(y => y >= TIME_DOMAIN[0] && y <= TIME_DOMAIN[1] && !MAJOR_TICKS.includes(y));
+const MINOR_TICKS = d3.range(-12500, 1501, 500)
+  .filter(y => y >= TIME_DOMAIN[0] && y <= TIME_DOMAIN[1] && !MAJOR_TICKS.includes(y));
+
+// Catmull-Rom spline through a set of {x,y} points
+const catmullRomLine = d3.line().x(p => p.x).y(p => p.y).curve(d3.curveCatmullRom.alpha(0.5));
 
 export default function ThreadsView({ data, selectedMilestone, hoveredMilestone, onSelect, onHover, sortBy }) {
   const scrollRef = useRef(null);
-  const leftRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
+  const [hoveredType, setHoveredType] = useState(null);
 
   const sortedCivs = useMemo(() => sortCivs(data.civilizations, sortBy), [data.civilizations, sortBy]);
 
@@ -63,84 +66,111 @@ export default function ThreadsView({ data, selectedMilestone, hoveredMilestone,
     return map;
   }, [sortedCivs, data.milestonesByCiv]);
 
-  const totalH = TOP_H + sortedCivs.length * (TRACK_H + TRACK_GAP) + 16;
+  // Compute per-type point sets for kinship threads
+  const typeThreads = useMemo(() => {
+    const map = {};
+    sortedCivs.forEach((civ, i) => {
+      const trackCenterY = TOP_H + i * (TRACK_H + TRACK_GAP) + TRACK_H / 2;
+      (layoutByCiv[civ.id] || []).forEach(m => {
+        if (!map[m.type]) map[m.type] = [];
+        map[m.type].push({
+          x: xFromYear(m.date),
+          y: trackCenterY + m.yOff,
+          date: m.date,
+          milestoneId: m.id,
+          civColor: civ.color,
+        });
+      });
+    });
+    // Sort each thread chronologically so the spline flows left-to-right
+    Object.values(map).forEach(pts => pts.sort((a, b) => a.date - b.date));
+    return map;
+  }, [sortedCivs, layoutByCiv]);
 
-  const handleMouseMove = useCallback((e, milestone, civ, trackY) => {
+  const totalH = TOP_H + sortedCivs.length * (TRACK_H + TRACK_GAP) + 24;
+
+  const handleMouseMove = useCallback((e, milestone, civ) => {
     const rect = e.currentTarget.closest('svg').getBoundingClientRect();
     setTooltip({
-      x: e.clientX - rect.left,
-      y: trackY - 14,
+      x: Math.min(e.clientX - rect.left, SVG_W - 210),
+      y: e.clientY - rect.top - 50,
       milestone,
       civ,
     });
     onHover(milestone);
+    setHoveredType(milestone.type);
   }, [onHover]);
 
   const handleMouseLeave = useCallback(() => {
     setTooltip(null);
     onHover(null);
+    setHoveredType(null);
   }, [onHover]);
+
+  const activeType = hoveredType || (hoveredMilestone?.type) || (selectedMilestone?.type);
 
   return (
     <div className="flex h-full overflow-hidden">
-      {/* Fixed left labels column */}
+      {/* Left civilization labels — styled as an organic legend, not a table column */}
       <div
-        ref={leftRef}
-        className="flex-shrink-0 bg-coal-800 border-r border-coal-600 z-10"
-        style={{ width: 200 }}
+        className="flex-shrink-0 relative"
+        style={{ width: 188 }}
       >
-        {/* Top spacer matching time axis */}
+        {/* Gradient mask on right edge to blend into SVG */}
         <div
-          className="border-b border-coal-700 flex items-end px-3 pb-2"
+          className="absolute right-0 top-0 bottom-0 w-8 pointer-events-none z-10"
+          style={{ background: 'linear-gradient(to right, transparent, #0a0d12)' }}
+        />
+
+        {/* Header spacer */}
+        <div
           style={{ height: TOP_H }}
+          className="flex items-end pb-2 pl-4"
         >
-          <span className="text-xs text-parchment-500 tracking-widest uppercase">Civilization</span>
+          <span className="text-xs tracking-widest uppercase text-parchment-500" style={{ fontSize: 9 }}>
+            Cultural Hearth
+          </span>
         </div>
 
         {/* Civ label rows */}
-        <div
-          className="overflow-y-hidden"
-          style={{ height: totalH - TOP_H }}
-        >
-          {sortedCivs.map((civ, i) => {
-            const trackTop = i * (TRACK_H + TRACK_GAP);
-            return (
-              <div
-                key={civ.id}
-                className="flex flex-col justify-center px-3 border-b border-coal-700"
-                style={{ height: TRACK_H + TRACK_GAP }}
-              >
-                <div className="flex items-center gap-1.5">
-                  <span
-                    className="w-2 h-2 rounded-full flex-shrink-0"
-                    style={{ backgroundColor: civ.color }}
-                    aria-hidden="true"
-                  />
-                  <span
-                    className="serif text-sm font-medium leading-tight text-parchment-200"
-                    title={civ.name}
-                  >
-                    {civ.name}
-                  </span>
-                </div>
-                <span
-                  className="text-xs mt-0.5 pl-3.5 truncate"
-                  style={{ color: AXIS_COLORS[civ.axisContext], opacity: 0.8 }}
-                  title={AXIS_LABELS[civ.axisContext]}
-                >
-                  {civ.axisContext.replace('-', '–')}
-                </span>
-              </div>
-            );
-          })}
-        </div>
+        {sortedCivs.map((civ, i) => (
+          <div
+            key={civ.id}
+            className="flex flex-col justify-center pl-4 pr-6"
+            style={{ height: TRACK_H + TRACK_GAP }}
+          >
+            {/* Colored accent line on left */}
+            <div
+              className="absolute left-0"
+              style={{
+                top: TOP_H + i * (TRACK_H + TRACK_GAP) + 12,
+                height: TRACK_H - 24,
+                width: 2,
+                backgroundColor: civ.color,
+                opacity: 0.6,
+                borderRadius: 2,
+              }}
+            />
+            <span
+              className="serif leading-tight font-medium"
+              style={{ color: civ.color, fontSize: 13, opacity: 0.9 }}
+            >
+              {civ.name}
+            </span>
+            <span
+              className="text-parchment-500 mt-0.5 leading-none"
+              style={{ fontSize: 9, letterSpacing: '0.03em' }}
+            >
+              {civ.region.split('(')[0].trim()}
+            </span>
+          </div>
+        ))}
       </div>
 
-      {/* Scrollable timeline SVG */}
+      {/* Scrollable SVG */}
       <div
         ref={scrollRef}
-        className="flex-1 overflow-x-auto overflow-y-auto"
-        style={{ cursor: 'default' }}
+        className="flex-1 overflow-x-auto overflow-y-hidden"
       >
         <svg
           width={SVG_W}
@@ -149,55 +179,95 @@ export default function ThreadsView({ data, selectedMilestone, hoveredMilestone,
           onMouseLeave={handleMouseLeave}
         >
           <defs>
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="3" result="coloredBlur" />
-              <feMerge>
-                <feMergeNode in="coloredBlur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
+            {/* Node glow */}
+            <filter id="nodeGlow" x="-80%" y="-80%" width="260%" height="260%">
+              <feGaussianBlur stdDeviation="4" result="blur" />
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            {/* Thread glow */}
+            <filter id="threadGlow" x="-5%" y="-30%" width="110%" height="160%">
+              <feGaussianBlur stdDeviation="3" result="blur" />
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
             </filter>
           </defs>
 
-          {/* Era background bands */}
+          {/* ── Layer 0: Era backgrounds ────────────────────── */}
           {ERAS.map((era, i) => {
             const x1 = xFromYear(era.start);
             const x2 = xFromYear(Math.min(era.end, TIME_DOMAIN[1]));
             return (
-              <g key={era.label}>
-                <rect
-                  x={x1}
-                  y={0}
-                  width={x2 - x1}
-                  height={totalH}
-                  fill={i % 2 === 0 ? 'rgba(255,255,255,0.012)' : 'rgba(0,0,0,0.06)'}
+              <rect
+                key={era.label}
+                x={x1} y={0}
+                width={x2 - x1} height={totalH}
+                fill={i % 2 === 0 ? 'rgba(255,255,255,0.010)' : 'rgba(0,0,0,0.04)'}
+              />
+            );
+          })}
+
+          {/* ── Layer 1: Kinship threads (cross-civ type connections) ── */}
+          {Object.entries(typeThreads).map(([type, points]) => {
+            if (points.length < 2) return null;
+            const meta = TYPE_META[type];
+            if (!meta) return null;
+            const isActive = activeType === type;
+            const pathStr = catmullRomLine(points);
+            if (!pathStr) return null;
+
+            return (
+              <g key={type}>
+                {/* Wide glow for active threads */}
+                {isActive && (
+                  <path
+                    d={pathStr}
+                    fill="none"
+                    stroke={meta.color}
+                    strokeWidth={10}
+                    strokeOpacity={0.06}
+                    strokeLinecap="round"
+                    filter="url(#threadGlow)"
+                  />
+                )}
+                {/* The thread itself */}
+                <path
+                  d={pathStr}
+                  fill="none"
+                  stroke={meta.color}
+                  strokeWidth={isActive ? 1.8 : 0.9}
+                  strokeOpacity={isActive ? 0.60 : 0.085}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeDasharray={isActive ? 'none' : '3,9'}
+                  style={{ cursor: 'crosshair', transition: 'stroke-opacity 0.25s ease, stroke-width 0.25s ease' }}
+                  onMouseEnter={() => setHoveredType(type)}
+                  onMouseLeave={() => !hoveredMilestone && setHoveredType(null)}
                 />
+                {/* Endpoint dots for active threads */}
+                {isActive && points.map((pt, pi) => (
+                  <circle
+                    key={pi}
+                    cx={pt.x}
+                    cy={pt.y}
+                    r={2.5}
+                    fill={meta.color}
+                    fillOpacity={0.5}
+                    pointerEvents="none"
+                  />
+                ))}
               </g>
             );
           })}
 
-          {/* Time axis */}
+          {/* ── Layer 2: Time axis ────────────────────────────── */}
           <g>
-            {/* Axis baseline */}
-            <line
-              x1={0} y1={TOP_H - 1}
-              x2={SVG_W} y2={TOP_H - 1}
-              stroke="#2a3550" strokeWidth={1}
-            />
-
             {/* Era labels */}
             {ERAS.map(era => {
               const x1 = xFromYear(era.start);
               const x2 = xFromYear(Math.min(era.end, TIME_DOMAIN[1]));
               const midX = (x1 + x2) / 2;
               return (
-                <text
-                  key={era.label}
-                  x={midX}
-                  y={16}
-                  textAnchor="middle"
-                  fill="#5c5245"
-                  fontSize={9}
-                  letterSpacing={1}
+                <text key={era.label} x={midX} y={13}
+                  textAnchor="middle" fill="#3a4560" fontSize={8.5} letterSpacing={1.2}
                   style={{ textTransform: 'uppercase', fontFamily: 'Inter, system-ui, sans-serif' }}
                 >
                   {era.label}
@@ -205,18 +275,15 @@ export default function ThreadsView({ data, selectedMilestone, hoveredMilestone,
               );
             })}
 
-            {/* Major ticks */}
+            {/* Major ticks + labels */}
             {MAJOR_TICKS.map(year => {
               const x = xFromYear(year);
               return (
                 <g key={year}>
-                  <line x1={x} y1={TOP_H - 24} x2={x} y2={TOP_H} stroke="#2a3550" strokeWidth={1} />
-                  <text
-                    x={x}
-                    y={TOP_H - 28}
-                    textAnchor="middle"
-                    fill="#8a7d65"
-                    fontSize={10}
+                  <line x1={x} y1={TOP_H - 20} x2={x} y2={totalH}
+                    stroke="#1e2840" strokeWidth={0.5} strokeDasharray="2,6" />
+                  <text x={x} y={TOP_H - 24} textAnchor="middle"
+                    fill="#5c5245" fontSize={9.5}
                     style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
                   >
                     {formatYear(year)}
@@ -226,115 +293,105 @@ export default function ThreadsView({ data, selectedMilestone, hoveredMilestone,
             })}
 
             {/* Minor ticks */}
-            {MINOR_TICKS.map(year => {
-              const x = xFromYear(year);
-              return (
-                <line key={year} x1={x} y1={TOP_H - 10} x2={x} y2={TOP_H} stroke="#1e2840" strokeWidth={1} />
-              );
-            })}
+            {MINOR_TICKS.map(year => (
+              <line key={year} x1={xFromYear(year)} y1={TOP_H - 8} x2={xFromYear(year)} y2={TOP_H}
+                stroke="#1e2840" strokeWidth={0.5} />
+            ))}
+
+            {/* Axis baseline */}
+            <line x1={0} y1={TOP_H} x2={SVG_W} y2={TOP_H}
+              stroke="#2a3550" strokeWidth={0.8} />
           </g>
 
-          {/* Civilization tracks */}
+          {/* ── Layer 3: Track backgrounds & organic baselines ── */}
+          {sortedCivs.map((civ, i) => {
+            const trackY = TOP_H + i * (TRACK_H + TRACK_GAP);
+            const midY = trackY + TRACK_H / 2;
+
+            return (
+              <g key={civ.id}>
+                {/* Very subtle track tint */}
+                <rect
+                  x={0} y={trackY} width={SVG_W} height={TRACK_H}
+                  fill={civ.color}
+                  fillOpacity={0.025}
+                />
+                {/* Organic dashed baseline — the "stem" of this civ's thread */}
+                <line
+                  x1={0} y1={midY} x2={SVG_W} y2={midY}
+                  stroke={civ.color}
+                  strokeOpacity={0.12}
+                  strokeWidth={0.8}
+                  strokeDasharray="1,10"
+                />
+              </g>
+            );
+          })}
+
+          {/* ── Layer 4: Milestone nodes ─────────────────────── */}
           {sortedCivs.map((civ, i) => {
             const trackY = TOP_H + i * (TRACK_H + TRACK_GAP);
             const milestones = layoutByCiv[civ.id] || [];
 
             return (
-              <g key={civ.id} className="timeline-track">
-                {/* Track background */}
-                <rect
-                  className="track-bg"
-                  x={0}
-                  y={trackY}
-                  width={SVG_W}
-                  height={TRACK_H}
-                  fill={civ.color}
-                  fillOpacity={0.035}
-                />
-
-                {/* Track baseline */}
-                <line
-                  x1={0}
-                  y1={trackY + TRACK_H / 2}
-                  x2={SVG_W}
-                  y2={trackY + TRACK_H / 2}
-                  stroke={civ.color}
-                  strokeOpacity={0.18}
-                  strokeWidth={1}
-                  strokeDasharray="3 6"
-                />
-
-                {/* Track bottom separator */}
-                <line
-                  x1={0}
-                  y1={trackY + TRACK_H}
-                  x2={SVG_W}
-                  y2={trackY + TRACK_H}
-                  stroke="#1e2840"
-                  strokeWidth={1}
-                />
-
-                {/* Milestone nodes */}
+              <g key={civ.id}>
                 {milestones.map(m => {
                   const x = xFromYear(m.date);
                   const cy = trackY + TRACK_H / 2 + m.yOff;
-                  const meta = TYPE_META[m.type] || { color: '#888', symbol: '·' };
+                  const meta = TYPE_META[m.type] || { color: '#888' };
                   const isSelected = selectedMilestone?.id === m.id;
+                  const isTypeActive = activeType === m.type;
                   const isHovered = hoveredMilestone?.id === m.id;
                   const isActive = isSelected || isHovered;
 
                   return (
                     <g
                       key={m.id}
-                      className="milestone-node"
                       transform={`translate(${x},${cy})`}
                       onClick={() => onSelect(m)}
-                      onMouseMove={e => handleMouseMove(e, m, civ, cy)}
+                      onMouseMove={e => handleMouseMove(e, m, civ)}
                       tabIndex={0}
                       role="button"
                       aria-label={`${m.title}, ${formatYear(m.date)}, ${civ.name}`}
                       onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') onSelect(m); }}
+                      style={{ cursor: 'pointer' }}
                     >
-                      {/* Selection ring */}
-                      {isSelected && (
-                        <circle
-                          r={NODE_R + 4}
-                          fill="none"
-                          stroke={meta.color}
-                          strokeWidth={1.5}
-                          strokeOpacity={0.6}
-                          filter="url(#glow)"
+                      {/* Type-active outer ring — connects visually to the kinship thread */}
+                      {isTypeActive && !isActive && (
+                        <circle r={NODE_R + 5} fill="none"
+                          stroke={meta.color} strokeWidth={0.8}
+                          strokeOpacity={0.4} strokeDasharray="2,3"
                         />
                       )}
 
-                      {/* Glow for active */}
-                      {isActive && (
-                        <circle
-                          r={NODE_R + 2}
-                          fill={meta.color}
-                          fillOpacity={0.15}
+                      {/* Selection halo */}
+                      {isSelected && (
+                        <circle r={NODE_R + 5} fill={meta.color} fillOpacity={0.08}
+                          stroke={meta.color} strokeWidth={1.5} strokeOpacity={0.7}
+                          filter="url(#nodeGlow)"
                         />
+                      )}
+
+                      {/* Hover glow */}
+                      {isHovered && (
+                        <circle r={NODE_R + 3} fill={meta.color} fillOpacity={0.15} />
                       )}
 
                       {/* Node body */}
                       <circle
                         r={NODE_R}
                         fill={meta.color}
-                        fillOpacity={isActive ? 0.5 : 0.22}
+                        fillOpacity={isActive ? 0.55 : isTypeActive ? 0.35 : 0.20}
                         stroke={meta.color}
                         strokeWidth={isSelected ? 2 : 1.5}
-                        strokeOpacity={isActive ? 1 : 0.7}
+                        strokeOpacity={isActive ? 1 : isTypeActive ? 0.8 : 0.65}
+                        style={{ transition: 'fill-opacity 0.2s ease' }}
                       />
 
-                      {/* Contested marker */}
+                      {/* Contested dot */}
                       {m.contested && (
-                        <circle
-                          r={2.5}
-                          cx={NODE_R - 1}
-                          cy={-NODE_R + 1}
-                          fill="#b8960c"
-                          stroke="#0a0d12"
-                          strokeWidth={0.5}
+                        <circle r={2.5} cx={NODE_R - 1} cy={-NODE_R + 1}
+                          fill="#b8960c" stroke="#0a0d12" strokeWidth={0.5}
                         />
                       )}
                     </g>
@@ -344,62 +401,44 @@ export default function ThreadsView({ data, selectedMilestone, hoveredMilestone,
             );
           })}
 
-          {/* Tooltip */}
+          {/* ── Layer 5: Tooltip ─────────────────────────────── */}
           {tooltip && (
-            <g
-              transform={`translate(${Math.min(tooltip.x, SVG_W - 200)},${tooltip.y})`}
-              pointerEvents="none"
-            >
-              <rect
-                x={-8}
-                y={-28}
-                width={Math.min(210, SVG_W - tooltip.x + 8)}
-                height={42}
-                rx={4}
-                fill="#161b26"
-                stroke="#2a3550"
-                strokeWidth={1}
-                opacity={0.97}
+            <g transform={`translate(${tooltip.x},${tooltip.y})`} pointerEvents="none">
+              <rect x={0} y={0} width={200} height={50} rx={4}
+                fill="#0f1117" stroke="#2a3550" strokeWidth={1} opacity={0.96}
               />
-              <text
-                y={-12}
-                fill="#d4c9a8"
-                fontSize={11}
-                fontWeight={500}
+              <text x={10} y={18} fill="#d4c9a8" fontSize={11} fontWeight={500}
                 style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
               >
-                {tooltip.milestone.title.length > 28
-                  ? tooltip.milestone.title.slice(0, 28) + '…'
+                {tooltip.milestone.title.length > 26
+                  ? tooltip.milestone.title.slice(0, 26) + '…'
                   : tooltip.milestone.title}
               </text>
-              <text
-                y={4}
-                fill="#8a7d65"
-                fontSize={10}
+              <text x={10} y={34} fill="#8a7d65" fontSize={9.5}
                 style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
               >
                 {tooltip.civ.name} · {formatYear(tooltip.milestone.date)}
-                {tooltip.milestone.contested ? ' ⚠' : ''}
+                {tooltip.milestone.contested ? '  ⚠ contested' : ''}
               </text>
+              {activeType && (
+                <text x={10} y={46} fill={TYPE_META[activeType]?.color || '#888'} fontSize={8.5}
+                  style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
+                >
+                  Thread: {TYPE_META[activeType]?.label}
+                </text>
+              )}
             </g>
           )}
         </svg>
 
-        {/* Legend strip at bottom */}
-        <div className="flex items-center gap-x-4 gap-y-1 flex-wrap px-3 py-2 border-t border-coal-700 text-xs text-parchment-500">
-          <span className="text-parchment-500 mr-1">Key:</span>
-          {Object.entries(TYPE_META).slice(0, 8).map(([type, meta]) => (
-            <span key={type} className="flex items-center gap-1">
-              <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
-                <circle cx="5" cy="5" r="4" fill={meta.color} fillOpacity="0.3" stroke={meta.color} strokeWidth="1" />
-              </svg>
-              {meta.label}
-            </span>
-          ))}
-          <span className="flex items-center gap-1">
-            <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
-              <circle cx="5" cy="5" r="2.5" fill="#b8960c" />
-            </svg>
+        {/* Kinship thread legend strip */}
+        <div className="flex items-center flex-wrap gap-x-5 gap-y-1 px-4 py-2.5 border-t border-coal-700 text-xs text-parchment-500">
+          <span className="text-parchment-500 flex-shrink-0">
+            Threads connect the same innovation across civilizations —
+            hover any node or thread to illuminate its lineage.
+          </span>
+          <span className="flex items-center gap-1.5 flex-shrink-0">
+            <svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="2.5" fill="#b8960c"/></svg>
             contested date
           </span>
         </div>

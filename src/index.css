@@ -104,6 +104,11 @@
   }
 }
 
+/* Panel borders — softer, less dashboard */
+.panel {
+  border-color: #1e2840 !important;
+}
+
 /* Timeline SVG styles */
 .timeline-track:hover .track-bg {
   fill-opacity: 0.08;
@@ -111,16 +116,23 @@
 
 .milestone-node {
   cursor: pointer;
-  transition: transform 0.15s ease;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .milestone-node:hover {
-  transform: scale(1.3);
+  transform: scale(1.25);
 }
 
 .milestone-node:focus-visible {
   outline: 2px solid #00a896;
-  outline-offset: 2px;
+  outline-offset: 3px;
+  border-radius: 50%;
+}
+
+/* Kinship thread hover amplification */
+svg path[style*="cursor: crosshair"]:hover {
+  stroke-opacity: 0.7 !important;
+  stroke-width: 2px !important;
 }
 
 /* Diffusion arc animation */
