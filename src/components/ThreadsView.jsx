@@ -593,13 +593,21 @@ export default function ThreadsView({ data, selectedMilestone, hoveredMilestone,
                     stroke="#d4c9a8" strokeWidth={0.8} strokeOpacity={0.28}
                     strokeDasharray="3,5" pointerEvents="none"
                   />
-                  {/* Draggable handle (sits in axis zone) */}
+                  {/* Draggable handle — visual only, no pointer events */}
                   <rect
                     x={sx - 7} y={ERA_H + 2}
                     width={14} height={AXIS_H - 4}
                     rx={4}
                     fill="#161b26"
                     stroke="#8a7d65" strokeWidth={1} strokeOpacity={0.7}
+                    pointerEvents="none"
+                  />
+                  {/* Transparent 44×44 hit area centered on the visible thumb */}
+                  <rect
+                    x={sx - 22}
+                    y={ERA_H + 2 + (AXIS_H - 4) / 2 - 22}
+                    width={44} height={44}
+                    fill="transparent"
                     style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
                     onMouseDown={startScrubDrag}
                     onTouchStart={startScrubDrag}
@@ -693,48 +701,52 @@ export default function ThreadsView({ data, selectedMilestone, hoveredMilestone,
           {formatYear(scrubberYear)}
         </span>
 
-        {/* Scrubber track */}
+        {/* Scrubber track — outer div is 44px tall (touch target); inner strip is visual */}
         <div
-          className="flex-1 relative h-4 rounded cursor-pointer"
-          style={{ background: '#0f1117', border: '1px solid #1e2840' }}
+          className="flex-1 relative flex items-center cursor-pointer"
+          style={{ minHeight: 44 }}
           onClick={e => {
             const r   = e.currentTarget.getBoundingClientRect();
             const pct = (e.clientX - r.left) / r.width;
             setScrubberYear(Math.round(yearFromX(SCRUB_X0 + pct * (SCRUB_XN - SCRUB_X0))));
           }}
         >
-          {/* Era segments */}
-          {ERAS.map((era, i) => {
-            const p0 = scrubPct(era.start);
-            const p1 = scrubPct(Math.min(era.end, TIME_DOMAIN[1]));
-            return (
-              <div key={era.label}
-                className="absolute top-0 bottom-0 text-center overflow-hidden"
-                style={{
-                  left:  `${p0 * 100}%`,
-                  width: `${(p1 - p0) * 100}%`,
-                  background: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.025)',
-                  borderLeft: i > 0 ? '1px solid #1e2840' : 'none',
-                }}
-              />
-            );
-          })}
-          {/* Progress fill */}
-          <div className="absolute top-0 left-0 bottom-0 rounded"
-            style={{
-              width: `${scrubPct(scrubberYear) * 100}%`,
-              background: 'linear-gradient(to right, rgba(0,168,150,0.22), rgba(0,168,150,0.06))',
-              transition: isPlaying ? 'none' : 'width 0.1s',
-            }}
-          />
-          {/* Position needle */}
-          <div className="absolute top-0 bottom-0 w-px"
-            style={{
-              left: `${scrubPct(scrubberYear) * 100}%`,
-              background: '#d4c9a8',
-              opacity: 0.55,
-            }}
-          />
+          {/* Visual track — thin strip centered within the touch target */}
+          <div className="relative w-full h-4 rounded"
+            style={{ background: '#0f1117', border: '1px solid #1e2840' }}>
+            {/* Era segments */}
+            {ERAS.map((era, i) => {
+              const p0 = scrubPct(era.start);
+              const p1 = scrubPct(Math.min(era.end, TIME_DOMAIN[1]));
+              return (
+                <div key={era.label}
+                  className="absolute top-0 bottom-0 text-center overflow-hidden"
+                  style={{
+                    left:  `${p0 * 100}%`,
+                    width: `${(p1 - p0) * 100}%`,
+                    background: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.025)',
+                    borderLeft: i > 0 ? '1px solid #1e2840' : 'none',
+                  }}
+                />
+              );
+            })}
+            {/* Progress fill */}
+            <div className="absolute top-0 left-0 bottom-0 rounded"
+              style={{
+                width: `${scrubPct(scrubberYear) * 100}%`,
+                background: 'linear-gradient(to right, rgba(0,168,150,0.22), rgba(0,168,150,0.06))',
+                transition: isPlaying ? 'none' : 'width 0.1s',
+              }}
+            />
+            {/* Position needle */}
+            <div className="absolute top-0 bottom-0 w-px"
+              style={{
+                left: `${scrubPct(scrubberYear) * 100}%`,
+                background: '#d4c9a8',
+                opacity: 0.55,
+              }}
+            />
+          </div>
         </div>
 
         {/* End year */}
@@ -745,7 +757,7 @@ export default function ThreadsView({ data, selectedMilestone, hoveredMilestone,
 
       {/* ── Legend bar ────────────────────────────────────────────────────────── */}
       <div className="flex-shrink-0 flex flex-wrap items-center gap-x-5 gap-y-1
-        px-4 py-2 border-t border-coal-700 bg-coal-900 text-xs text-parchment-500">
+        px-4 py-2 border-t border-coal-700 bg-coal-900 text-xs text-parchment-400">
 
         {/* Node tier legend */}
         {[
@@ -772,7 +784,7 @@ export default function ThreadsView({ data, selectedMilestone, hoveredMilestone,
         <span className="w-px h-3 bg-coal-600 mx-1" aria-hidden="true" />
 
         {/* Interaction hint */}
-        <span className="flex-shrink-0 text-parchment-500">
+        <span className="flex-shrink-0 text-parchment-400">
           Hover any node or thread to illuminate its lineage
         </span>
       </div>
