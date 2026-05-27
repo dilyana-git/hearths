@@ -6,8 +6,8 @@ import {
 } from '../utils/constants';
 
 // ─── Layout constants ────────────────────────────────────────────────────────
-const TRACK_H   = 62;
-const TRACK_GAP = 10;
+const TRACK_H   = 48;
+const TRACK_GAP = 5;
 const ERA_H     = 30;   // colored era annotation band
 const AXIS_H    = 38;   // tick-mark row
 const TOP_H     = ERA_H + AXIS_H;   // 68 px total header
@@ -105,7 +105,7 @@ function sortCivs(civs, sortBy) {
 function computeLayout(milestones) {
   const sorted = [...milestones].sort((a, b) => a.date - b.date);
   const center = TRACK_H / 2;
-  const yOpts  = [0, -20, +20, -36, +36];
+  const yOpts  = [0, -9, +9, -14, +14];
   const placed = [];
   return sorted.map(m => {
     const x = xFromYear(m.date);
@@ -271,11 +271,11 @@ export default function ThreadsView({ data, selectedMilestone, hoveredMilestone,
                   borderRadius: 2,
                 }} />
               <span className="serif font-medium leading-tight"
-                style={{ color: civ.color, fontSize: 12.5, opacity: 0.92 }}>
+                style={{ color: civ.color, fontSize: 12.5 }}>
                 {civ.name}
               </span>
-              <span className="text-parchment-500 mt-0.5"
-                style={{ fontSize: 8.5, letterSpacing: '0.02em' }}>
+              <span className="mt-0.5"
+                style={{ fontSize: 12, letterSpacing: '0.02em', color: '#8a7d65' }}>
                 {civ.region.split('(')[0].trim()}
               </span>
             </div>
@@ -382,6 +382,28 @@ export default function ThreadsView({ data, selectedMilestone, hoveredMilestone,
                   stroke="#2a3550" strokeWidth={0.8} />
               ))}
 
+              {/* Scale compression boundary annotation at -9500 BCE */}
+              {(() => {
+                const bx = xFromYear(-9500);
+                return (
+                  <g>
+                    <line x1={bx} y1={ERA_H + 2} x2={bx} y2={TOP_H}
+                      stroke="#b8960c" strokeWidth={1.5} strokeOpacity={0.5}
+                    />
+                    <text x={bx - 6} y={ERA_H + AXIS_H - 6} textAnchor="end"
+                      fill="#b8960c" fontSize={12} opacity={0.8}
+                      style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+                      ← compressed
+                    </text>
+                    <text x={bx + 6} y={ERA_H + AXIS_H - 6} textAnchor="start"
+                      fill="#b8960c" fontSize={12} opacity={0.8}
+                      style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+                      expanded →
+                    </text>
+                  </g>
+                );
+              })()}
+
               {/* Axis baseline */}
               <line x1={0} y1={TOP_H} x2={SVG_W} y2={TOP_H}
                 stroke="#2a3550" strokeWidth={0.8} />
@@ -428,6 +450,19 @@ export default function ThreadsView({ data, selectedMilestone, hoveredMilestone,
                     <circle key={pi} cx={pt.x} cy={pt.y} r={2.5}
                       fill={meta.color} fillOpacity={0.55} pointerEvents="none" />
                   ))}
+                  {/* Thread identity label at start of active thread */}
+                  {isActive && points.length > 0 && (
+                    <g transform={`translate(${Math.max(48, points[0].x)},${TOP_H + 12})`} pointerEvents="none">
+                      <rect x={-44} y={-11} width={88} height={16}
+                        rx={3} fill="#0d1119" stroke={meta.color} strokeWidth={0.6} strokeOpacity={0.45}
+                      />
+                      <text textAnchor="middle" y={3}
+                        fill={meta.color} fontSize={9.5} fontWeight={500}
+                        style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+                        {meta.label} lineage
+                      </text>
+                    </g>
+                  )}
                 </g>
               );
             })}
@@ -736,9 +771,9 @@ export default function ThreadsView({ data, selectedMilestone, hoveredMilestone,
 
         <span className="w-px h-3 bg-coal-600 mx-1" aria-hidden="true" />
 
-        {/* Scale note */}
+        {/* Interaction hint */}
         <span className="flex-shrink-0 text-parchment-500">
-          Time scale compressed before 9 500 BCE — hover any node or thread to illuminate its lineage
+          Hover any node or thread to illuminate its lineage
         </span>
       </div>
     </div>
