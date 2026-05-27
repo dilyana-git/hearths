@@ -248,6 +248,21 @@ export default function CausalChain({ data, selectedCivId, onSelectCiv }) {
         <p className="text-xs text-parchment-500 mt-0.5">
           Diamond's pathway from biogeography to civilizational complexity. Select a civilization to trace its chain; hover any node to read its role.
         </p>
+
+        {/* Connection-strength key — color + dash pattern so it's not color-only */}
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2.5">
+          {Object.entries(CHAIN_STRENGTH_COLORS).map(([s, c]) => (
+            <span key={s} className="flex items-center gap-1.5">
+              <svg width="18" height="8" aria-hidden="true" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+                <line x1="1" y1="4" x2="17" y2="4"
+                  stroke={c} strokeWidth="2.5" strokeLinecap="round"
+                  strokeDasharray={s === 'absent' ? '3,3' : s === 'context-specific' ? '1,2' : 'none'}
+                />
+              </svg>
+              <span className="text-xs text-parchment-400">{CHAIN_STRENGTH_LABELS[s]}</span>
+            </span>
+          ))}
+        </div>
       </div>
 
       <div className="flex flex-1 overflow-hidden">
@@ -291,6 +306,25 @@ export default function CausalChain({ data, selectedCivId, onSelectCiv }) {
                       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
                     </filter>
                   </defs>
+
+                  {/* ── Category group headers ── */}
+                  {[
+                    { y: 18,  label: 'Geographic endowment' },
+                    { y: 136, label: 'Agricultural transition' },
+                    { y: 264, label: 'Social complexity' },
+                    { y: 337, label: 'Civilizational outcomes' },
+                  ].map(({ y, label }) => (
+                    <g key={label} transform={`translate(${CX}, ${y})`}>
+                      <line x1={-100} y1={0} x2={-(NODE_R + 12)} y2={0} stroke="#2a3550" strokeWidth={0.7} />
+                      <line x1={NODE_R + 12} y1={0} x2={100} y2={0} stroke="#2a3550" strokeWidth={0.7} />
+                      {/* Background rect so the trunk line doesn't bisect the text */}
+                      <rect x={-58} y={-8} width={116} height={13} fill="#0a0d12" />
+                      <text y={4} textAnchor="middle" fill="#4a5570" fontSize={8} letterSpacing={1.5}
+                        style={{ fontFamily: 'Inter, system-ui, sans-serif', textTransform: 'uppercase' }}>
+                        {label}
+                      </text>
+                    </g>
+                  ))}
 
                   {/* ── Spine connectors ── */}
                   {SPINE.slice(0, -1).map((id, i) => (
@@ -344,13 +378,6 @@ export default function CausalChain({ data, selectedCivId, onSelectCiv }) {
                     />
                   ))}
 
-                  {/* ── "Outcomes" label below leaves ── */}
-                  <text x={CX} y={leafBaseY + LEAF_H / 2 + 20}
-                    textAnchor="middle" fill="#3a4560" fontSize={8.5} letterSpacing={1.5}
-                    style={{ fontFamily: 'Inter, system-ui, sans-serif', textTransform: 'uppercase' }}
-                  >
-                    Outcomes of the full chain
-                  </text>
                 </svg>
               </div>
 
@@ -366,16 +393,6 @@ export default function CausalChain({ data, selectedCivId, onSelectCiv }) {
                     Hover a node to read its role in the chain
                   </p>
                 )}
-              </div>
-
-              {/* Strength colour key */}
-              <div className="flex-shrink-0 flex items-center justify-center gap-6 pb-4 flex-wrap">
-                {Object.entries(CHAIN_STRENGTH_COLORS).map(([s, c]) => (
-                  <div key={s} className="flex items-center gap-1.5">
-                    <span className="w-3 h-px" style={{ display: 'inline-block', backgroundColor: c }} />
-                    <span className="text-xs" style={{ color: c }}>{CHAIN_STRENGTH_LABELS[s]}</span>
-                  </div>
-                ))}
               </div>
 
               {/* Civ summary */}

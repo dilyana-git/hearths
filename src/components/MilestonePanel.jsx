@@ -1,6 +1,14 @@
 import React from 'react';
 import { TYPE_META, AXIS_LABELS, AXIS_COLORS, formatYear } from '../utils/constants';
 
+function MetaPill({ children }) {
+  return (
+    <div className="flex items-center gap-1.5 bg-coal-700 border border-coal-600 rounded px-2.5 py-1">
+      {children}
+    </div>
+  );
+}
+
 function ChainLink({ label, strength }) {
   const strengthColors = {
     strong: '#00a896', moderate: '#b8960c', weak: '#c0392b',
@@ -64,31 +72,27 @@ export default function MilestonePanel({ milestone, civilization, onClose, onSel
       </div>
 
       <div className="flex-1 px-5 py-4 space-y-5">
-        {/* Who & When */}
-        <section className="flex flex-wrap gap-3">
+        {/* Who & When — three standardized MetaPill tags */}
+        <section className="flex flex-wrap gap-2">
           {civilization && (
-            <div className="flex items-center gap-1.5 bg-coal-700 rounded px-2.5 py-1.5">
-              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: civilization.color }} />
+            <MetaPill>
+              <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: civilization.color }} />
               <span className="text-xs font-medium text-parchment-300">{civilization.name}</span>
-            </div>
+            </MetaPill>
           )}
-          <div className="flex items-center gap-1.5 bg-coal-700 rounded px-2.5 py-1.5">
-            <span className="text-xs text-parchment-400">
-              <span className="text-parchment-200 font-medium">{formatYear(milestone.date)}</span>
-              {milestone.contested && (
-                <span className="ml-1.5 text-gold-500">⚠ contested</span>
-              )}
-            </span>
-          </div>
+          <MetaPill>
+            <span className="text-xs font-medium text-parchment-200">{formatYear(milestone.date)}</span>
+            {milestone.contested && (
+              <span className="text-xs text-gold-500">⚠ contested</span>
+            )}
+          </MetaPill>
           {civilization && (
-            <div
-              className="flex items-center gap-1.5 bg-coal-700 rounded px-2.5 py-1.5"
-              style={{ borderLeft: `2px solid ${AXIS_COLORS[civilization.axisContext]}` }}
-            >
-              <span className="text-xs" style={{ color: AXIS_COLORS[civilization.axisContext] }}>
+            <MetaPill>
+              <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: AXIS_COLORS[civilization.axisContext] }} />
+              <span className="text-xs text-parchment-300">
                 {civilization.axisContext.replace(/-/g, '–')} axis
               </span>
-            </div>
+            </MetaPill>
           )}
         </section>
 
