@@ -2,7 +2,7 @@ import React, { useMemo, useRef, useState, useEffect, useCallback } from 'react'
 import * as d3 from 'd3';
 import {
   TIME_DOMAIN, TYPE_META, ERAS, AXIS_COLORS,
-  formatYear, getNodeTier, NODE_TIERS,
+  formatYear, getNodeTier,
 } from '../utils/constants';
 
 // ─── Layout constants ────────────────────────────────────────────────────────
@@ -755,39 +755,6 @@ export default function ThreadsView({ data, selectedMilestone, hoveredMilestone,
         </span>
       </div>
 
-      {/* ── Legend bar ────────────────────────────────────────────────────────── */}
-      <div className="flex-shrink-0 flex flex-wrap items-center gap-x-5 gap-y-1
-        px-4 py-2 border-t border-coal-700 bg-coal-900 text-xs text-parchment-400">
-
-        {/* Node tier legend */}
-        {[
-          { tier: 'ring',   svg: <circle r="5" fill="none" stroke="#8a7d65" strokeWidth="1.5" /> },
-          { tier: 'filled', svg: <circle r="5" fill="#8a7d65" fillOpacity="0.3" stroke="#8a7d65" strokeWidth="1.5" /> },
-          { tier: 'double', svg: <><circle r="8.5" fill="none" stroke="#8a7d65" strokeWidth="0.75" strokeOpacity="0.45"/><circle r="4" fill="#8a7d65" fillOpacity="0.45" stroke="#8a7d65" strokeWidth="1.5"/></> },
-        ].map(({ tier, svg }) => (
-          <span key={tier} className="flex items-center gap-1.5 flex-shrink-0">
-            <svg width="20" height="20" viewBox="-10 -10 20 20" aria-hidden="true">{svg}</svg>
-            {NODE_TIERS[tier].label}
-          </span>
-        ))}
-
-        <span className="w-px h-3 bg-coal-600 mx-1" aria-hidden="true" />
-
-        {/* Contested */}
-        <span className="flex items-center gap-1.5 flex-shrink-0">
-          <svg width="12" height="12" viewBox="0 0 12 12">
-            <circle cx="6" cy="6" r="3" fill="#b8960c" />
-          </svg>
-          Contested date
-        </span>
-
-        <span className="w-px h-3 bg-coal-600 mx-1" aria-hidden="true" />
-
-        {/* Interaction hint */}
-        <span className="flex-shrink-0 text-parchment-400">
-          Hover any node or thread to illuminate its lineage
-        </span>
-      </div>
     </div>
   );
 }
