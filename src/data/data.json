@@ -4,7 +4,10 @@
       "id": "fertile-crescent",
       "name": "Fertile Crescent",
       "region": "Southwest Asia",
-      "hearth": { "lat": 33.5, "lng": 43.0 },
+      "hearth": {
+        "lat": 33.5,
+        "lng": 43
+      },
       "axisContext": "east-west",
       "color": "#00a896",
       "sortOrder": 1,
@@ -19,13 +22,39 @@
         "technology": "strong",
         "political-complexity": "strong",
         "epidemic-disease": "strong"
-      }
+      },
+      "stages": [
+        {
+          "stage": "foraging",
+          "fromDate": -13000
+        },
+        {
+          "stage": "incipient-cultivation",
+          "fromDate": -12500
+        },
+        {
+          "stage": "established-farming",
+          "fromDate": -9500
+        },
+        {
+          "stage": "towns-chiefdoms",
+          "fromDate": -6500
+        },
+        {
+          "stage": "cities-states",
+          "fromDate": -3500
+        }
+      ],
+      "imagePrompt": "The Fertile Crescent seen from above at dusk, reed marshes and river deltas glowing amber, the first walled cities rising from alluvial plains, Piranesi-meets-Rackham etching, dark atmospheric, deep umber and gold, parchment texture, no text"
     },
     {
       "id": "east-asia",
       "name": "East Asia",
       "region": "China (Yellow & Yangtze Rivers)",
-      "hearth": { "lat": 34.0, "lng": 113.0 },
+      "hearth": {
+        "lat": 34,
+        "lng": 113
+      },
       "axisContext": "east-west",
       "color": "#b8960c",
       "sortOrder": 2,
@@ -40,13 +69,39 @@
         "technology": "strong",
         "political-complexity": "strong",
         "epidemic-disease": "strong"
-      }
+      },
+      "stages": [
+        {
+          "stage": "foraging",
+          "fromDate": -13000
+        },
+        {
+          "stage": "incipient-cultivation",
+          "fromDate": -9000
+        },
+        {
+          "stage": "established-farming",
+          "fromDate": -7500
+        },
+        {
+          "stage": "towns-chiefdoms",
+          "fromDate": -5000
+        },
+        {
+          "stage": "cities-states",
+          "fromDate": -2000
+        }
+      ],
+      "imagePrompt": "Ancient Yellow River valley at flood season, terraced millet fields climbing loess hills, a walled settlement of fired-brick buildings, Moebius-style architectural cross-section, dark ink wash, indigo and ochre on aged paper, no text"
     },
     {
       "id": "indus-valley",
       "name": "Indus Valley",
       "region": "South Asia (Pakistan & NW India)",
-      "hearth": { "lat": 25.0, "lng": 67.0 },
+      "hearth": {
+        "lat": 25,
+        "lng": 67
+      },
       "axisContext": "east-west",
       "color": "#5a7fb5",
       "sortOrder": 3,
@@ -61,13 +116,39 @@
         "technology": "strong",
         "political-complexity": "moderate",
         "epidemic-disease": "moderate"
-      }
+      },
+      "stages": [
+        {
+          "stage": "foraging",
+          "fromDate": -13000
+        },
+        {
+          "stage": "incipient-cultivation",
+          "fromDate": -7000
+        },
+        {
+          "stage": "established-farming",
+          "fromDate": -6500
+        },
+        {
+          "stage": "towns-chiefdoms",
+          "fromDate": -4500
+        },
+        {
+          "stage": "cities-states",
+          "fromDate": -2600
+        }
+      ],
+      "imagePrompt": "The great bath of Mohenjo-daro at dawn mist, brick-lined streets arranged in grid precision, merchant seals pressed into clay, Beksiński atmospheric, deep teal-grey, etched geometric detail on parchment ground, no text"
     },
     {
       "id": "mesoamerica",
       "name": "Mesoamerica",
       "region": "Mexico & Central America",
-      "hearth": { "lat": 19.0, "lng": -99.0 },
+      "hearth": {
+        "lat": 19,
+        "lng": -99
+      },
       "axisContext": "north-south",
       "color": "#7a9e5c",
       "sortOrder": 4,
@@ -82,13 +163,39 @@
         "technology": "moderate",
         "political-complexity": "moderate",
         "epidemic-disease": "weak"
-      }
+      },
+      "stages": [
+        {
+          "stage": "foraging",
+          "fromDate": -13000
+        },
+        {
+          "stage": "incipient-cultivation",
+          "fromDate": -7000
+        },
+        {
+          "stage": "established-farming",
+          "fromDate": -4000
+        },
+        {
+          "stage": "towns-chiefdoms",
+          "fromDate": -1600
+        },
+        {
+          "stage": "cities-states",
+          "fromDate": -500
+        }
+      ],
+      "imagePrompt": "A stepped pyramid emerging from dense jungle canopy at twilight, maize fields patterning the valley floor, Remedios Varo dreamlike, jade and obsidian palette, dark atmospheric botanical illustration, no text"
     },
     {
       "id": "andean",
       "name": "Andean South America",
       "region": "Peru, Bolivia & the Pacific coast",
-      "hearth": { "lat": -13.0, "lng": -74.0 },
+      "hearth": {
+        "lat": -13,
+        "lng": -74
+      },
       "axisContext": "north-south",
       "color": "#c4966a",
       "sortOrder": 5,
@@ -103,13 +210,39 @@
         "technology": "moderate",
         "political-complexity": "moderate",
         "epidemic-disease": "weak"
-      }
+      },
+      "stages": [
+        {
+          "stage": "foraging",
+          "fromDate": -13000
+        },
+        {
+          "stage": "incipient-cultivation",
+          "fromDate": -5000
+        },
+        {
+          "stage": "established-farming",
+          "fromDate": -4500
+        },
+        {
+          "stage": "towns-chiefdoms",
+          "fromDate": -3500
+        },
+        {
+          "stage": "cities-states",
+          "fromDate": 600
+        }
+      ],
+      "imagePrompt": "Andean terraces cascading down vertical mountain faces, llama caravans moving along a high ridge, the Pacific coast glinting far below, Rackham-style dramatic cross-section, blue-violet and copper, parchment texture, no text"
     },
     {
       "id": "sub-saharan-sahel",
       "name": "Sub-Saharan Sahel",
       "region": "West & Central Africa",
-      "hearth": { "lat": 12.0, "lng": 0.0 },
+      "hearth": {
+        "lat": 12,
+        "lng": 0
+      },
       "axisContext": "fragmented",
       "color": "#c0392b",
       "sortOrder": 6,
@@ -124,13 +257,39 @@
         "technology": "moderate",
         "political-complexity": "moderate",
         "epidemic-disease": "context-specific"
-      }
+      },
+      "stages": [
+        {
+          "stage": "foraging",
+          "fromDate": -13000
+        },
+        {
+          "stage": "incipient-cultivation",
+          "fromDate": -5000
+        },
+        {
+          "stage": "established-farming",
+          "fromDate": -4000
+        },
+        {
+          "stage": "towns-chiefdoms",
+          "fromDate": -2000
+        },
+        {
+          "stage": "cities-states",
+          "fromDate": 300
+        }
+      ],
+      "imagePrompt": "The inland Niger delta at its height, canoe trade routes threading through water-meadows, a mud-brick mosque rising over a market town, Piranesi aerial etching, warm ochre and sienna on dark ground, no text"
     },
     {
       "id": "eastern-north-america",
       "name": "Eastern North America",
       "region": "Mississippi Valley & Eastern Woodlands",
-      "hearth": { "lat": 38.5, "lng": -90.0 },
+      "hearth": {
+        "lat": 38.5,
+        "lng": -90
+      },
       "axisContext": "north-south",
       "color": "#8a7aad",
       "sortOrder": 7,
@@ -145,13 +304,35 @@
         "technology": "weak",
         "political-complexity": "weak",
         "epidemic-disease": "absent"
-      }
+      },
+      "stages": [
+        {
+          "stage": "foraging",
+          "fromDate": -13000
+        },
+        {
+          "stage": "incipient-cultivation",
+          "fromDate": -3000
+        },
+        {
+          "stage": "established-farming",
+          "fromDate": -2000
+        },
+        {
+          "stage": "towns-chiefdoms",
+          "fromDate": 900
+        }
+      ],
+      "imagePrompt": "The Cahokia mound complex seen from above in autumn, the Mississippi River shining beyond, thousands of cooking fires, Rackham atmospheric pen-and-ink, amber and charcoal, parchment ground, no text"
     },
     {
       "id": "new-guinea",
       "name": "New Guinea Highlands",
       "region": "Papua New Guinea",
-      "hearth": { "lat": -5.5, "lng": 145.0 },
+      "hearth": {
+        "lat": -5.5,
+        "lng": 145
+      },
       "axisContext": "isolated",
       "color": "#a0a8b0",
       "sortOrder": 8,
@@ -166,13 +347,35 @@
         "technology": "weak",
         "political-complexity": "absent",
         "epidemic-disease": "absent"
-      }
+      },
+      "stages": [
+        {
+          "stage": "foraging",
+          "fromDate": -13000
+        },
+        {
+          "stage": "incipient-cultivation",
+          "fromDate": -7000
+        },
+        {
+          "stage": "established-farming",
+          "fromDate": -6500
+        },
+        {
+          "stage": "towns-chiefdoms",
+          "fromDate": 500
+        }
+      ],
+      "imagePrompt": "New Guinea highland garden valleys carved into impossible steep ridges, sweet potato fields terraced in dense green, morning mist filling the valleys, Beksiński otherworldly, dark emerald and charcoal on aged paper, no text"
     },
     {
       "id": "aboriginal-australia",
       "name": "Aboriginal Australia",
       "region": "Australia",
-      "hearth": { "lat": -25.0, "lng": 134.0 },
+      "hearth": {
+        "lat": -25,
+        "lng": 134
+      },
       "axisContext": "isolated",
       "color": "#8a7d65",
       "sortOrder": 9,
@@ -187,10 +390,20 @@
         "technology": "absent",
         "political-complexity": "absent",
         "epidemic-disease": "absent"
-      }
+      },
+      "stages": [
+        {
+          "stage": "foraging",
+          "fromDate": -13000
+        },
+        {
+          "stage": "incipient-cultivation",
+          "fromDate": -6000
+        }
+      ],
+      "imagePrompt": "The Australian continent seen from altitude at twilight, ancient songlines glowing faintly across desert and coast, a single campfire near a river, Moebius cosmic geography, ochre and deep violet on parchment, no text"
     }
   ],
-
   "milestones": [
     {
       "id": "fc-sedentism",
@@ -312,7 +525,6 @@
       "causalExplanation": "Living in dense cities alongside domesticated animals enabled the zoonotic origin of epidemic diseases: smallpox, measles, and influenza. Millennia of exposure built partial population immunity. When Eurasian peoples later contacted isolated populations, these diseases traveled faster than armies — accounting for up to 90% of Indigenous mortality in post-contact Americas.",
       "caveat": "The timing of specific disease emergence is difficult to establish archaeologically. The diseases that devastated the Americas were products of centuries of Eurasian co-evolution with livestock."
     },
-
     {
       "id": "ea-pottery",
       "civilizationId": "east-asia",
@@ -423,7 +635,6 @@
       "causalExplanation": "Oracle bone inscriptions from the Shang dynasty (~1200 BCE) are the earliest undisputed Chinese writing, used for divination records. Earlier symbols from Neolithic sites may represent proto-writing but are not yet recognized as a fully functional script.",
       "caveat": "Some claim Neolithic pottery symbols as early writing; this is contested. Oracle bone script remains our earliest certifiable Chinese writing system."
     },
-
     {
       "id": "iv-sedentism",
       "civilizationId": "indus-valley",
@@ -524,7 +735,6 @@
       "causalExplanation": "The Indus civilization achieved remarkable standardization across a vast area — uniform weights, consistent urban plans, shared iconography — suggesting some form of coordinated political authority. Yet no palaces, royal burials, or clear warrior elite have been identified, unlike in Mesopotamia or Egypt.",
       "caveat": "The political structure of the Indus civilization is genuinely unknown. It may have been a confederation, a theocracy, a merchant republic, or something with no modern analogue. This is a major caveat for Diamond-style arguments about state formation."
     },
-
     {
       "id": "meso-plant-dom",
       "civilizationId": "mesoamerica",
@@ -635,7 +845,6 @@
       "causalExplanation": "Metalworking arrived in Mesoamerica very late — around 600–900 CE via diffusion from South America — and was used primarily for ornament and ritual objects rather than tools or weapons. The absence of iron metallurgy until contact meant Mesoamerican armies fought with obsidian-edged weapons against Spanish steel.",
       "caveat": "This extremely late adoption of metallurgy is itself striking evidence that geographic isolation from Eurasian innovations had concrete technological consequences."
     },
-
     {
       "id": "andean-plant-dom",
       "civilizationId": "andean",
@@ -716,7 +925,6 @@
       "causalExplanation": "Wari (Peru) and Tiwanaku (Bolivia) ~600–1000 CE were the Andes' first expansive imperial states, with road networks, administrative centers, and iconographic programs spread across hundreds of kilometers.",
       "caveat": null
     },
-
     {
       "id": "ssa-pottery",
       "civilizationId": "sub-saharan-sahel",
@@ -797,7 +1005,6 @@
       "causalExplanation": "The Kingdom of Ghana (not to be confused with modern Ghana) emerged in the western Sahel around 300–400 CE, controlling gold and salt trade routes. It was the first of a succession of large West African empires — Ghana, Mali, Songhai — that rivaled contemporaneous states in scale and sophistication.",
       "caveat": null
     },
-
     {
       "id": "ena-plant-dom",
       "civilizationId": "eastern-north-america",
@@ -858,7 +1065,6 @@
       "causalExplanation": "Cahokia's monumental earthwork complex — over 120 mounds across 5 square miles — required organized mass labor and coercive authority. It was abandoned by ~1350 CE, possibly due to environmental degradation, climate change, or political fragmentation.",
       "caveat": null
     },
-
     {
       "id": "ng-sedentism",
       "civilizationId": "new-guinea",
@@ -909,7 +1115,6 @@
       "causalExplanation": "New Guinea's political organization reached the 'big man' level — charismatic leaders who accumulate followers through generosity, never through inherited coercive authority. Positions could not be passed to children; authority dissolved at death. The terrain fragmented populations into thousands of mutually hostile groups speaking 800+ languages, preventing the aggregation that produces states.",
       "caveat": null
     },
-
     {
       "id": "au-animal-dom",
       "civilizationId": "aboriginal-australia",
@@ -941,90 +1146,350 @@
       "caveat": "Whether Australian societies showed 'social stratification' in the archaeological sense is contested. Hierarchies existed but were situational, age- and skill-based, not institutionalized across generations in the way agricultural states develop."
     }
   ],
-
   "diffusionEvents": [
     {
       "id": "diff-wheat-europe",
       "innovation": "Wheat & Barley Farming",
       "fromId": "fertile-crescent",
-      "toRegion": { "lat": 48.0, "lng": 16.0, "name": "Central Europe" },
+      "toRegion": {
+        "lat": 48,
+        "lng": 16,
+        "name": "Central Europe"
+      },
       "approxDate": -5500,
       "axisAlong": "latitude",
       "description": "Wheat and barley farming spread westward from Anatolia into Europe along the Mediterranean coast and Danube corridor — traveling across similar latitudes with compatible climates. The diffusion took ~2,000 years to cross the continent.",
-      "strength": "strong"
+      "strength": "strong",
+      "enablingTech": "farming-wave",
+      "fromDate": -7000,
+      "toDate": -3500,
+      "flows": [
+        "wheat",
+        "barley",
+        "einkorn",
+        "livestock",
+        "pottery traditions"
+      ],
+      "narrative": "Farming populations expanded westward from Anatolia in a slow demic wave, absorbing and replacing forager populations across Europe over 3,500 years."
     },
     {
       "id": "diff-wheat-indus",
       "innovation": "Wheat & Barley Farming",
       "fromId": "fertile-crescent",
-      "toRegion": { "lat": 27.0, "lng": 68.0, "name": "Indus Plain" },
+      "toRegion": {
+        "lat": 27,
+        "lng": 68,
+        "name": "Indus Plain"
+      },
       "approxDate": -6000,
       "axisAlong": "latitude",
       "description": "Fertile Crescent crops diffused eastward to the Indus Valley across a belt of similar subtropical dry climate — one of the canonical examples of east–west axis enabling crop spread.",
-      "strength": "strong"
+      "strength": "strong",
+      "enablingTech": "farming-wave",
+      "fromDate": -7000,
+      "toDate": -5000,
+      "flows": [
+        "wheat",
+        "barley",
+        "cattle",
+        "sheep",
+        "goats"
+      ],
+      "narrative": "East–west climate matching allowed Fertile Crescent crops to spread directly to the Indus Plain without adaptation — Diamond's canonical axis-diffusion example."
     },
     {
       "id": "diff-cattle-africa",
       "innovation": "Cattle Pastoralism",
       "fromId": "fertile-crescent",
-      "toRegion": { "lat": 5.0, "lng": 25.0, "name": "East Africa" },
+      "toRegion": {
+        "lat": 5,
+        "lng": 25,
+        "name": "East Africa"
+      },
       "approxDate": -4000,
       "axisAlong": "meridional",
       "description": "Cattle-keeping spread from Northeast Africa southward — but crossed dramatically different climate zones, slowing diffusion. Tropical diseases (trypanosomiasis) halted cattle spread in much of sub-Saharan Africa.",
-      "strength": "weak"
+      "strength": "weak",
+      "enablingTech": "foot-river",
+      "fromDate": -5000,
+      "toDate": -2000,
+      "flows": [
+        "cattle",
+        "herding practices"
+      ],
+      "narrative": "Cattle pastoralism moved south through the Nile corridor and Horn of Africa, but tropical disease barriers slowed and eventually halted the spread into equatorial Africa."
     },
     {
       "id": "diff-writing-indus",
       "innovation": "Writing Concept",
       "fromId": "fertile-crescent",
-      "toRegion": { "lat": 25.0, "lng": 67.0, "name": "Indus Valley" },
+      "toRegion": {
+        "lat": 25,
+        "lng": 67,
+        "name": "Indus Valley"
+      },
       "approxDate": -2700,
       "axisAlong": "latitude",
       "description": "Whether the Indus script was stimulated by knowledge of Mesopotamian writing (stimulus diffusion) or invented independently is debated. The two systems coexisted through maritime trade contact.",
-      "strength": "moderate"
+      "strength": "moderate",
+      "enablingTech": "bronze-trade",
+      "fromDate": -2700,
+      "toDate": -1800,
+      "flows": [
+        "script concepts",
+        "administrative seals",
+        "merchant accounting"
+      ],
+      "narrative": "Indus merchants in contact with Mesopotamia through Persian Gulf trade may have adopted stimulus diffusion — the concept of writing, realized in a locally distinct script."
     },
     {
       "id": "diff-iron-africa",
       "innovation": "Iron Smelting",
       "fromId": "fertile-crescent",
-      "toRegion": { "lat": -2.0, "lng": 30.0, "name": "Great Lakes Region" },
+      "toRegion": {
+        "lat": -2,
+        "lng": 30,
+        "name": "Great Lakes Region"
+      },
       "approxDate": -1000,
       "axisAlong": "meridional",
       "description": "Iron technology's spread into sub-Saharan Africa is debated: some argue diffusion from the Middle East; others argue independent invention. Either way, African iron smelting was remarkably early and sophisticated.",
-      "strength": "moderate"
+      "strength": "moderate",
+      "enablingTech": "iron-maritime",
+      "fromDate": -1000,
+      "toDate": 500,
+      "flows": [
+        "iron smelting technique",
+        "iron tools and weapons"
+      ],
+      "narrative": "Iron smelting spread through sub-Saharan Africa — possibly via the Meroitic kingdom (Sudan) or independently invented. African ironworking was early and technically sophisticated."
     },
     {
       "id": "diff-maize-north",
       "innovation": "Maize Cultivation",
       "fromId": "mesoamerica",
-      "toRegion": { "lat": 38.0, "lng": -90.0, "name": "Eastern North America" },
+      "toRegion": {
+        "lat": 38,
+        "lng": -90,
+        "name": "Eastern North America"
+      },
       "approxDate": 700,
       "axisAlong": "meridional",
       "description": "Maize spread northward from Mesoamerica through the US Southwest and into the Eastern Woodlands — but the north–south journey crossed multiple climate zones, taking thousands of years and requiring substantial crop adaptation. The contrast with east–west Eurasian diffusion is Diamond's key argument.",
-      "strength": "weak"
+      "strength": "weak",
+      "enablingTech": "foot-river",
+      "fromDate": 200,
+      "toDate": 900,
+      "flows": [
+        "maize",
+        "beans",
+        "squash (Three Sisters)"
+      ],
+      "narrative": "Maize migrated northward from Mesoamerica, requiring thousands of years of adaptation across climate zones — the north–south barrier that Diamond contrasts with Eurasian east–west diffusion."
     },
     {
       "id": "diff-rice-sea",
       "innovation": "Rice Cultivation",
       "fromId": "east-asia",
-      "toRegion": { "lat": 10.0, "lng": 106.0, "name": "Southeast Asia" },
+      "toRegion": {
+        "lat": 10,
+        "lng": 106,
+        "name": "Southeast Asia"
+      },
       "approxDate": -3000,
       "axisAlong": "meridional",
       "description": "Rice cultivation spread southward from the Yangtze delta into Southeast Asia, carried by Austronesian and other agricultural expansions. The spread was slower than comparable east–west diffusion in Eurasia.",
-      "strength": "moderate"
+      "strength": "moderate",
+      "enablingTech": "farming-wave",
+      "fromDate": -3500,
+      "toDate": -1000,
+      "flows": [
+        "rice",
+        "Austronesian languages",
+        "outrigger canoe technology"
+      ],
+      "narrative": "Rice cultivation spread southward with Austronesian-speaking farming populations, who then became the greatest maritime diffusers in prehistory."
     },
     {
       "id": "diff-bronze-europe",
       "innovation": "Bronze Technology",
       "fromId": "fertile-crescent",
-      "toRegion": { "lat": 50.0, "lng": 10.0, "name": "Western Europe" },
+      "toRegion": {
+        "lat": 50,
+        "lng": 10,
+        "name": "Western Europe"
+      },
       "approxDate": -2000,
       "axisAlong": "latitude",
       "description": "Bronze metallurgy spread rapidly across Europe along the east–west axis, transforming weapons, agriculture, and social hierarchies. European Bronze Age cultures emerged within centuries of Near Eastern bronze, illustrating how the axis orientation accelerated technology transfer.",
+      "strength": "strong",
+      "enablingTech": "bronze-trade",
+      "fromDate": -2200,
+      "toDate": -900,
+      "flows": [
+        "bronze",
+        "tin",
+        "copper ingots",
+        "amber",
+        "metallurgical knowledge"
+      ],
+      "narrative": "Bronze metallurgy spread rapidly across Europe along the east–west axis, transforming weapons, tools, and social hierarchies within centuries of Near Eastern innovations."
+    },
+    {
+      "id": "diff-obsidian-levant",
+      "innovation": "Obsidian Exchange",
+      "fromId": "fertile-crescent",
+      "toRegion": {
+        "lat": 32,
+        "lng": 35.5,
+        "name": "Levant Coast"
+      },
+      "approxDate": -9000,
+      "enablingTech": "foot-river",
+      "fromDate": -10000,
+      "toDate": -5000,
+      "axisAlong": "latitude",
+      "flows": [
+        "obsidian",
+        "shells",
+        "ochre pigment"
+      ],
+      "narrative": "Anatolian obsidian moved hundreds of kilometres through gift exchange and trade networks — evidence of the first human \"world system,\" even among foragers.",
+      "description": "Obsidian from Anatolian volcanic sources moved via foot-travel gift exchange networks into the Levant, leaving archaeologically visible traces of early long-distance contact.",
+      "strength": "moderate"
+    },
+    {
+      "id": "diff-bronze-aegean",
+      "innovation": "Bronze Age Maritime Network",
+      "fromId": "fertile-crescent",
+      "toRegion": {
+        "lat": 37.5,
+        "lng": 24,
+        "name": "Aegean Basin"
+      },
+      "approxDate": -2000,
+      "enablingTech": "bronze-trade",
+      "fromDate": -2200,
+      "toDate": -1200,
+      "axisAlong": "latitude",
+      "flows": [
+        "tin",
+        "copper",
+        "bronze ingots",
+        "textiles",
+        "grain",
+        "slaves"
+      ],
+      "narrative": "The Bronze Age eastern Mediterranean was the first true world-system: every palace economy required tin from distant Afghanistan or Anatolia and copper from Cyprus to function.",
+      "description": "Uluburun-type ships carried bronze, tin, copper, ebony, and luxury goods across the Bronze Age Mediterranean, creating interdependencies that made the Bronze Age Collapse of ~1200 BCE system-wide.",
+      "strength": "strong"
+    },
+    {
+      "id": "diff-austronesian",
+      "innovation": "Austronesian Expansion",
+      "fromId": "east-asia",
+      "toRegion": {
+        "lat": -20,
+        "lng": 165,
+        "name": "Western Pacific"
+      },
+      "approxDate": -1500,
+      "enablingTech": "sail-monsoon",
+      "fromDate": -2000,
+      "toDate": 1000,
+      "axisAlong": "meridional",
+      "flows": [
+        "outrigger canoe technology",
+        "rice",
+        "pig",
+        "dog",
+        "chicken",
+        "Austronesian languages"
+      ],
+      "narrative": "Austronesian-speaking peoples settled the Pacific from Taiwan to Madagascar to Easter Island — the greatest maritime expansion in human prehistory, made possible by the outrigger double-hull sailing canoe.",
+      "description": "The Austronesian maritime expansion scattered farming populations across 10,000 km of Pacific Ocean, demonstrating how sail technology could overcome even the formidable meridional barrier of open water.",
+      "strength": "strong"
+    },
+    {
+      "id": "diff-indian-ocean",
+      "innovation": "Indian Ocean Monsoon Trade",
+      "fromId": "fertile-crescent",
+      "toRegion": {
+        "lat": 11,
+        "lng": 75,
+        "name": "Malabar Coast"
+      },
+      "approxDate": -500,
+      "enablingTech": "sail-monsoon",
+      "fromDate": -800,
+      "toDate": 1500,
+      "axisAlong": "latitude",
+      "flows": [
+        "spices",
+        "pepper",
+        "cotton cloth",
+        "incense",
+        "silk",
+        "horses",
+        "gold"
+      ],
+      "narrative": "Once Arab and Indian navigators understood the monsoon reversal, the Indian Ocean became the world's most reliable trade highway — connecting Rome to India to East Africa to China in a single commercial system.",
+      "description": "The predictable monsoon wind system made Indian Ocean sailing reliable: sail east on the summer monsoon, west on the winter monsoon. This transformed the Indian Ocean rim into an integrated economic zone.",
+      "strength": "strong"
+    },
+    {
+      "id": "diff-trans-saharan",
+      "innovation": "Trans-Saharan Caravan Trade",
+      "fromId": "sub-saharan-sahel",
+      "toRegion": {
+        "lat": 32,
+        "lng": 9,
+        "name": "North Africa Coast"
+      },
+      "approxDate": -200,
+      "enablingTech": "wheel-caravan",
+      "fromDate": -200,
+      "toDate": 1500,
+      "axisAlong": "meridional",
+      "flows": [
+        "gold",
+        "salt",
+        "enslaved people",
+        "ivory",
+        "kola nuts"
+      ],
+      "narrative": "The camel unlocked the Sahara. Trans-Saharan caravans carried West African gold north and Mediterranean goods south, making the Mali and Songhai Empires among the wealthiest states in the medieval world.",
+      "description": "Camel domestication (via Arabia) enabled the trans-Saharan crossing that no wheeled vehicle could manage. The resulting gold-salt trade made West Africa a cornerstone of medieval world commerce.",
+      "strength": "moderate"
+    },
+    {
+      "id": "diff-silk-road",
+      "innovation": "Silk Road Exchange",
+      "fromId": "east-asia",
+      "toRegion": {
+        "lat": 40,
+        "lng": 60,
+        "name": "Central Asia"
+      },
+      "approxDate": -100,
+      "enablingTech": "wheel-caravan",
+      "fromDate": -200,
+      "toDate": 1400,
+      "axisAlong": "latitude",
+      "flows": [
+        "silk",
+        "paper",
+        "gunpowder",
+        "porcelain",
+        "Buddhism",
+        "Islam",
+        "plague"
+      ],
+      "narrative": "The Silk Roads were less a single road than a network of routes across Central Asia, connecting Han China to Rome and everything between — carrying silk west and gold east, and inadvertently transmitting the Black Death in 1347.",
+      "description": "The Silk Road east–west corridor exploited the same Eurasian climate band that had earlier spread crops and bronze — now carrying luxury goods, religions, technologies, and ultimately pandemic disease.",
       "strength": "strong"
     }
   ],
-
   "causalChain": {
     "links": [
       {
@@ -1073,5 +1538,32 @@
         "description": "Crowd diseases originating from cohabitation with domesticated animals (smallpox from cattle, influenza from pigs and birds, measles from cattle). After millennia of exposure, Eurasian populations built partial immunity; those who had not were catastrophically vulnerable at first contact."
       }
     ]
+  },
+  "eraMeta": {
+    "Late Pleistocene": {
+      "narrative": "The glacial world: ice sheets cover a quarter of the land surface. Sea levels are 120 metres lower — Britain is joined to Europe; Beringia links Asia to the Americas. Anatomically modern humans are present on every continent except Antarctica, living entirely by hunting and gathering. No agriculture exists anywhere. Population is perhaps 500,000 globally. Every human alive is a forager.",
+      "imagePrompt": "The Pleistocene world from above at glacial maximum, vast ice sheets over northern continents, exposed continental shelves, small fires of hunting bands scattered across grassland and tundra, Beksiński cosmic desolation, deep blue-white and charcoal, parchment texture, no text",
+      "defaultYear": -11000
+    },
+    "Holocene Transition": {
+      "narrative": "The ice retreats and the world warms rapidly. Sea levels rise, reshaping coastlines. In several separate locations — the Fertile Crescent, China, New Guinea, the Andes — people begin tending wild plants and selecting domesticable animals. This is not a planned revolution but a series of gradual, independent experiments. Contact between hearths is local: foot travel, rivers, coastal boats carrying obsidian and shells perhaps 200–300 km.",
+      "imagePrompt": "Post-glacial warming world, green spreading northward across Europe and Asia, river valleys filling with early agricultural settlements, trade routes as faint threads along coasts, Rackham atmospheric panorama, teal-green and amber on parchment, no text",
+      "defaultYear": -7000
+    },
+    "First Urban Complexity": {
+      "narrative": "The first cities appear — in Mesopotamia, the Indus Valley, the Nile Valley, the Yellow River, and independently in Mesoamerica. Writing emerges to manage the complexity of surplus, trade, and administration. Bronze forces the first long-distance trade networks: tin and copper rarely occur together, so producing bronze requires knowing your trading partner is thousands of kilometres away. The Mediterranean world becomes connected by this necessity.",
+      "imagePrompt": "The eastern Mediterranean world circa 2500 BCE from above at dusk, glowing trade routes threading between coastal cities, Beksiński-meets-Rackham, dark atmospheric cartographic illustration, deep indigo and amber, parchment texture, no text",
+      "defaultYear": -2500
+    },
+    "Iron Age & Classical": {
+      "narrative": "Iron democratizes metal — it is common, and production localises. But states grow powerful enough to maintain diplomatic webs across vast distances. Alphabets multiply, making literacy accessible. The horse and chariot transform warfare. In the Mediterranean, the monsoon-wind pattern becomes understood, opening the Indian Ocean as a reliable sea highway. Austronesian navigators reach Madagascar and eventually Hawaii — the greatest maritime expansion in human prehistory.",
+      "imagePrompt": "The ancient Mediterranean and Indian Ocean circa 500 BCE, quinqueremes and dhows threading between ports, alphabets carved in stone, iron forges glowing in every valley, Piranesi grand architectural etching, umber and silver, aged parchment, no text",
+      "defaultYear": -500
+    },
+    "Pre-Colonial Complexity": {
+      "narrative": "Complex polities exist on every inhabited continent. The Indian Ocean is a web of monsoon-timed trade connecting East Africa, the Arabian Peninsula, South Asia, and Southeast Asia. The Silk Roads carry silk, spice, plague, and ideas across Eurasia. In the Americas, the Inca build the longest road system in the world without the wheel. In West Africa, the Mali Empire controls the gold and salt trade. The threshold of European global expansion approaches.",
+      "imagePrompt": "The medieval world circa 1200 CE, Silk Road caravans crossing Central Asian steppe, dhows on the Indian Ocean, Inca roads descending Andean valleys, Remedios Varo dreamlike global tapestry, deep blue and burnished gold on dark parchment, no text",
+      "defaultYear": 1000
+    }
   }
 }

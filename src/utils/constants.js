@@ -102,3 +102,28 @@ export const SORT_OPTIONS = [
   { value: 'region', label: 'By Region' },
   { value: 'axis', label: 'By Axis Orientation' },
 ];
+
+export const TECH_FAMILIES = {
+  'foot-river':    { label: 'Foot / River',    color: '#6b8e9f', dash: '4,4',  description: 'Local exchange: obsidian, shells, ~100–300 km' },
+  'farming-wave':  { label: 'Farming Wave',    color: '#7a9e5c', dash: '2,5',  description: 'Demic diffusion as farming populations expand' },
+  'wheel-caravan': { label: 'Wheel / Caravan', color: '#c4966a', dash: '6,3',  description: 'Overland caravan corridors; donkey, horse, camel' },
+  'bronze-trade':  { label: 'Bronze Trade',    color: '#c4a840', dash: 'none', description: 'Long-range necessity: tin and copper rarely co-locate' },
+  'iron-maritime': { label: 'Iron / Maritime', color: '#a0a8b0', dash: '8,3',  description: 'Coastal and riverine; iron production localizes supply' },
+  'sail-monsoon':  { label: 'Sail / Monsoon',  color: '#5a7fb5', dash: 'none', description: 'Seas become highways: Austronesian, Indian Ocean, Mediterranean' },
+};
+
+export const STAGES = [
+  'foraging',
+  'incipient-cultivation',
+  'established-farming',
+  'towns-chiefdoms',
+  'cities-states',
+];
+
+export const STAGE_META = {
+  'foraging':              { label: 'Foraging',              color: '#1a2840', glowOpacity: 0 },
+  'incipient-cultivation': { label: 'Incipient Cultivation', color: '#1e3530', glowOpacity: 0.06 },
+  'established-farming':   { label: 'Established Farming',   color: '#2a4830', glowOpacity: 0.12 },
+  'towns-chiefdoms':       { label: 'Towns / Chiefdoms',     color: '#4a4020', glowOpacity: 0.20 },
+  'cities-states':         { label: 'Cities / States',       color: '#8a5a18', glowOpacity: 0.30 },
+};

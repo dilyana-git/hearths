@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { useData } from './hooks/useData';
 import Header from './components/Header';
 import AboutPanel from './components/AboutPanel';
+import AtlasView from './components/AtlasView';
 import ThreadsView from './components/ThreadsView';
 import MapView from './components/MapView';
 import MilestonePanel from './components/MilestonePanel';
@@ -9,14 +10,16 @@ import CausalChain from './components/CausalChain';
 import TypeLegend from './components/TypeLegend';
 
 const VIEWS = [
-  { id: 'threads', label: 'Threads', description: 'Civilizations through time' },
-  { id: 'map', label: 'Map', description: 'Geography & diffusion' },
+  { id: 'atlas', label: 'Atlas', description: 'World map · space & time' },
+  { id: 'stories', label: 'Stories', description: 'Coming soon', disabled: true },
+  { id: 'threads', label: 'Timeline', description: 'Civilizations through time' },
   { id: 'chain', label: 'Causal Chain', description: 'Diamond\'s framework' },
 ];
 
 export default function App() {
   const data = useData();
-  const [activeView, setActiveView] = useState('threads');
+  const [activeView, setActiveView] = useState('atlas');
+  const [selectedYear, setSelectedYear] = useState(-2500);
   const [selectedMilestone, setSelectedMilestone] = useState(null);
   const [hoveredMilestone, setHoveredMilestone] = useState(null);
   const [showAbout, setShowAbout] = useState(true);
@@ -51,15 +54,21 @@ export default function App() {
         showLegend={showLegend}
         sortBy={sortBy}
         onSortChange={setSortBy}
-        activeViewObj={VIEWS.find(v => v.id === activeView)}
       />
 
       <main className="flex flex-1 overflow-hidden relative">
         {/* Main content area */}
         <div
           className="flex-1 overflow-hidden transition-all duration-300"
-          style={{ marginRight: selectedMilestone ? '380px' : '0' }}
+          style={{ marginRight: (selectedMilestone && activeView !== 'atlas') ? '380px' : '0' }}
         >
+          {activeView === 'atlas' && (
+            <AtlasView
+              data={data}
+              selectedYear={selectedYear}
+              onYearChange={setSelectedYear}
+            />
+          )}
           {activeView === 'threads' && (
             <ThreadsView
               data={data}
@@ -68,15 +77,6 @@ export default function App() {
               onSelect={handleSelectMilestone}
               onHover={handleHoverMilestone}
               sortBy={sortBy}
-            />
-          )}
-          {activeView === 'map' && (
-            <MapView
-              data={data}
-              selectedMilestone={selectedMilestone}
-              hoveredMilestone={hoveredMilestone}
-              onSelect={handleSelectMilestone}
-              onHover={handleHoverMilestone}
             />
           )}
           {activeView === 'chain' && (
@@ -88,8 +88,8 @@ export default function App() {
           )}
         </div>
 
-        {/* Milestone detail panel — slides in from the right */}
-        {selectedMilestone && (
+        {/* Milestone detail panel — slides in from the right (non-atlas views) */}
+        {selectedMilestone && activeView !== 'atlas' && (
           <div className="absolute right-0 top-0 bottom-0 w-96 panel-enter z-20">
             <MilestonePanel
               milestone={selectedMilestone}
