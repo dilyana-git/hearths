@@ -1731,5 +1731,278 @@
       "imageUrl": "",
       "narrative": "Complex polities exist on every inhabited continent. The Indian Ocean is a web of monsoon-timed trade connecting East Africa, the Arabian Peninsula, South Asia, and Southeast Asia. The Silk Roads carry silk, spice, plague, and ideas across Eurasia. In the Americas, the Inca build the longest road system in the world without the wheel. In West Africa, the Mali Empire controls the gold and salt trade. The threshold of European global expansion approaches."
     }
+  ],
+  "stories": [
+    {
+      "id": "bronze-made-the-world-small",
+      "title": "Bronze Made the World Small",
+      "subtitle": "Why the first connected world was bronze, and why iron undid it.",
+      "badge": "Atlas Tour",
+      "badgeColor": "#c4a840",
+      "heroImagePrompt": "A glowing web of Bronze Age trade routes overlaid on a darkened map of the eastern Mediterranean and the Near East, amber lines connecting cities, atmospheric Piranesi-meets-Beksiński illustration, deep indigo and gold, parchment texture, no text.",
+      "imageUrl": "",
+      "beats": [
+        {
+          "date": -3500,
+          "focus": { "type": "region", "id": "fertile-crescent" },
+          "narrative": "Copper came first. In Anatolia, in the Balkans, in Iran, people learned how to coax it out of green stone with fire. It was soft. You could hammer it into a knife or a ring or a thin leaf to lay on the dead. Everything you needed was within a few days' walk. Nobody had reason to go further."
+        },
+        {
+          "date": -3300,
+          "focus": { "type": "region", "id": "fertile-crescent" },
+          "narrative": "Then someone — no name, no story, just an accident in a fire one afternoon — added tin to copper. The mix was harder than either alone. They called it bronze. This was the first international problem in history. Copper is everywhere. Tin is almost nowhere. To make a serious bronze sword you had to send for tin from places you would never see. Suddenly, distance was something you spent."
+        },
+        {
+          "date": -2500,
+          "focus": { "type": "connection", "id": "diff-indus-mesopotamia" },
+          "narrative": "By 2500 BCE, the web is real. Tin comes down from Afghanistan, copper across from Cyprus, lapis lazuli from one mountain valley you could fit in a pocket of Asia. Carnelian beads cut in Indus workshops are buried in graves in Ur. Mesopotamian weights, exact and standardized, sit on shelves in Indus warehouses. None of this is a global market. But none of it could have happened in a world that walked."
+        },
+        {
+          "date": -1500,
+          "focus": { "type": "connection", "id": "diff-bronze-aegean" },
+          "narrative": "By 1350 BCE there are kings writing to kings. The Amarna letters — three hundred and fifty clay tablets found in the dust of an Egyptian capital that lasted one generation — are letters from pharaohs to Hittite emperors, from Babylonian princes to Assyrian governors. They write about gold shipments and marriages and slights nobody else would understand. They sign off, sometimes, by calling each other brother. For a moment, the great courts of the world had each other's address."
+        },
+        {
+          "date": -1200,
+          "focus": { "type": "era", "id": "bronze-age" },
+          "narrative": "And then it ended. Within a fifty-year window on either side of 1200 BCE, almost every great Bronze Age power east of the Adriatic burned or emptied. Hattusa, capital of the Hittites: ash. Mycenae: gone. Ugarit, the great trading city: an unfinished letter still on the scribe's desk when the fire came. Whole writing systems were forgotten. We still argue about why — drought, sea raiders, social collapse, all of these at once. What we know is that the connected world ended in a single human lifetime."
+        },
+        {
+          "date": -1000,
+          "focus": { "type": "era", "id": "iron-age" },
+          "narrative": "What came back was different. Iron is harder than bronze, and iron ore is in the ground almost everywhere. A village smith with charcoal could make a sword now. He did not need to know anyone in Cornwall. The new age was sharper and more local. Kingdoms did not have to be friends anymore. The first wide-reaching world had died with bronze. The next would not arrive for over a thousand years."
+        },
+        {
+          "date": -800,
+          "focus": { "type": "reflection" },
+          "narrative": "There is a shape to how far we can reach each other, and the shape is set by what we can carry. Bronze pulled the world close because bronze could not be made alone. Iron let kingdoms be alone again. Sails, later, would widen everything. The land has not moved. We have."
+        }
+      ]
+    },
+    {
+      "id": "when-humans-stopped-moving",
+      "title": "When Humans Stopped Moving",
+      "subtitle": "The quietest revolution we ever made.",
+      "badge": "Atlas Tour",
+      "badgeColor": "#6b8e9f",
+      "heroImagePrompt": "A late Pleistocene Natufian stone-foundation hut at dawn, smoke rising from a hearth, wild cereal fields in the distance, atmospheric Rackham-style illustration, deep amber and slate tones, parchment texture, no text.",
+      "imageUrl": "",
+      "beats": [
+        {
+          "date": -12500,
+          "focus": { "type": "region", "id": "fertile-crescent" },
+          "narrative": "For nearly all of our story, we walked. We followed the herds. We followed the seasons. We slept wherever night caught us. Then, in the hills above the Jordan, something changed. A people we call the Natufians began to stay. They built round stone houses. They harvested wild grass that grew thick at their doors. They buried their grandparents in the same floor where their grandchildren would later sleep. They did all of this before they farmed. For a long time we thought fields had made the villages. The Natufians say something stranger: maybe staying came first, and farming followed, the way a habit becomes a life."
+        },
+        {
+          "date": -10800,
+          "focus": { "type": "era", "id": "younger-dryas" },
+          "narrative": "And then the weather turned on them. The Younger Dryas — a long cold that lasted longer than all of recorded history would later — dried the grass and emptied the herds. The Natufian villages thinned. People who had been settling down picked their things up. For a thousand years, the future of staying still hung on a question the climate was asking."
+        },
+        {
+          "date": -9500,
+          "focus": { "type": "era", "id": "early-holocene" },
+          "narrative": "The Holocene began suddenly, around 9500 BCE — within a generation, the world warmed and held. This time the staying took. Across the Fertile Crescent, the wild cereals people had been gathering went into the ground on purpose. Settling down and putting things in the ground became the same project, each helping the other along."
+        },
+        {
+          "date": -9000,
+          "focus": { "type": "region", "id": "fertile-crescent" },
+          "narrative": "At Göbekli Tepe in southern Turkey, around 9000 BCE, somebody — hunters, or people who had just stopped being hunters — pulled twenty-ton T-shaped pillars into great stone circles and carved them with foxes, snakes, vultures, scorpions. They did this a thousand years before pottery. They did this before farming was settled work. Whoever they were, they organized a labour we have not fully understood. The story of why people build big things is older and stranger than the story of cities."
+        },
+        {
+          "date": -7000,
+          "focus": { "type": "region", "id": "fertile-crescent" },
+          "narrative": "By seven thousand years before us, Çatalhöyük in central Anatolia was a town of several thousand people, mud-brick houses crowded so close there were no streets. You came in through your roof. The dead were buried under the floor of the room where you slept. The Neolithic was not an experiment anymore. It was just how people lived."
+        },
+        {
+          "date": -6000,
+          "focus": { "type": "region", "id": "east-asia" },
+          "narrative": "Staying still was invented again and again, in different rooms. In the Yangtze, rice pulled people into villages. In the Andes, fishing villages crowded the Pacific coast for centuries before any field was planted in the highlands. In Mesoamerica it came slowly — first squash, then beans, then eventually maize — and the villages followed each crop. Every region wrote its own version of the same line: this is where we will stay."
+        },
+        {
+          "date": -3500,
+          "focus": { "type": "reflection" },
+          "narrative": "To stop moving is the quietest of all our revolutions, and possibly the largest. It made storehouses possible. And inheritance. And inequality. And walls. And writing. And the version of us that reads this. The species did not arrive at staying still the way you arrive at a city. People built it, in different valleys, for different reasons, and the lives we have are inside that decision."
+        }
+      ]
+    },
+    {
+      "id": "spread-of-cattle",
+      "title": "The Spread of Cattle",
+      "subtitle": "Three peoples, three herds, ten thousand years of mixing.",
+      "badge": "Atlas Tour",
+      "badgeColor": "#c4966a",
+      "heroImagePrompt": "A herd of long-horned aurochs at dawn on the green Sahara, before the desertification, mist on the grass, atmospheric Beksiński-meets-Rackham illustration, deep amber and indigo tones, parchment texture, no text.",
+      "imageUrl": "",
+      "beats": [
+        {
+          "date": -10500,
+          "focus": { "type": "region", "id": "fertile-crescent" },
+          "narrative": "Wild aurochs at the end of the ice age were enormous. A bull stood taller than a man at the shoulder, horns wider than your arms. People had been hunting them for as long as people had been people. Nobody had ever tried to live with them. That would happen three times, in three places, by three peoples who would never meet."
+        },
+        {
+          "date": -8500,
+          "focus": { "type": "region", "id": "fertile-crescent" },
+          "narrative": "In the Fertile Crescent, around 8500 BCE, the first calves were raised by people instead of just hunted. Over generations the animals shrank. They grew calmer. They gave more milk. Wherever they went, the people who drank that milk began to change too — keeping into adulthood an enzyme most mammals lose at weaning. The cow and the human were reshaping each other already."
+        },
+        {
+          "date": -7000,
+          "focus": { "type": "region", "id": "sub-saharan-sahel" },
+          "narrative": "At roughly the same moment, in the green Sahara — when there were rivers where there is now sand — African pastoralists in what is now Mali, Niger, and Sudan were domesticating their own aurochs. Whether the project began entirely on its own, or borrowed something from the east, is still argued about. What is not argued: African cattle-keeping is its own tradition, with its own knowledge, its own breeds, and a name for every shade of hide."
+        },
+        {
+          "date": -7000,
+          "focus": { "type": "region", "id": "indus-valley" },
+          "narrative": "In South Asia, a third project. Different cattle this time — humped, heat-tolerant, drought-resistant — domesticated from the Indian aurochs. Zebu, they are called now, and they are the cattle of the subcontinent. Three separate domestications, three separate herds, three peoples having a slightly different conversation with the same wild animal."
+        },
+        {
+          "date": -5000,
+          "focus": { "type": "connection", "id": "diff-wheat-europe" },
+          "narrative": "Taurine cattle walked into Europe with the farming wave. They came as part of a moving household — sheep, goats, grain, pottery, the cattle that pulled the cart that carried everything else. Wherever a Neolithic family settled, a cow stood in the yard. By 5000 BCE, you could walk from the Atlantic to the Aegean and find the same animal in every farm."
+        },
+        {
+          "date": -3000,
+          "focus": { "type": "region", "id": "sub-saharan-sahel" },
+          "narrative": "As the Sahara dried — slowly, then all at once, around 3000 BCE — the cattle herders went south. Their cows came with them. Cattle-keeping seeded itself across the Sahel, into the savannas, down into East Africa. The Maasai, the Fulani, the Dinka — these cultures are, in a real way, what the green Sahara turned into when it had nowhere else to go."
+        },
+        {
+          "date": -1500,
+          "focus": { "type": "reflection" },
+          "narrative": "Three beginnings, three lineages, ten thousand years of mixing. The cow on an Irish dairy, the cow on a Kenyan herder's land, the cow walking a Bangalore street — each is the descendant of a different prehistoric thought about the same wild animal. The thought was: stay with us. The cow, eventually, did."
+        }
+      ]
+    },
+    {
+      "id": "crops-that-made-cities",
+      "title": "The Crops That Made Cities",
+      "subtitle": "Every city anywhere is sitting on top of a small bag of local seeds.",
+      "badge": "Atlas Tour",
+      "badgeColor": "#7a9e5c",
+      "heroImagePrompt": "A collection of staple crops arranged like an alchemical illustration — wheat, rice, maize, sorghum, quinoa, taro — on a parchment background, etched line work, deep amber and umber tones, no text.",
+      "imageUrl": "",
+      "beats": [
+        {
+          "date": -9000,
+          "focus": { "type": "region", "id": "fertile-crescent" },
+          "narrative": "The Fertile Crescent's first farmers worked out a package: emmer wheat, barley, lentils, peas, chickpeas, flax. Bread, soup, cloth. With those eight or nine plants you could feed and dress a village, and every civilization that rose on the Tigris, the Euphrates, the Jordan, or the Nile was built on this small handful of seeds. The pyramids ate wheat. The Code of Hammurabi was written by men who had had lentils for lunch."
+        },
+        {
+          "date": -7000,
+          "focus": { "type": "region", "id": "east-asia" },
+          "narrative": "In the wet south of China, on the Yangtze, somebody started planting rice on purpose. In the drier north, on the Yellow River, somebody else was raising foxtail and broomcorn millet. For a long time they were two different ways of eating. Eventually they met, traded, married — and fed the cities of the Shang and the Zhou, and all the dynasties that came after. Half of humanity still lives on what these farmers worked out."
+        },
+        {
+          "date": -7000,
+          "focus": { "type": "region", "id": "sub-saharan-sahel" },
+          "narrative": "On the southern edge of the Sahara, where the Crescent's wheat would have died in a season, African farmers brought sorghum and pearl millet into cultivation — tough, drought-tough cereals that drank little and gave back enough. To these they later added African yams and a rice all their own, Oryza glaberrima. With this set of plants, civilizations could rise where the rain came once a year and meant it."
+        },
+        {
+          "date": -5000,
+          "focus": { "type": "region", "id": "mesoamerica" },
+          "narrative": "In Mesoamerica, the gift came in threes. Maize, beans, and squash — planted together in the same mound — feed each other and the people who grow them. The maize gives the bean a pole to climb. The bean gives the maize nitrogen. The squash sprawls underneath and keeps the weeds down. Together they make a near-complete diet. By 1500 BCE, when the Olmec began carving heads twelve feet tall, the people doing the carving had been eating this combination for two thousand years."
+        },
+        {
+          "date": -5000,
+          "focus": { "type": "region", "id": "andean" },
+          "narrative": "The Andes did something no other hearth did: they grew civilization above the clouds. Potatoes in every colour and shape — thousands of varieties even today — and quinoa, oca, ulluco, mashua. Up there with the llamas and alpacas, at three thousand metres and more, a complex civilization could feed itself on plants that would not grow anywhere else. The Inca emperors ate dinners no Egyptian could have grown."
+        },
+        {
+          "date": -7000,
+          "focus": { "type": "region", "id": "new-guinea" },
+          "narrative": "High in the wet valleys of New Guinea, farmers were tending taro and yam, sugarcane and banana, nine thousand years ago. They never built cities. The mountains made every valley its own little country, and no one valley could ever rule another for long. The crops were good. The geography was the problem. They had agriculture, but not the kind of flatness that turns into kingdoms."
+        },
+        {
+          "date": -3000,
+          "focus": { "type": "reflection" },
+          "narrative": "Every city anywhere is sitting on top of a small bag of local seeds. Wheat in Babylon. Rice in Xi'an. Maize in Tenochtitlán. Quinoa in Cusco. Sorghum in Jenne-jeno. The plants do not get statues, but they had the first word. What they could and could not do — where they would grow, how long they would keep, who they would feed — wrote the borders of everything else."
+        }
+      ]
+    },
+    {
+      "id": "how-far-could-a-boat-go",
+      "title": "How Far Could a Boat Go?",
+      "subtitle": "Every map that shows the ocean as empty is wrong.",
+      "badge": "Atlas Tour",
+      "badgeColor": "#5a7fb5",
+      "heroImagePrompt": "A double-hulled Polynesian voyaging canoe on open Pacific water at night, the stars overhead vivid and the wake glowing, the navigator reading the swell, atmospheric Rackham-style illustration, deep indigo and silver tones, parchment texture, no text.",
+      "imageUrl": "",
+      "beats": [
+        {
+          "date": -50000,
+          "focus": { "type": "region", "id": "aboriginal-australia" },
+          "narrative": "The first sailors we know of crossed the sea to Australia fifty thousand years ago. Even when the ocean was at its lowest, the crossing meant blue water — long enough that you could not see the other side from where you started. Whoever they were, they got into something that floated and went looking. The ancestors of Aboriginal Australians are the first people we have any evidence of who ever did that."
+        },
+        {
+          "date": -9000,
+          "focus": { "type": "region", "id": "fertile-crescent" },
+          "narrative": "By the early Holocene, the Mediterranean was already a working sea. Obsidian from the island of Melos — a sharp black volcanic glass — turns up at sites a hundred kilometres of open water away on the Greek mainland. Somebody was making that crossing deliberately, in a boat that could handle it. The Mediterranean had become small enough to cross."
+        },
+        {
+          "date": -2500,
+          "focus": { "type": "connection", "id": "diff-indus-mesopotamia" },
+          "narrative": "By 2500 BCE the Persian Gulf was a working trade route. Indus shipmasters had learned the monsoon — sail one direction in summer, the other in winter, let the wind do the work. The cargo was carnelian, lapis, copper, sometimes ivory, sometimes a monkey for somebody's court. The first long-distance trade by water was a business that did its accounts in clay."
+        },
+        {
+          "date": -3000,
+          "focus": { "type": "connection", "id": "diff-austronesian" },
+          "narrative": "Around 3000 BCE the Austronesians set out from Taiwan in canoes you could not have imagined would go where they went. Double-hulled, fast in good wind, the technology that mattered was as much in the navigator's head as in the wood — a star map memorised by song, the look of a wave that has just come around an island, the flight paths of birds that always slept on land. They reached almost every island in the Pacific. Some of them, somehow, reached Madagascar going the other way."
+        },
+        {
+          "date": -1200,
+          "focus": { "type": "region", "id": "fertile-crescent" },
+          "narrative": "After the Bronze Age went down, the Phoenicians turned the Mediterranean into a single trading floor. From a handful of cities along the Lebanese coast they founded outposts in Sicily, Sardinia, Iberia, and out past the Strait of Gibraltar. Around 600 BCE, on commission from an Egyptian pharaoh, a Phoenician crew is reported to have sailed all the way around Africa. Most ancient historians didn't believe them, because the crew said the sun had been on their right. Which is exactly what would happen, sailing south of the equator."
+        },
+        {
+          "date": 800,
+          "focus": { "type": "connection", "id": "diff-austronesian" },
+          "narrative": "By around 1300 CE, Polynesian voyagers had reached New Zealand, the last large landmass on Earth to receive its first people. Before that they had reached Hawaii, two thousand miles of open ocean from anywhere. They had reached Easter Island, the most isolated inhabited place on the planet. They were navigating by memorised stars and the shape of swells they could feel through the wood of the hull. Without instruments, nobody has gone further."
+        },
+        {
+          "date": 1500,
+          "focus": { "type": "reflection" },
+          "narrative": "Every crossing widened the horizon. The first boats to Australia. The obsidian boats of Neolithic Greece. The Indus ships running the monsoon. The Phoenicians turning around the bottom of Africa. The Polynesians finding islands smaller than a thought. Every map that shows the ocean as empty is wrong. People were already there. People were going there. People were always going."
+        }
+      ]
+    },
+    {
+      "id": "domestication-of-the-wolf",
+      "title": "The Domestication of the Wolf",
+      "subtitle": "Older than fields. Older than pots. Older than the word for village.",
+      "badge": "Atlas Tour",
+      "badgeColor": "#a0a8b0",
+      "heroImagePrompt": "A proto-domestic dog sitting beside a Paleolithic hunter at a campfire under a snowy sky, both watching the dark forest, atmospheric Beksiński-style illustration, deep slate and amber tones, parchment texture, no text.",
+      "imageUrl": "",
+      "beats": [
+        {
+          "date": -30000,
+          "focus": { "type": "region", "id": "fertile-crescent" },
+          "narrative": "Somewhere — we are still arguing where — a wolf came close to a human fire and did not run away. The DNA suggests this happened a long time ago, perhaps thirty thousand years ago. Long before farming. Long before pottery. Long before any village. We do not know what they ate together that first night. We only know that the line between wolves and the dogs that would lie at our doors begins, somewhere, with that fire."
+        },
+        {
+          "date": -15000,
+          "focus": { "type": "region", "id": "fertile-crescent" },
+          "narrative": "By fourteen thousand years ago, the evidence is plain. At Bonn-Oberkassel in Germany, a man, a woman, and a dog were buried together — careful, deliberate, the dog laid between them with a piece of carved bone. We don't know who they were. We know that whatever was between them and the dog was important enough that they took it with them into the ground."
+        },
+        {
+          "date": -12500,
+          "focus": { "type": "region", "id": "fertile-crescent" },
+          "narrative": "In Natufian villages in the Levant, the dogs are smaller than wolves and shaped a little differently. They are buried with care. Sometimes a child is buried with a hand on the dog's head. By the time we can see this clearly in the archaeology, the relationship is already very old. We are watching a friendship in its middle years."
+        },
+        {
+          "date": -9000,
+          "focus": { "type": "region", "id": "eastern-north-america" },
+          "narrative": "When the first people crossed into the Americas at the end of the ice age, they did not come alone. The dogs came too. For ten thousand years, the dogs of the Americas were a distinct family, different from the dogs of Eurasia. After 1492, European dogs largely replaced them. But you can still find their bones, from Alaska to Patagonia — the last traces of a parallel lineage that ran with people for millennia."
+        },
+        {
+          "date": -5000,
+          "focus": { "type": "region", "id": "aboriginal-australia" },
+          "narrative": "The dingo arrived in Australia five thousand years ago, carried by sailors from the Austronesian world. Once it was there, it walked away from the firelight and went feral. It became Australia's top non-marsupial predator. The same animal, in a different room of history — one a friend of the hearth, one the shadow at the edge of camp."
+        },
+        {
+          "date": -2000,
+          "focus": { "type": "reflection" },
+          "narrative": "Every other animal we live with is a creature of the Neolithic — cattle, sheep, goats, pigs, horses, chickens, all of them showing up in our story after we stopped moving. The dog is older than that. The dog is older than fields, older than pots, older than the word for village. Somewhere in the Paleolithic, a wolf chose us, and we chose her back. They have been with us ever since."
+        }
+      ]
+    }
   ]
 }

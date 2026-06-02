@@ -166,10 +166,10 @@ function TourOverlay({ tour, onBeat, onClose }) {
         </button>
       </div>
 
-      {/* Beat label */}
+      {/* Beat date / label */}
       <div className="px-4 pt-2 pb-1">
         <p className="serif text-sm font-medium text-parchment-200" style={{ fontFamily: 'Cormorant Garamond, Georgia, serif' }}>
-          {beat.label}
+          {beat.label || formatYear(beat.date ?? beat.year)}
         </p>
       </div>
 
@@ -291,10 +291,20 @@ export default function AtlasView({ data, activeTour, onCloseTour, onTourBeat })
     if (!activeTour) return;
     const beat = activeTour.beats[activeTour.beatIndex];
     if (!beat) return;
-    setSelectedYear(beat.year);
+    // beats from data.json use `date`; legacy beats used `year`
+    setSelectedYear(beat.date ?? beat.year);
     setPlaying(false);
-    setSelectedConnectionId(beat.focusConnectionId ?? null);
-    setSelectedCivId(null);
+    const { focus } = beat;
+    if (focus?.type === 'region') {
+      setSelectedCivId(focus.id ?? null);
+      setSelectedConnectionId(null);
+    } else if (focus?.type === 'connection') {
+      setSelectedConnectionId(focus.id ?? null);
+      setSelectedCivId(null);
+    } else {
+      setSelectedCivId(null);
+      setSelectedConnectionId(null);
+    }
     setSelectedMilestoneId(null);
   }, [activeTour]);
 

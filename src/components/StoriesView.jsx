@@ -1,97 +1,15 @@
 import React, { useState } from 'react';
 import CausalChain from './CausalChain';
 
-const TOURS = {
-  'bronze-made-world-small': [
-    {
-      label: 'The Bronze Problem',
-      year: -2500,
-      focusConnectionId: null,
-      narrative: 'Bronze is an alloy of copper and tin — but they rarely occur together. Copper was available across much of the ancient world, but tin was scarce. By 2500 BCE, bronze had become the defining technology of civilisation. Those who wanted it had to trade, at distances no earlier society had sustained.',
-    },
-    {
-      label: 'The Tin Routes',
-      year: -2000,
-      focusConnectionId: 'diff-bronze-europe',
-      narrative: 'The principal tin sources were in Afghanistan, Central Europe (Bohemia), and later Cornwall. Copper came from Cyprus, Sinai, and the Caucasus. Bronze Age merchants had to map, fund, and protect overland and sea routes across thousands of kilometres — just to keep their smiths in business.',
-    },
-    {
-      label: 'The Bronze Network',
-      year: -1800,
-      focusConnectionId: 'diff-bronze-aegean',
-      narrative: "By 1800 BCE, the Eastern Mediterranean was the world's first multi-civilisational trade network. The Uluburun shipwreck (c. 1305 BCE) carried cargo from at least seven cultural regions — tin ingots, copper ingots, ebony, glass, and resin — a snapshot of Bronze Age globalisation frozen 3,300 years ago.",
-    },
-    {
-      label: 'Collapse',
-      year: -1200,
-      focusConnectionId: null,
-      narrative: "Around 1200 BCE, the Bronze Age Collapse terminated most of the Eastern Mediterranean's palatial civilisations within a few decades. The very interconnection that had made the Bronze Age possible — complex, multi-node supply chains — became its fatal vulnerability. When the tin routes broke, the civilisation broke with them.",
-    },
-  ],
+// The Diamond framework is a special non-tour story (no beats / atlas navigation)
+const DIAMOND_STORY = {
+  id: 'diamond-chain',
+  title: "Diamond's Causal Chain",
+  description: 'Jared Diamond traced why some civilizations developed faster than others — from biogeography to domesticable species to cities and disease. An influential framework with known critiques, presented here as one reading, not the definitive answer.',
+  badge: 'Framework',
+  badgeColor: '#8a7aad',
+  available: true,
 };
-
-const STORIES = [
-  {
-    id: 'diamond-chain',
-    title: "Diamond's Causal Chain",
-    hook: 'One theory of civilizational advantage — after Guns, Germs, and Steel',
-    description:
-      'Jared Diamond traced why some civilizations developed faster than others: from biogeography, to domesticable species, to cities and disease. An influential framework with known critiques — presented here as one reading, not the definitive answer.',
-    badge: 'Framework',
-    badgeColor: '#8a7aad',
-    available: true,
-  },
-  {
-    id: 'bronze-made-world-small',
-    title: 'Bronze Made the World Small',
-    hook: 'How metal forced the first global trade network',
-    description:
-      'Tin and copper rarely occur together. Producing bronze required knowing your trading partner was a thousand kilometres away — the origin of long-distance commerce.',
-    badge: 'Atlas Tour',
-    badgeColor: '#c4a840',
-    available: true,
-  },
-  {
-    id: 'when-humans-stopped-moving',
-    title: 'When Humans Stopped Moving',
-    hook: 'The transition to sedentism',
-    description:
-      'For 90,000 years humans moved. Then, almost simultaneously across multiple continents, they stopped. What changed?',
-    badge: 'Atlas Tour',
-    badgeColor: '#6b8e9f',
-    available: false,
-  },
-  {
-    id: 'the-crops-that-made-cities',
-    title: 'The Crops That Made Cities',
-    hook: 'Storage, surplus, and the urban revolution',
-    description:
-      'Only certain crops could produce the storable surplus needed to free people from farming. Which plants made cities possible, and which ones could not?',
-    badge: 'Atlas Tour',
-    badgeColor: '#7a9e5c',
-    available: false,
-  },
-  {
-    id: 'how-far-could-a-boat-go',
-    title: 'How Far Could a Boat Go?',
-    hook: 'The Austronesian expansion',
-    description:
-      'Starting from Taiwan 4,000 years ago, a single maritime culture colonized half the world\'s coast — from Madagascar to Easter Island. The most extraordinary migration in human history.',
-    badge: 'Atlas Tour',
-    badgeColor: '#5a7fb5',
-    available: false,
-  },
-  {
-    id: 'spread-of-cattle',
-    title: 'The Spread of Cattle',
-    hook: 'From the Fertile Crescent to three continents',
-    description:
-      'Cattle domestication began in Anatolia and transformed not just food systems but cosmologies, economies, and disease landscapes across the Old World.',
-    badge: 'Atlas Tour',
-    badgeColor: '#c4966a',
-    available: false,
-  },
-];
 
 function StoryCard({ story, onOpen }) {
   return (
@@ -99,7 +17,7 @@ function StoryCard({ story, onOpen }) {
       className="flex flex-col rounded border border-coal-700 overflow-hidden transition-all duration-200 hover:border-coal-500"
       style={{ background: '#0f1420' }}
     >
-      {/* Image placeholder */}
+      {/* Image / title area */}
       <div
         className="flex flex-col items-center justify-center gap-2 px-4"
         style={{
@@ -126,8 +44,8 @@ function StoryCard({ story, onOpen }) {
           >
             {story.badge}
           </span>
-          {!story.available && (
-            <span className="text-[9px] text-parchment-700 italic">Coming soon</span>
+          {story.beatCount != null && (
+            <span className="text-[9px] text-parchment-700">{story.beatCount} beats</span>
           )}
         </div>
         <p className="text-[10px] text-parchment-500 leading-snug flex-1">{story.description}</p>
@@ -153,15 +71,29 @@ export default function StoriesView({ data, chainCivId, onChainCivChange, onOpen
   function handleOpen(storyId) {
     if (storyId === 'diamond-chain') {
       setActiveStory(storyId);
-    } else if (TOURS[storyId]) {
-      onOpenTour?.(TOURS[storyId]);
+    } else {
+      const story = data.storiesById[storyId];
+      if (story?.beats) onOpenTour?.(story.beats);
     }
   }
+
+  // Combine diamond-chain with all data-driven stories
+  const allCards = [
+    DIAMOND_STORY,
+    ...data.stories.map(s => ({
+      id: s.id,
+      title: s.title,
+      description: s.subtitle,
+      badge: s.badge,
+      badgeColor: s.badgeColor,
+      beatCount: s.beats?.length,
+      available: true,
+    })),
+  ];
 
   if (activeStory === 'diamond-chain') {
     return (
       <div className="flex flex-col h-full overflow-hidden">
-        {/* Back bar */}
         <div className="flex-shrink-0 flex items-center gap-3 px-4 py-2.5 border-b border-coal-700 bg-coal-900">
           <button
             onClick={() => setActiveStory(null)}
@@ -190,20 +122,18 @@ export default function StoriesView({ data, chainCivId, onChainCivChange, onOpen
 
   return (
     <div className="flex flex-col h-full overflow-y-auto bg-coal-900">
-      {/* Header */}
       <div className="flex-shrink-0 px-8 pt-8 pb-6 border-b border-coal-700">
         <h2 className="serif text-3xl font-medium text-parchment-200 mb-2">Stories</h2>
         <p className="text-sm text-parchment-500 max-w-prose leading-relaxed">
           Guided explorations through the atlas — each story traces one argument, one migration,
-          or one transformation through space and time. Start with the Framework, then explore the
-          atlas-driven tours as they become available.
+          or one transformation through space and time. Open any Atlas Tour to step through
+          the narrative on a live map.
         </p>
       </div>
 
-      {/* Story grid */}
       <div className="flex-1 px-8 py-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl">
-          {STORIES.map(story => (
+          {allCards.map(story => (
             <StoryCard key={story.id} story={story} onOpen={handleOpen} />
           ))}
         </div>

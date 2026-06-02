@@ -17,10 +17,14 @@ export function useData() {
     const erasById = {};
     eras.forEach(e => { erasById[e.id] = e; });
 
+    const storiesById = {};
+    rawData.stories.forEach(s => { storiesById[s.id] = s; });
+
     return {
       ...rawData,
       eras,
       erasById,
+      storiesById,
       milestonesByCiv,
       civById,
     };
