@@ -93,16 +93,33 @@ export default function MapCanvas({
   }).filter(Boolean), [data.civilizations, proj]);
 
   const allConnectionPaths = useMemo(() => {
-    return data.diffusionEvents.map(ev => {
+    const results = [];
+
+    // diffusionEvents — original schema (fromId + toRegion object)
+    data.diffusionEvents.forEach(ev => {
       const fromCiv = data.civById[ev.fromId];
-      if (!fromCiv) return null;
+      if (!fromCiv) return;
       const from = [fromCiv.hearth.lng, fromCiv.hearth.lat];
       const to = [ev.toRegion.lng, ev.toRegion.lat];
       const dPath = makeArcPath(proj, from, to);
       const length = approxPathLength(dPath);
       const tech = TECH_FAMILIES[ev.enablingTech] || TECH_FAMILIES['foot-river'];
-      return { ...ev, dPath, length, fromCiv, tech };
-    }).filter(Boolean);
+      const toPt = proj(to);
+      results.push({ ...ev, dPath, length, fromCiv, tech, toPt, _fromCivId: ev.fromId });
+    });
+
+    // rich connections — new schema (fromCoords/toCoords arrays [lng, lat])
+    (data.connections || []).forEach(conn => {
+      const from = conn.fromCoords;
+      const to = conn.toCoords;
+      const dPath = makeArcPath(proj, from, to);
+      const length = approxPathLength(dPath);
+      const tech = TECH_FAMILIES[conn.enablingTech] || TECH_FAMILIES['foot-river'];
+      const toPt = proj(to);
+      results.push({ ...conn, dPath, length, tech, toPt, _fromCivId: conn.fromRegion });
+    });
+
+    return results;
   }, [data, proj]);  // NOT selectedYear — paths don't change when year changes
 
   const activeConnections = useMemo(() => {
@@ -113,7 +130,7 @@ export default function MapCanvas({
   }, [allConnectionPaths, selectedYear]);  // just filter, no path computation
 
   const visibleConnections = selectedCivId
-    ? activeConnections.filter(c => c.fromId === selectedCivId)
+    ? activeConnections.filter(c => c._fromCivId === selectedCivId)
     : activeConnections;
 
   const scale = dims.width / MAP_W;
@@ -210,10 +227,9 @@ export default function MapCanvas({
           const isSelected = conn.id === selectedConnectionId;
           const isHovered = conn.id === hoveredConnId;
           const isDimmed = hoveredConnId != null && !isHovered && !isSelected;
-          const { tech } = conn;
+          const { tech, toPt } = conn;
           const delay = i * 0.10;
           const duration = 1.5 + i * 0.08;
-          const toPt = proj([conn.toRegion.lng, conn.toRegion.lat]);
           const baseOpacity = isSelected ? 0.9 : isHovered ? 0.95 : isDimmed ? 0.12 : 0.72;
           const glowOpacity = isSelected ? 0.30 : isHovered ? 0.35 : isDimmed ? 0.04 : 0.15;
 

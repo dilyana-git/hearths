@@ -115,14 +115,17 @@ function EraView({ data, currentEra, activeConnections }) {
             {activeConnections.map(conn => {
               const tech = TECH_FAMILIES[conn.enablingTech] || TECH_FAMILIES['foot-river'];
               const fromCiv = data.civById[conn.fromId];
+              const label = conn.innovation || conn.flows?.[0] || conn.id;
+              const fromLabel = fromCiv?.name || conn.fromRegion || '';
+              const toLabel = (typeof conn.toRegion === 'object' ? conn.toRegion?.name : conn.toRegion) || '';
               return (
                 <div key={conn.id} className="flex items-start gap-2">
                   <span className="w-2 h-2 rounded-full mt-1 flex-shrink-0"
                     style={{ backgroundColor: tech.color }} />
                   <div>
-                    <span className="text-xs text-parchment-300">{conn.innovation}</span>
+                    <span className="text-xs text-parchment-300">{label}</span>
                     <span className="text-[10px] text-parchment-500 ml-1">
-                      {fromCiv?.name} → {conn.toRegion.name}
+                      {fromLabel} → {toLabel}
                     </span>
                   </div>
                 </div>
@@ -206,6 +209,8 @@ function CivView({ civ, data, selectedYear, activeMilestones, civConnections, on
           <div className="space-y-1.5">
             {civConnections.map(conn => {
               const tech = TECH_FAMILIES[conn.enablingTech] || TECH_FAMILIES['foot-river'];
+              const label = conn.innovation || conn.flows?.[0] || conn.id;
+              const toLabel = (typeof conn.toRegion === 'object' ? conn.toRegion?.name : conn.toRegion) || '';
               return (
                 <div key={conn.id} className="flex items-center gap-2">
                   <svg width="16" height="6" className="flex-shrink-0" aria-hidden="true">
@@ -213,8 +218,8 @@ function CivView({ civ, data, selectedYear, activeMilestones, civConnections, on
                       stroke={tech.color} strokeWidth={1.5}
                       strokeDasharray={tech.dash !== 'none' ? tech.dash : undefined} />
                   </svg>
-                  <span className="text-[10px] text-parchment-400">{conn.innovation}</span>
-                  <span className="text-[10px] text-parchment-600">→ {conn.toRegion.name}</span>
+                  <span className="text-[10px] text-parchment-400">{label}</span>
+                  <span className="text-[10px] text-parchment-600">→ {toLabel}</span>
                 </div>
               );
             })}
@@ -229,6 +234,12 @@ function CivView({ civ, data, selectedYear, activeMilestones, civConnections, on
 
 function ConnectionView({ conn, data }) {
   const fromCiv = data.civById[conn.fromId];
+  // Support both schemas: diffusionEvents have .innovation + .toRegion.name; rich connections have .flows[0] + string .toRegion
+  const title = conn.innovation || conn.flows?.[0] || conn.id;
+  const fromLabel = fromCiv?.name || conn.fromRegion || '?';
+  const toLabel = (typeof conn.toRegion === 'object' ? conn.toRegion?.name : conn.toRegion) || '?';
+  const imagePrompt = conn.imagePrompt || TECH_FAMILIES[conn.enablingTech]?.description;
+
   return (
     <div className="flex flex-col gap-4 p-4 overflow-y-auto h-full">
       <div>
@@ -242,10 +253,10 @@ function ConnectionView({ conn, data }) {
           )}
         </div>
         <h2 className="serif text-xl text-parchment-200 font-medium mt-2 leading-snug">
-          {conn.innovation}
+          {title}
         </h2>
         <p className="text-xs text-parchment-500 mt-1">
-          {fromCiv?.name} → {conn.toRegion.name}
+          {fromLabel} → {toLabel}
         </p>
         {(conn.fromDate || conn.toDate) && (
           <p className="text-[10px] text-parchment-600 mt-0.5">
@@ -255,7 +266,7 @@ function ConnectionView({ conn, data }) {
         )}
       </div>
 
-      <ImageSlot title={conn.innovation} prompt={TECH_FAMILIES[conn.enablingTech]?.description} imageUrl={conn.imageUrl} />
+      <ImageSlot title={title} prompt={imagePrompt} imageUrl={conn.imageUrl} />
 
       {conn.narrative && (
         <p className="text-xs text-parchment-400 leading-relaxed">{conn.narrative}</p>
@@ -350,14 +361,17 @@ export default function RightRail({
   onCivSelect, onConnectionSelect, onMilestoneSelect,
 }) {
   const activeConnections = useMemo(() => {
-    return data.diffusionEvents
-      .filter(ev => (ev.fromDate != null ? ev.fromDate <= selectedYear : ev.approxDate <= selectedYear))
+    const all = [...data.diffusionEvents, ...(data.connections || [])];
+    return all
+      .filter(ev => (ev.fromDate != null ? ev.fromDate <= selectedYear : (ev.approxDate ?? Infinity) <= selectedYear))
       .filter(ev => ev.toDate == null || ev.toDate >= selectedYear);
   }, [data, selectedYear]);
 
   const selectedCiv = selectedCivId ? data.civById[selectedCivId] : null;
   const selectedConn = selectedConnectionId
-    ? data.diffusionEvents.find(e => e.id === selectedConnectionId)
+    ? (data.diffusionEvents.find(e => e.id === selectedConnectionId) ||
+       data.connectionsById?.[selectedConnectionId] ||
+       null)
     : null;
   const selectedMilestone = selectedMilestoneId
     ? data.milestones.find(m => m.id === selectedMilestoneId)
@@ -370,7 +384,7 @@ export default function RightRail({
 
   const civConnections = useMemo(() => {
     if (!selectedCiv) return [];
-    return activeConnections.filter(c => c.fromId === selectedCiv.id);
+    return activeConnections.filter(c => (c.fromId || c.fromRegion) === selectedCiv.id);
   }, [selectedCiv, activeConnections]);
 
   return (
@@ -408,7 +422,7 @@ export default function RightRail({
           {selectedMilestone
             ? selectedMilestone.title
             : selectedConn && !selectedCiv
-            ? selectedConn.innovation
+            ? (selectedConn.innovation || selectedConn.flows?.[0] || selectedConn.id)
             : selectedCiv
             ? selectedCiv.name
             : currentEra.label}

@@ -20,11 +20,15 @@ export function useData() {
     const storiesById = {};
     rawData.stories.forEach(s => { storiesById[s.id] = s; });
 
+    const connectionsById = {};
+    (rawData.connections || []).forEach(c => { connectionsById[c.id] = c; });
+
     return {
       ...rawData,
       eras,
       erasById,
       storiesById,
+      connectionsById,
       milestonesByCiv,
       civById,
     };
