@@ -4,17 +4,17 @@ import { TECH_FAMILIES, STAGE_META } from '../utils/constants';
 const SLIDES = [
   {
     title: 'Fifteen thousand years of human contact',
-    body: 'Hearths maps cultural development from the last ice age to 1500 CE — nine civilisations, 100+ innovations, and the connections that formed between them. Technology set the geography of human contact: what could be traded, where, and when.',
+    body: 'Hearths maps cultural development from the last ice age to 1500 CE. Nine civilisations — Fertile Crescent, Nile Valley, Indus Valley, China, Mesoamerica, Andes, Sub-Saharan Africa, Aboriginal Australia, and Papua New Guinea — each taking a different path shaped by where they started.',
     visual: 'globe',
   },
   {
     title: 'Reading the map',
-    body: 'Glowing regions show development level — the brighter the glow, the more complex the society. Lines connect cultures, coloured and styled by the technology that made the connection possible. Click any hearth, line, or milestone dot for detail.',
+    body: 'Glowing regions show development stage — the brighter the glow, the more complex the society. Lines connect cultures, coloured and styled by the technology that made contact possible: foot paths, farming waves, bronze trade networks, monsoon sailing routes. Click any region, line, or dot for detail.',
     visual: 'legend',
   },
   {
     title: 'Navigate through time',
-    body: 'Scrub through 15,000 years at the bottom of the map, or press Play to watch civilisations develop. The right panel updates as you move — era narrative, active connections, and the story of whichever hearth you have selected.',
+    body: 'Drag the scrubber at the bottom of the map, or press Play to watch civilisations develop. The right panel updates as you move — showing the era narrative, which connections are active, and the detail of whatever you have clicked.',
     visual: 'scrubber',
   },
 ];

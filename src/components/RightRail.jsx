@@ -93,7 +93,17 @@ function getCurrentStage(civ, year) {
 function EraView({ data, currentEra, activeConnections }) {
   return (
     <div className="flex flex-col gap-4 p-4 overflow-y-auto h-full">
+      {/* Interaction affordance */}
+      <div className="flex flex-col gap-1.5 px-3 py-2.5 rounded bg-coal-800 border border-coal-700 text-[10px] text-parchment-600">
+        <p className="text-[9px] uppercase tracking-widest text-parchment-700 font-medium mb-0.5">Explore the atlas</p>
+        <p className="flex items-center gap-2"><span className="opacity-60">○</span> Click a <span className="text-parchment-400">glowing region</span> to explore a civilisation</p>
+        <p className="flex items-center gap-2"><span className="opacity-60">—</span> Click a <span className="text-parchment-400">connection line</span> for trade &amp; diffusion detail</p>
+        <p className="flex items-center gap-2"><span className="opacity-60">·</span> Click a <span className="text-parchment-400">milestone dot</span> for a specific innovation</p>
+        <p className="flex items-center gap-2"><span className="opacity-60">▷</span> Press <span className="text-parchment-400">Play</span> or drag the bottom bar to travel through time</p>
+      </div>
+
       <div>
+        <p className="text-[9px] uppercase tracking-widest text-parchment-600 mb-1">Current era</p>
         <h2 className="serif text-xl text-parchment-200 font-medium leading-snug">
           {currentEra.label}
         </h2>

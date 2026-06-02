@@ -412,6 +412,22 @@ export default function MapCanvas({
           );
         })()}
 
+        {/* Empty-state interaction hint — fades once user clicks something */}
+        {!selectedCivId && !selectedConnectionId && !selectedMilestoneId && (
+          <text
+            x={dims.width / 2}
+            y={36}
+            textAnchor="middle"
+            fill="rgba(138,125,101,0.28)"
+            fontSize={9.5}
+            fontFamily="Cormorant Garamond, Georgia, serif"
+            fontStyle="italic"
+            pointerEvents="none"
+          >
+            click a circle · connection line · or milestone dot to explore
+          </text>
+        )}
+
         {/* Vignette */}
         <rect width={dims.width} height={dims.height}
           fill="url(#mc-vig)" pointerEvents="none" />

@@ -38,8 +38,27 @@ export default function AboutPanel({ onClose }) {
           {/* Vision */}
           <section>
             <p>
-              <em className="serif text-base text-parchment-200 not-italic">Hearths</em> takes its name from <strong className="text-parchment-200 font-medium">cultural hearths</strong> — the geographic term for the handful of regions where complex civilizations independently emerged. This application lets you trace those divergent paths across deep time, from the first settled villages to the threshold of European global expansion around 1500 CE.
+              <em className="serif text-base text-parchment-200 not-italic">Hearths</em> takes its name from <strong className="text-parchment-200 font-medium">cultural hearths</strong> — the geographic term for the handful of regions where complex civilizations independently emerged. Starting from the last ice age (~13,000 BCE) and ending at the threshold of European global expansion (~1500 CE), it maps nine civilizations, 100+ innovations, and the trade and diffusion routes that connected them across 15,000 years.
             </p>
+            <p className="mt-3">
+              The core argument: <strong className="text-parchment-200 font-medium">technology set the geography of human contact</strong>. Before sailing ships existed, only foot-traffic and rivers could carry ideas. When bronze-working forced long-distance tin-and-copper trade, the Mediterranean became an interconnected network. Each connection line on the map is coloured and styled by the technology that made it possible.
+            </p>
+          </section>
+
+          {/* How to use */}
+          <section>
+            <h3 className="serif text-lg text-parchment-200 mb-2">How to use this atlas</h3>
+            <ul className="space-y-2 text-parchment-400">
+              <li>
+                <strong className="text-parchment-300">Atlas</strong> — The map view. Glowing regions show civilisational development level; coloured lines show active trade and diffusion routes. Click any glowing circle, connection line, or milestone dot — the right panel updates with context. Use the time scrubber at the bottom to move through 15,000 years.
+              </li>
+              <li>
+                <strong className="text-parchment-300">Stories</strong> — Guided tours that step through a theme (the Bronze Age trade network, the Austronesian expansion, how cattle spread across Eurasia…) by advancing through dated beats on the live map. Also includes the <em>Diamond's Causal Chain</em> tool — select any civilisation and see how each step in Diamond's argument resolved for it.
+              </li>
+              <li>
+                <strong className="text-parchment-300">Timeline</strong> — A horizontal scroll across all nine civilisations, showing their 100+ milestone events as dated nodes. Useful for comparing civilisational development side-by-side across time.
+              </li>
+            </ul>
           </section>
 
           {/* The framework */}
@@ -79,27 +98,17 @@ export default function AboutPanel({ onClose }) {
                 </li>
                 <li className="flex gap-2">
                   <span className="text-crimson-500 flex-shrink-0">—</span>
-                  <span>Many dates and causal attributions are genuinely uncertain. Where scholarly debate exists, the data is flagged with a <span className="text-gold-500">⚠ contested</span> marker.</span>
+                  <span>Many dates and causal attributions are genuinely uncertain. Where scholarly debate exists, the data is flagged with a <span className="text-amber-400">contested</span> marker.</span>
                 </li>
                 <li className="flex gap-2">
                   <span className="text-crimson-500 flex-shrink-0">—</span>
-                  <span>The civilizations selected follow Diamond's comparative set and reflect a particular research tradition. Many societies not represented here developed equally sophisticated cultural forms that don't fit this schema.</span>
+                  <span>The civilizations selected follow Diamond's comparative set. Many societies not represented here developed equally sophisticated cultural forms that don't fit this schema.</span>
                 </li>
               </ul>
               <p>
                 Indigenous scholars, historians, and archaeologists have offered important correctives to environmental determinist readings of history. We encourage readers to pursue those critiques alongside this visualization.
               </p>
             </div>
-          </section>
-
-          {/* How to use */}
-          <section>
-            <h3 className="serif text-lg text-parchment-200 mb-2">How to use this atlas</h3>
-            <ul className="space-y-1.5 text-parchment-400">
-              <li><strong className="text-parchment-300">Threads</strong> — The primary view. Scroll horizontally across 14,500 years of divergent civilizational history. Click any node to open a detailed panel.</li>
-              <li><strong className="text-parchment-300">Map</strong> — See the cultural hearths geographically and watch diffusion arcs show how innovations spread (or stalled) across continents.</li>
-              <li><strong className="text-parchment-300">Causal Chain</strong> — Select any civilization and see how Diamond's causal chain resolved for it — which links were strong, weak, or absent entirely.</li>
-            </ul>
           </section>
 
           <div className="pt-2 flex justify-end">

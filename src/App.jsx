@@ -20,7 +20,7 @@ export default function App() {
   const [activeView, setActiveView] = useState('atlas');
   const [selectedMilestone, setSelectedMilestone] = useState(null);
   const [hoveredMilestone, setHoveredMilestone] = useState(null);
-  const [showAbout, setShowAbout] = useState(true);
+  const [showAbout, setShowAbout] = useState(false);
   const [showLegend, setShowLegend] = useState(false);
   const [sortBy, setSortBy] = useState('default');
   const [chainCivId, setChainCivId] = useState('fertile-crescent');
