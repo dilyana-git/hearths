@@ -388,17 +388,17 @@ export default function ThreadsView({ data, selectedMilestone, hoveredMilestone,
                 return (
                   <g>
                     <line x1={bx} y1={ERA_H + 2} x2={bx} y2={TOP_H}
-                      stroke="#b8960c" strokeWidth={1.5} strokeOpacity={0.5}
+                      stroke="#b8960c" strokeWidth={1.5} strokeOpacity={0.45}
                     />
-                    <text x={bx - 6} y={ERA_H + AXIS_H - 6} textAnchor="end"
-                      fill="#b8960c" fontSize={12} opacity={0.8}
+                    <text x={bx - 8} y={ERA_H + AXIS_H - 4} textAnchor="end"
+                      fill="#b8960c" fontSize={8.5} opacity={0.65}
                       style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-                      ← compressed
+                      Pleistocene compressed
                     </text>
-                    <text x={bx + 6} y={ERA_H + AXIS_H - 6} textAnchor="start"
-                      fill="#b8960c" fontSize={12} opacity={0.8}
+                    <text x={bx + 8} y={ERA_H + AXIS_H - 4} textAnchor="start"
+                      fill="#b8960c" fontSize={8.5} opacity={0.65}
                       style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-                      expanded →
+                      Holocene expanded
                     </text>
                   </g>
                 );
@@ -753,6 +753,13 @@ export default function ThreadsView({ data, selectedMilestone, hoveredMilestone,
         <span className="flex-shrink-0 text-xs text-parchment-500 w-14">
           1500 CE
         </span>
+      </div>
+
+      {/* Reading hint */}
+      <div className="flex-shrink-0 flex items-center justify-center px-4 py-1.5 border-t border-coal-800 bg-coal-950">
+        <p className="text-[9px] text-parchment-700 italic text-center">
+          Ring = foundational · Filled = emerging complexity · Double ring = peak complexity &nbsp;·&nbsp; Click any dot to inspect · Hover type labels to thread
+        </p>
       </div>
 
     </div>

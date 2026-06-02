@@ -2,7 +2,7 @@ import React, { useMemo, useState, useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import worldTopology from 'world-atlas/countries-110m.json';
-import { TECH_FAMILIES, STAGE_META, TYPE_META } from '../utils/constants';
+import { TECH_FAMILIES, STAGE_META, TYPE_META, ERAS } from '../utils/constants';
 
 const PROJ_SCALE = 155;
 const MAP_W = 960;
@@ -76,6 +76,7 @@ export default function MapCanvas({
 }) {
   const containerRef = useRef(null);
   const dims = useDimensions(containerRef);
+  const [hoveredConnId, setHoveredConnId] = useState(null);
   const proj = useProjection(dims.width, dims.height);
   const pathGen = useMemo(() => d3.geoPath(proj), [proj]);
   const { land, borders } = useMemo(() => ({
@@ -151,6 +152,15 @@ export default function MapCanvas({
           <filter id="mc-stageBlur" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="22" />
           </filter>
+          <filter id="mc-textHalo" x="-15%" y="-40%" width="130%" height="180%" colorInterpolationFilters="sRGB">
+            <feMorphology in="SourceAlpha" operator="dilate" radius="2" result="expanded" />
+            <feFlood floodColor="#080c12" floodOpacity="0.88" result="bg" />
+            <feComposite in="bg" in2="expanded" operator="in" result="halo" />
+            <feMerge>
+              <feMergeNode in="halo" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
           {hearths.map(h => {
             const stage = getCurrentStage(h, selectedYear);
             const meta = STAGE_META[stage];
@@ -169,7 +179,7 @@ export default function MapCanvas({
         {/* Graticule */}
         <path
           d={pathGen(d3.geoGraticule()()) || ''}
-          fill="none" stroke="#1a2235" strokeWidth={0.4} opacity={0.6}
+          fill="none" stroke="#1a2235" strokeWidth={0.5} opacity={0.75}
         />
 
         {/* Land */}
@@ -198,15 +208,21 @@ export default function MapCanvas({
         {/* Tech-typed connections */}
         {visibleConnections.map((conn, i) => {
           const isSelected = conn.id === selectedConnectionId;
+          const isHovered = conn.id === hoveredConnId;
+          const isDimmed = hoveredConnId != null && !isHovered && !isSelected;
           const { tech } = conn;
           const delay = i * 0.10;
           const duration = 1.5 + i * 0.08;
           const toPt = proj([conn.toRegion.lng, conn.toRegion.lat]);
+          const baseOpacity = isSelected ? 0.9 : isHovered ? 0.95 : isDimmed ? 0.12 : 0.72;
+          const glowOpacity = isSelected ? 0.30 : isHovered ? 0.35 : isDimmed ? 0.04 : 0.15;
 
           return (
             <g
               key={conn.id}
               onClick={e => { e.stopPropagation(); onConnectionSelect(conn.id); }}
+              onMouseEnter={() => setHoveredConnId(conn.id)}
+              onMouseLeave={() => setHoveredConnId(null)}
               style={{ cursor: 'pointer' }}
             >
               {/* Glow + dash track */}
@@ -214,8 +230,8 @@ export default function MapCanvas({
                 d={conn.dPath}
                 fill="none"
                 stroke={tech.color}
-                strokeWidth={isSelected ? 5 : 2.5}
-                strokeOpacity={isSelected ? 0.28 : 0.13}
+                strokeWidth={isSelected || isHovered ? 5 : 2.5}
+                strokeOpacity={glowOpacity}
                 strokeDasharray={tech.dash !== 'none' ? tech.dash : undefined}
                 filter="url(#mc-arcGlow)"
               />
@@ -224,20 +240,21 @@ export default function MapCanvas({
                 d={conn.dPath}
                 fill="none"
                 stroke={tech.color}
-                strokeWidth={isSelected ? 2.5 : 1.5}
-                strokeOpacity={isSelected ? 0.9 : 0.6}
+                strokeWidth={isSelected || isHovered ? 2.5 : 1.5}
+                strokeOpacity={baseOpacity}
                 strokeDasharray={`${conn.length} ${conn.length}`}
                 strokeDashoffset={conn.length}
                 strokeLinecap="round"
                 style={{
                   animation: `arcDraw ${duration}s cubic-bezier(0.4,0,0.2,1) ${delay}s forwards`,
                   '--arc-length': conn.length,
+                  transition: 'stroke-opacity 0.15s ease',
                 }}
               />
               {toPt && (
                 <circle
-                  cx={toPt[0]} cy={toPt[1]} r={isSelected ? 4 : 2.5}
-                  fill={tech.color} fillOpacity={0.7}
+                  cx={toPt[0]} cy={toPt[1]} r={isSelected || isHovered ? 4 : 2.5}
+                  fill={tech.color} fillOpacity={isDimmed ? 0.15 : 0.7}
                   stroke={tech.color} strokeWidth={0.5}
                   pointerEvents="none"
                 />
@@ -324,19 +341,41 @@ export default function MapCanvas({
               <circle cx={h.px} cy={h.py} r={isActive ? 5 : 3.5}
                 fill={color} fillOpacity={isActive ? 0.9 : 0.65} />
               <text
-                x={h.px} y={h.py - (isActive ? 14 : 11)}
+                x={h.px} y={h.py - (isActive ? 18 : 15)}
                 textAnchor="middle"
                 fill={color}
-                fontSize={isActive ? 11 : 9}
+                fontSize={isActive ? 14 : 11}
                 fontWeight={isActive ? 600 : 400}
+                filter="url(#mc-textHalo)"
                 style={{ fontFamily: 'Cormorant Garamond, Georgia, serif', pointerEvents: 'none' }}
-                opacity={isActive ? 1 : 0.78}
+                opacity={isActive ? 1 : 0.85}
               >
                 {h.name}
               </text>
             </g>
           );
         })}
+
+        {/* Era inscription — top center */}
+        {(() => {
+          const era = [...ERAS].reverse().find(e => selectedYear >= e.start) || ERAS[0];
+          return (
+            <text
+              x={dims.width / 2}
+              y={20}
+              textAnchor="middle"
+              fill="#b8960c"
+              fontSize={12}
+              fontFamily="Cormorant Garamond, Georgia, serif"
+              fontWeight={500}
+              opacity={0.22}
+              pointerEvents="none"
+              style={{ textTransform: 'uppercase', letterSpacing: '0.14em' }}
+            >
+              {era.label.toUpperCase()}
+            </text>
+          );
+        })()}
 
         {/* Vignette */}
         <rect width={dims.width} height={dims.height}
@@ -385,6 +424,26 @@ export default function MapCanvas({
               </g>
             );
           })}
+        </g>
+
+        {/* Compass rose — bottom right */}
+        <g
+          transform={`translate(${dims.width - 38}, ${dims.height - 42})`}
+          pointerEvents="none"
+          opacity={0.42}
+        >
+          {/* N arrow */}
+          <polygon points="0,-20 -3.5,-10 3.5,-10" fill="#8a7d65" />
+          <line x1={0} y1={-10} x2={0} y2={2} stroke="#8a7d65" strokeWidth={1.5} />
+          <text x={0} y={-23} textAnchor="middle" fill="#8a7d65" fontSize={8}
+            fontFamily="sans-serif" fontWeight={700}>N</text>
+          {/* Cardinal ticks S, E, W */}
+          <line x1={0} y1={14} x2={0} y2={8} stroke="#5a5045" strokeWidth={1} />
+          <line x1={-14} y1={0} x2={-8} y2={0} stroke="#5a5045" strokeWidth={1} />
+          <line x1={14} y1={0} x2={8} y2={0} stroke="#5a5045" strokeWidth={1} />
+          {/* Center ring */}
+          <circle cx={0} cy={0} r={3.5} fill="none" stroke="#6a6050" strokeWidth={0.8} />
+          <circle cx={0} cy={0} r={1.5} fill="#8a7d65" />
         </g>
 
         {/* Helper text */}

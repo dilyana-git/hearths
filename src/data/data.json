@@ -1488,6 +1488,107 @@
       "narrative": "The Silk Roads were less a single road than a network of routes across Central Asia, connecting Han China to Rome and everything between — carrying silk west and gold east, and inadvertently transmitting the Black Death in 1347.",
       "description": "The Silk Road east–west corridor exploited the same Eurasian climate band that had earlier spread crops and bronze — now carrying luxury goods, religions, technologies, and ultimately pandemic disease.",
       "strength": "strong"
+    },
+    {
+      "id": "diff-indus-mesopotamia",
+      "innovation": "Indus–Mesopotamia Maritime Trade",
+      "fromId": "indus-valley",
+      "toRegion": {
+        "lat": 30.5,
+        "lng": 47.8,
+        "name": "Lower Mesopotamia"
+      },
+      "approxDate": -2600,
+      "enablingTech": "sail-monsoon",
+      "fromDate": -2600,
+      "toDate": -1800,
+      "axisAlong": "east-west",
+      "flows": [
+        "carnelian beads",
+        "lapis lazuli",
+        "cotton textiles",
+        "ivory",
+        "timber"
+      ],
+      "narrative": "The Indus Valley cities maintained a maritime trade network through the Persian Gulf that reached Ur and Dilmun. Mesopotamian clay tablets record the Meluhha (Indus) merchants and the goods they brought — carnelian, ivory, and timber unavailable in the alluvial plains.",
+      "description": "At its peak the Indus–Mesopotamia exchange was the world's first intercontinental maritime trade system, linking two literate Bronze Age urban cultures across 2,500 km of sea.",
+      "strength": "strong"
+    },
+    {
+      "id": "diff-nile-corridor",
+      "innovation": "Nile Corridor Exchange",
+      "fromId": "fertile-crescent",
+      "toRegion": {
+        "lat": 17.0,
+        "lng": 32.5,
+        "name": "Nubia / Upper Nile"
+      },
+      "approxDate": -4000,
+      "enablingTech": "foot-river",
+      "fromDate": -5000,
+      "toDate": null,
+      "axisAlong": "north-south",
+      "flows": [
+        "gold",
+        "ivory",
+        "ebony",
+        "cattle",
+        "grain",
+        "enslaved people"
+      ],
+      "narrative": "The Nile is the world's longest navigable corridor. From at least 5000 BCE, goods and people moved continuously along its length — Egyptian grain south, Nubian gold north. Egypt's wealth was inseparable from its ability to tap Nubian resources.",
+      "description": "The Nile Valley was a long-range exchange corridor long before writing. The river's current carried boats north effortlessly; rowing and sailing carried them south. No terrain stood between Egypt and the African interior.",
+      "strength": "strong"
+    },
+    {
+      "id": "diff-steppe-corridor",
+      "innovation": "Eurasian Steppe Corridor",
+      "fromId": "fertile-crescent",
+      "toRegion": {
+        "lat": 50.0,
+        "lng": 32.0,
+        "name": "Pontic Steppe / Eastern Europe"
+      },
+      "approxDate": -3000,
+      "enablingTech": "wheel-caravan",
+      "fromDate": -3500,
+      "toDate": -1000,
+      "axisAlong": "east-west",
+      "flows": [
+        "domesticated horses",
+        "bronze weapons",
+        "wheeled vehicles",
+        "Indo-European languages",
+        "pastoral practices"
+      ],
+      "narrative": "The Pontic-Caspian steppe was a vast grassland superhighway. Horses, the wheel, and later bronze weapons spread across Eurasia along this corridor, carrying the ancestors of Indo-European languages from the steppe into Europe, Iran, and South Asia simultaneously.",
+      "description": "The Yamnaya expansion from the Pontic steppe is now confirmed by ancient DNA to have replaced a large proportion of Neolithic European ancestry. The steppe corridor was the vector for languages spoken today by half the world's population.",
+      "strength": "strong"
+    },
+    {
+      "id": "diff-andes-mesoamerica",
+      "innovation": "Andean–Mesoamerican Diffusion",
+      "fromId": "andean",
+      "toRegion": {
+        "lat": 14.0,
+        "lng": -88.0,
+        "name": "Mesoamerica"
+      },
+      "approxDate": -1000,
+      "enablingTech": "foot-river",
+      "fromDate": -2000,
+      "toDate": 0,
+      "axisAlong": "north-south",
+      "flows": [
+        "metallurgy",
+        "textile techniques",
+        "maize varieties",
+        "ritual practices"
+      ],
+      "contested": true,
+      "narrative": "The extent of direct contact between Andean and Mesoamerican cultures is debated. Similarities in metallurgy, textile iconography, and certain crops suggest some corridor of exchange through lower Central America — but whether it was sustained contact or independent invention remains contested.",
+      "description": "The narrow land bridge of Central America separates two of the world's independently developed civilizations. Evidence for exchange exists but is thinner than in the Old World — geography punished north-south contact in the Americas.",
+      "strength": "weak"
     }
   ],
   "causalChain": {
