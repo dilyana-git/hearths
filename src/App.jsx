@@ -7,6 +7,7 @@ import ThreadsView from './components/ThreadsView';
 import StoriesView from './components/StoriesView';
 import MilestonePanel from './components/MilestonePanel';
 import TypeLegend from './components/TypeLegend';
+import OnboardingModal from './components/OnboardingModal';
 
 const VIEWS = [
   { id: 'atlas',   label: 'Atlas',    description: 'World map · space & time' },
@@ -23,7 +24,10 @@ export default function App() {
   const [showLegend, setShowLegend] = useState(false);
   const [sortBy, setSortBy] = useState('default');
   const [chainCivId, setChainCivId] = useState('fertile-crescent');
-  const [activeStory, setActiveStory] = useState(null);
+  const [activeTour, setActiveTour] = useState(null);
+  const [showOnboarding, setShowOnboarding] = useState(
+    () => !localStorage.getItem('hearths-onboarded')
+  );
 
   const handleSelectMilestone = useCallback((milestone) => {
     setSelectedMilestone(prev => prev?.id === milestone?.id ? null : milestone);
@@ -35,6 +39,24 @@ export default function App() {
 
   const handleClosePanel = useCallback(() => {
     setSelectedMilestone(null);
+  }, []);
+
+  const handleOpenTour = useCallback((beats) => {
+    setActiveTour({ beats, beatIndex: 0 });
+    setActiveView('atlas');
+  }, []);
+
+  const handleCloseTour = useCallback(() => {
+    setActiveTour(null);
+  }, []);
+
+  const handleTourBeat = useCallback((idx) => {
+    setActiveTour(t => t ? { ...t, beatIndex: idx } : null);
+  }, []);
+
+  const handleCloseOnboarding = useCallback(() => {
+    localStorage.setItem('hearths-onboarded', '1');
+    setShowOnboarding(false);
   }, []);
 
   useEffect(() => {
@@ -67,6 +89,9 @@ export default function App() {
           {activeView === 'atlas' && (
             <AtlasView
               data={data}
+              activeTour={activeTour}
+              onCloseTour={handleCloseTour}
+              onTourBeat={handleTourBeat}
             />
           )}
           {activeView === 'stories' && (
@@ -74,6 +99,7 @@ export default function App() {
               data={data}
               chainCivId={chainCivId}
               onChainCivChange={setChainCivId}
+              onOpenTour={handleOpenTour}
             />
           )}
           {activeView === 'threads' && (
@@ -118,6 +144,11 @@ export default function App() {
       {/* About modal */}
       {showAbout && (
         <AboutPanel onClose={() => setShowAbout(false)} />
+      )}
+
+      {/* First-visit onboarding */}
+      {showOnboarding && (
+        <OnboardingModal onClose={handleCloseOnboarding} />
       )}
     </div>
   );

@@ -234,7 +234,15 @@ function ConnectionView({ conn, data }) {
   return (
     <div className="flex flex-col gap-4 p-4 overflow-y-auto h-full">
       <div>
-        <TechBadge techKey={conn.enablingTech} />
+        <div className="flex items-center gap-2 flex-wrap">
+          <TechBadge techKey={conn.enablingTech} />
+          {conn.contested && (
+            <span className="text-[9px] px-1.5 py-0.5 rounded font-medium"
+              style={{ backgroundColor: '#c4a84022', color: '#c4a840', border: '1px solid #c4a84044' }}>
+              Contested
+            </span>
+          )}
+        </div>
         <h2 className="serif text-xl text-parchment-200 font-medium mt-2 leading-snug">
           {conn.innovation}
         </h2>

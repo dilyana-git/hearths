@@ -205,8 +205,17 @@ function TrunkSegment({ y1, y2, color, opacity }) {
   );
 }
 
+const CHAIN_STRENGTH_DESCRIPTIONS = {
+  'strong':           'Clear, well-evidenced causal contribution for this civilisation.',
+  'moderate':         'Present and meaningful — but not the primary driver.',
+  'weak':             'Limited, indirect, or contested contribution.',
+  'context-specific': 'Significant only under specific historical circumstances.',
+  'absent':           'No evidence of this factor; the causal chain breaks here.',
+};
+
 export default function CausalChain({ data, selectedCivId, onSelectCiv }) {
   const [hoveredId, setHoveredId] = useState(null);
+  const [hoveredStrength, setHoveredStrength] = useState(null);
 
   useEffect(() => {
     setHoveredId(null);
@@ -259,7 +268,12 @@ export default function CausalChain({ data, selectedCivId, onSelectCiv }) {
         {/* Connection-strength key — color + dash pattern so it's not color-only */}
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2.5">
           {Object.entries(CHAIN_STRENGTH_COLORS).map(([s, c]) => (
-            <span key={s} className="flex items-center gap-1.5">
+            <span
+              key={s}
+              className="flex items-center gap-1.5 cursor-default"
+              onMouseEnter={() => setHoveredStrength(s)}
+              onMouseLeave={() => setHoveredStrength(null)}
+            >
               <svg width="18" height="8" aria-hidden="true" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
                 <line x1="1" y1="4" x2="17" y2="4"
                   stroke={c} strokeWidth="2.5" strokeLinecap="round"
@@ -269,6 +283,14 @@ export default function CausalChain({ data, selectedCivId, onSelectCiv }) {
               <span className="text-xs text-parchment-400">{CHAIN_STRENGTH_LABELS[s]}</span>
             </span>
           ))}
+        </div>
+        {/* Strength description tooltip row */}
+        <div className="min-h-4 mt-1.5">
+          {hoveredStrength && (
+            <p className="text-[10px] text-parchment-500 italic">
+              {CHAIN_STRENGTH_DESCRIPTIONS[hoveredStrength]}
+            </p>
+          )}
         </div>
       </div>
 

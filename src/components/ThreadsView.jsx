@@ -57,10 +57,12 @@ const MAJOR_TICKS = [-12000, -10000, -9500, -8000, -6000, -4000, -2000, -1000, 0
 const MINOR_TICKS = [-11000, -9000, -7000, -5000, -3000, -1500, 250, 1000];
 
 // ─── Node rendering by tier ──────────────────────────────────────────────────
-function NodeShape({ color, tier, active, typeActive, selected }) {
+function NodeShape({ color, tier, active, typeActive, selected, contested }) {
   const baseOpacity    = selected ? 0.70 : active ? 0.55 : typeActive ? 0.30 : 0.18;
   const strokeOpacity  = selected ? 1    : active ? 0.95 : typeActive ? 0.80 : 0.60;
   const strokeW        = selected ? 2    : 1.5;
+  const dash           = contested ? '3,3' : undefined;
+  const fop            = contested ? baseOpacity * 0.55 : baseOpacity;
 
   switch (tier) {
     case 'ring':
@@ -68,6 +70,7 @@ function NodeShape({ color, tier, active, typeActive, selected }) {
         <circle r={NODE_R}
           fill="none"
           stroke={color} strokeWidth={strokeW} strokeOpacity={strokeOpacity}
+          strokeDasharray={dash}
         />
       );
     case 'double':
@@ -77,18 +80,21 @@ function NodeShape({ color, tier, active, typeActive, selected }) {
             fill="none"
             stroke={color} strokeWidth={0.8}
             strokeOpacity={strokeOpacity * 0.45}
+            strokeDasharray={dash}
           />
           <circle r={NODE_R - 1}
-            fill={color} fillOpacity={baseOpacity}
+            fill={color} fillOpacity={fop}
             stroke={color} strokeWidth={strokeW} strokeOpacity={strokeOpacity}
+            strokeDasharray={dash}
           />
         </>
       );
     default: // 'filled'
       return (
         <circle r={NODE_R}
-          fill={color} fillOpacity={baseOpacity}
+          fill={color} fillOpacity={fop}
           stroke={color} strokeWidth={strokeW} strokeOpacity={strokeOpacity}
+          strokeDasharray={dash}
         />
       );
   }
@@ -568,6 +574,7 @@ export default function ThreadsView({ data, selectedMilestone, hoveredMilestone,
                         <NodeShape
                           color={meta.color} tier={tier}
                           active={isActive} typeActive={isTypeAct} selected={isSelected}
+                          contested={m.contested}
                         />
                         {/* Contested badge */}
                         {m.contested && (

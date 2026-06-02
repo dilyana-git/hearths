@@ -251,6 +251,18 @@ export default function MapCanvas({
                   transition: 'stroke-opacity 0.15s ease',
                 }}
               />
+              {/* Contested uncertainty stripe */}
+              {conn.contested && (
+                <path
+                  d={conn.dPath}
+                  fill="none"
+                  stroke="#c4a840"
+                  strokeWidth={1}
+                  strokeOpacity={isDimmed ? 0.08 : 0.28}
+                  strokeDasharray="2,10"
+                  pointerEvents="none"
+                />
+              )}
               {toPt && (
                 <circle
                   cx={toPt[0]} cy={toPt[1]} r={isSelected || isHovered ? 4 : 2.5}
@@ -278,12 +290,16 @@ export default function MapCanvas({
                 const meta = TYPE_META[m.type] || { color: '#8a7d65', tier: 'filled' };
                 const isSel = m.id === selectedMilestoneId;
                 const r = isSel ? 5 : 3.5;
+                const contestedDash = m.contested ? '2,2' : undefined;
+                const fillOp = m.contested ? 0.20 : 0.38;
+                const strokeOp = m.contested ? 0.50 : 0.75;
 
                 if (meta.tier === 'ring') {
                   return (
                     <circle key={m.id} cx={mx} cy={my} r={r}
                       fill="none" stroke={meta.color}
-                      strokeWidth={1.2} strokeOpacity={0.75}
+                      strokeWidth={1.2} strokeOpacity={strokeOp}
+                      strokeDasharray={contestedDash}
                       style={{ cursor: 'pointer' }}
                       onClick={e => { e.stopPropagation(); onMilestoneSelect(m.id); }}
                     />
@@ -297,17 +313,20 @@ export default function MapCanvas({
                     >
                       <circle cx={mx} cy={my} r={r + 2.5}
                         fill="none" stroke={meta.color}
-                        strokeWidth={0.7} strokeOpacity={0.4} />
+                        strokeWidth={0.7} strokeOpacity={strokeOp * 0.5}
+                        strokeDasharray={contestedDash} />
                       <circle cx={mx} cy={my} r={r}
-                        fill={meta.color} fillOpacity={0.3}
-                        stroke={meta.color} strokeWidth={1} />
+                        fill={meta.color} fillOpacity={fillOp}
+                        stroke={meta.color} strokeWidth={1}
+                        strokeDasharray={contestedDash} />
                     </g>
                   );
                 }
                 return (
                   <circle key={m.id} cx={mx} cy={my} r={r}
-                    fill={meta.color} fillOpacity={0.38}
+                    fill={meta.color} fillOpacity={fillOp}
                     stroke={meta.color} strokeWidth={1.2}
+                    strokeDasharray={contestedDash}
                     style={{ cursor: 'pointer' }}
                     onClick={e => { e.stopPropagation(); onMilestoneSelect(m.id); }}
                   />

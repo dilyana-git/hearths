@@ -139,7 +139,83 @@ function AtlasScrubber({ year, onScrub, playing, onPlayPause, speed, onSpeedChan
   );
 }
 
-export default function AtlasView({ data }) {
+function TourOverlay({ tour, onBeat, onClose }) {
+  const { beats, beatIndex } = tour;
+  const beat = beats[beatIndex];
+  if (!beat) return null;
+  const isFirst = beatIndex === 0;
+  const isLast = beatIndex === beats.length - 1;
+
+  return (
+    <div
+      className="absolute left-4 bottom-4 z-20 rounded border border-coal-600 flex flex-col overflow-hidden"
+      style={{
+        width: 320,
+        background: 'rgba(8,12,18,0.94)',
+        backdropFilter: 'blur(4px)',
+      }}
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 pt-3 pb-0">
+        <span className="text-[9px] uppercase tracking-widest text-parchment-700">
+          Atlas Tour
+        </span>
+        <button
+          onClick={onClose}
+          className="text-parchment-600 hover:text-parchment-400 text-base leading-none transition-colors"
+          aria-label="Close tour"
+        >
+          ×
+        </button>
+      </div>
+
+      {/* Beat label */}
+      <div className="px-4 pt-2 pb-1">
+        <p className="serif text-sm font-medium text-parchment-200" style={{ fontFamily: 'Cormorant Garamond, Georgia, serif' }}>
+          {beat.label}
+        </p>
+      </div>
+
+      {/* Narrative */}
+      <div className="px-4 pb-3">
+        <p className="text-[11px] text-parchment-400 leading-relaxed">
+          {beat.narrative}
+        </p>
+      </div>
+
+      {/* Navigation */}
+      <div className="flex items-center justify-between px-4 pb-3 pt-1 border-t border-coal-700">
+        <button
+          onClick={() => onBeat(beatIndex - 1)}
+          disabled={isFirst}
+          className="text-[10px] text-parchment-500 hover:text-parchment-300 disabled:opacity-25 transition-colors"
+        >
+          ← Previous
+        </button>
+        <span className="text-[9px] text-parchment-700 tabular-nums">
+          {beatIndex + 1} / {beats.length}
+        </span>
+        {isLast ? (
+          <button
+            onClick={onClose}
+            className="text-[10px] text-teal-500 hover:text-teal-300 transition-colors"
+          >
+            Finish ✓
+          </button>
+        ) : (
+          <button
+            onClick={() => onBeat(beatIndex + 1)}
+            className="text-[10px] text-parchment-500 hover:text-parchment-300 transition-colors"
+          >
+            Next →
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default function AtlasView({ data, activeTour, onCloseTour, onTourBeat }) {
   const [selectedYear, setSelectedYear] = useState(-2500);
   const [playing, setPlaying] = useState(false);
   const [speed, setSpeed] = useState('normal');
@@ -213,6 +289,18 @@ export default function AtlasView({ data }) {
     setSelectedMilestoneId(null);
   }, []);
 
+  // Sync to tour beat when the tour or beat index changes
+  useEffect(() => {
+    if (!activeTour) return;
+    const beat = activeTour.beats[activeTour.beatIndex];
+    if (!beat) return;
+    setSelectedYear(beat.year);
+    setPlaying(false);
+    setSelectedConnectionId(beat.focusConnectionId ?? null);
+    setSelectedCivId(null);
+    setSelectedMilestoneId(null);
+  }, [activeTour]);
+
   const handleScrub = useCallback((year) => {
     setPlaying(false);
     setSelectedYear(year);
@@ -233,7 +321,14 @@ export default function AtlasView({ data }) {
     <div className="flex flex-col h-full overflow-hidden bg-coal-900">
       {/* Map + right rail */}
       <div className="flex flex-1 overflow-hidden min-h-0">
-        <div className="flex-1 overflow-hidden min-w-0">
+        <div className="flex-1 overflow-hidden min-w-0 relative">
+          {activeTour && (
+            <TourOverlay
+              tour={activeTour}
+              onBeat={onTourBeat}
+              onClose={onCloseTour}
+            />
+          )}
           <MapCanvas
             data={data}
             selectedYear={selectedYear}

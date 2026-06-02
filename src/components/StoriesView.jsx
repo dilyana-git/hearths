@@ -1,6 +1,35 @@
 import React, { useState } from 'react';
 import CausalChain from './CausalChain';
 
+const TOURS = {
+  'bronze-made-world-small': [
+    {
+      label: 'The Bronze Problem',
+      year: -2500,
+      focusConnectionId: null,
+      narrative: 'Bronze is an alloy of copper and tin — but they rarely occur together. Copper was available across much of the ancient world, but tin was scarce. By 2500 BCE, bronze had become the defining technology of civilisation. Those who wanted it had to trade, at distances no earlier society had sustained.',
+    },
+    {
+      label: 'The Tin Routes',
+      year: -2000,
+      focusConnectionId: 'diff-bronze-europe',
+      narrative: 'The principal tin sources were in Afghanistan, Central Europe (Bohemia), and later Cornwall. Copper came from Cyprus, Sinai, and the Caucasus. Bronze Age merchants had to map, fund, and protect overland and sea routes across thousands of kilometres — just to keep their smiths in business.',
+    },
+    {
+      label: 'The Bronze Network',
+      year: -1800,
+      focusConnectionId: 'diff-bronze-aegean',
+      narrative: "By 1800 BCE, the Eastern Mediterranean was the world's first multi-civilisational trade network. The Uluburun shipwreck (c. 1305 BCE) carried cargo from at least seven cultural regions — tin ingots, copper ingots, ebony, glass, and resin — a snapshot of Bronze Age globalisation frozen 3,300 years ago.",
+    },
+    {
+      label: 'Collapse',
+      year: -1200,
+      focusConnectionId: null,
+      narrative: "Around 1200 BCE, the Bronze Age Collapse terminated most of the Eastern Mediterranean's palatial civilisations within a few decades. The very interconnection that had made the Bronze Age possible — complex, multi-node supply chains — became its fatal vulnerability. When the tin routes broke, the civilisation broke with them.",
+    },
+  ],
+};
+
 const STORIES = [
   {
     id: 'diamond-chain',
@@ -20,7 +49,7 @@ const STORIES = [
       'Tin and copper rarely occur together. Producing bronze required knowing your trading partner was a thousand kilometres away — the origin of long-distance commerce.',
     badge: 'Atlas Tour',
     badgeColor: '#c4a840',
-    available: false,
+    available: true,
   },
   {
     id: 'when-humans-stopped-moving',
@@ -118,8 +147,16 @@ function StoryCard({ story, onOpen }) {
   );
 }
 
-export default function StoriesView({ data, chainCivId, onChainCivChange }) {
+export default function StoriesView({ data, chainCivId, onChainCivChange, onOpenTour }) {
   const [activeStory, setActiveStory] = useState(null);
+
+  function handleOpen(storyId) {
+    if (storyId === 'diamond-chain') {
+      setActiveStory(storyId);
+    } else if (TOURS[storyId]) {
+      onOpenTour?.(TOURS[storyId]);
+    }
+  }
 
   if (activeStory === 'diamond-chain') {
     return (
@@ -167,7 +204,7 @@ export default function StoriesView({ data, chainCivId, onChainCivChange }) {
       <div className="flex-1 px-8 py-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl">
           {STORIES.map(story => (
-            <StoryCard key={story.id} story={story} onOpen={setActiveStory} />
+            <StoryCard key={story.id} story={story} onOpen={handleOpen} />
           ))}
         </div>
       </div>
