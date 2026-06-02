@@ -4,16 +4,14 @@ import Header from './components/Header';
 import AboutPanel from './components/AboutPanel';
 import AtlasView from './components/AtlasView';
 import ThreadsView from './components/ThreadsView';
-import MapView from './components/MapView';
+import StoriesView from './components/StoriesView';
 import MilestonePanel from './components/MilestonePanel';
-import CausalChain from './components/CausalChain';
 import TypeLegend from './components/TypeLegend';
 
 const VIEWS = [
-  { id: 'atlas', label: 'Atlas', description: 'World map · space & time' },
-  { id: 'stories', label: 'Stories', description: 'Coming soon', disabled: true },
+  { id: 'atlas',   label: 'Atlas',    description: 'World map · space & time' },
+  { id: 'stories', label: 'Stories',  description: 'Frameworks & guided tours' },
   { id: 'threads', label: 'Timeline', description: 'Civilizations through time' },
-  { id: 'chain', label: 'Causal Chain', description: 'Diamond\'s framework' },
 ];
 
 export default function App() {
@@ -25,6 +23,7 @@ export default function App() {
   const [showLegend, setShowLegend] = useState(false);
   const [sortBy, setSortBy] = useState('default');
   const [chainCivId, setChainCivId] = useState('fertile-crescent');
+  const [activeStory, setActiveStory] = useState(null);
 
   const handleSelectMilestone = useCallback((milestone) => {
     setSelectedMilestone(prev => prev?.id === milestone?.id ? null : milestone);
@@ -70,6 +69,13 @@ export default function App() {
               data={data}
             />
           )}
+          {activeView === 'stories' && (
+            <StoriesView
+              data={data}
+              chainCivId={chainCivId}
+              onChainCivChange={setChainCivId}
+            />
+          )}
           {activeView === 'threads' && (
             <ThreadsView
               data={data}
@@ -78,13 +84,6 @@ export default function App() {
               onSelect={handleSelectMilestone}
               onHover={handleHoverMilestone}
               sortBy={sortBy}
-            />
-          )}
-          {activeView === 'chain' && (
-            <CausalChain
-              data={data}
-              selectedCivId={chainCivId}
-              onSelectCiv={setChainCivId}
             />
           )}
         </div>
@@ -98,7 +97,7 @@ export default function App() {
               onClose={handleClosePanel}
               onSelectCiv={(civId) => {
                 setChainCivId(civId);
-                setActiveView('chain');
+                setActiveView('stories');
               }}
             />
           </div>

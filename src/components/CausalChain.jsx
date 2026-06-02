@@ -248,9 +248,12 @@ export default function CausalChain({ data, selectedCivId, onSelectCiv }) {
     <div className="flex flex-col h-full overflow-hidden">
       {/* Top header */}
       <div className="flex-shrink-0 px-5 py-4 border-b border-coal-700">
-        <h2 className="serif text-xl text-parchment-200 font-semibold">The Causal Chain</h2>
+        <h2 className="serif text-xl text-parchment-200 font-semibold">Diamond's Causal Chain</h2>
         <p className="text-xs text-parchment-500 mt-0.5">
-          Diamond's pathway from biogeography to civilizational complexity. Select a civilization to trace its chain; hover any node to read its role.
+          After <em>Guns, Germs, and Steel</em> (Diamond, 1997). Select a civilization; hover any node to read its role.
+        </p>
+        <p className="text-[10px] text-parchment-600 mt-1.5 leading-snug">
+          One influential framework — critiqued for environmental determinism and underweighting agency, institutions, and contingency. Strength ratings are heuristic, not measurements.
         </p>
 
         {/* Connection-strength key — color + dash pattern so it's not color-only */}
@@ -412,12 +415,6 @@ export default function CausalChain({ data, selectedCivId, onSelectCiv }) {
         </div>
       </div>
 
-      {/* Footer caveat */}
-      <div className="flex-shrink-0 px-5 py-2.5 border-t border-coal-700">
-        <p className="text-xs text-parchment-500">
-          <strong className="text-parchment-400">Note:</strong> Strength ratings are analytical characterizations based on Diamond's framework — a heuristic, not a measurement. Real historical causation is always more complex.
-        </p>
-      </div>
     </div>
   );
 }
