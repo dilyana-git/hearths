@@ -105,18 +105,22 @@ export default function MapCanvas({
       const length = approxPathLength(dPath);
       const tech = TECH_FAMILIES[ev.enablingTech] || TECH_FAMILIES['foot-river'];
       const toPt = proj(to);
-      results.push({ ...ev, dPath, length, fromCiv, tech, toPt, _fromCivId: ev.fromId });
+      const interp = d3.geoInterpolate(from, to);
+      const midPt = proj(interp(0.5));
+      results.push({ ...ev, dPath, length, fromCiv, tech, toPt, midPt, _fromCivId: ev.fromId });
     });
 
-    // rich connections — new schema (fromCoords/toCoords arrays [lng, lat])
+    // rich connections — new schema: coords stored as [lat, lng], D3 needs [lng, lat]
     (data.connections || []).forEach(conn => {
-      const from = conn.fromCoords;
-      const to = conn.toCoords;
+      const from = [conn.fromCoords[1], conn.fromCoords[0]];
+      const to   = [conn.toCoords[1],   conn.toCoords[0]];
       const dPath = makeArcPath(proj, from, to);
       const length = approxPathLength(dPath);
       const tech = TECH_FAMILIES[conn.enablingTech] || TECH_FAMILIES['foot-river'];
       const toPt = proj(to);
-      results.push({ ...conn, dPath, length, tech, toPt, _fromCivId: conn.fromRegion });
+      const interp = d3.geoInterpolate(from, to);
+      const midPt = proj(interp(0.5));
+      results.push({ ...conn, dPath, length, tech, toPt, midPt, _fromCivId: conn.fromRegion });
     });
 
     return results;
@@ -287,6 +291,24 @@ export default function MapCanvas({
                   pointerEvents="none"
                 />
               )}
+              {/* Arc label at midpoint — always readable, more prominent on hover/select */}
+              {conn.midPt && !isDimmed && (
+                <text
+                  x={conn.midPt[0]}
+                  y={conn.midPt[1] - 5}
+                  textAnchor="middle"
+                  fill={tech.color}
+                  fontSize={isSelected || isHovered ? 8.5 : 7}
+                  fontFamily="sans-serif"
+                  fontWeight={isSelected || isHovered ? 600 : 400}
+                  opacity={isSelected || isHovered ? 0.9 : 0.42}
+                  filter="url(#mc-textHalo)"
+                  pointerEvents="none"
+                  style={{ letterSpacing: '0.04em' }}
+                >
+                  {tech.label}
+                </text>
+              )}
             </g>
           );
         })}
@@ -295,8 +317,10 @@ export default function MapCanvas({
         {hearths.map(h => {
           const ms = (data.milestonesByCiv[h.id] || []).filter(m => m.date <= selectedYear);
           if (!ms.length) return null;
-          const recent = ms.slice(-8);
-          const mr = (18 * scale) + 8;
+          // Show up to 20 most recent, sorted oldest-first so the ring builds chronologically
+          const recent = ms.slice(-20);
+          // Larger ring radius so dots are individually distinguishable
+          const mr = (30 * scale) + 14;
           return (
             <g key={`mm-${h.id}`}>
               {recent.map((m, idx) => {
@@ -305,7 +329,7 @@ export default function MapCanvas({
                 const my = h.py + mr * Math.sin(angle);
                 const meta = TYPE_META[m.type] || { color: '#8a7d65', tier: 'filled' };
                 const isSel = m.id === selectedMilestoneId;
-                const r = isSel ? 5 : 3.5;
+                const r = isSel ? 6 : 4.5;
                 const contestedDash = m.contested ? '2,2' : undefined;
                 const fillOp = m.contested ? 0.20 : 0.38;
                 const strokeOp = m.contested ? 0.50 : 0.75;
