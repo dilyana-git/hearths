@@ -1,7 +1,16 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import MapCanvas from './MapCanvas';
 import RightRail from './RightRail';
 import { ERAS, formatYear } from '../utils/constants';
+
+const TIME_START = -13000;
+const TIME_END = 1500;
+
+const SPEED_OPTIONS = [
+  { value: 'slow',   label: 'Slow',   yearsPerSec: 60 },
+  { value: 'normal', label: 'Normal', yearsPerSec: 250 },
+  { value: 'fast',   label: 'Fast',   yearsPerSec: 800 },
+];
 
 function getCurrentEra(year) {
   return (
@@ -10,10 +19,178 @@ function getCurrentEra(year) {
   );
 }
 
-export default function AtlasView({ data, selectedYear, onYearChange }) {
+// Sparkline path for the scrubber — pre-computes event density
+function useSparkline(data) {
+  return useMemo(() => {
+    const BINS = 160;
+    const range = TIME_END - TIME_START;
+    const counts = new Array(BINS).fill(0);
+    data.milestones.forEach(m => {
+      const idx = Math.floor(((m.date - TIME_START) / range) * BINS);
+      if (idx >= 0 && idx < BINS) counts[idx]++;
+    });
+    data.diffusionEvents.forEach(ev => {
+      const date = ev.fromDate ?? ev.approxDate;
+      if (date == null) return;
+      const idx = Math.floor(((date - TIME_START) / range) * BINS);
+      if (idx >= 0 && idx < BINS) counts[idx]++;
+    });
+    const max = Math.max(...counts, 1);
+    const pts = counts.map((c, i) => `${(i / BINS) * 100},${20 - (c / max) * 18}`);
+    return `M 0,20 L ${pts.join(' L ')} L 100,20 Z`;
+  }, [data]);
+}
+
+function AtlasScrubber({ year, onScrub, playing, onPlayPause, speed, onSpeedChange, data, currentEra }) {
+  const sparkPath = useSparkline(data);
+  const displayYear = Math.round(year);
+
+  // Era boundaries as tick positions (%)
+  const eraTicks = ERAS.slice(1).map(e => ({
+    pct: ((e.start - TIME_START) / (TIME_END - TIME_START)) * 100,
+    label: e.label,
+  }));
+
+  return (
+    <div className="flex-shrink-0 border-t border-coal-700 bg-coal-900 select-none">
+      {/* Year + era header */}
+      <div className="text-center pt-2 pb-1 leading-none">
+        <div className="serif text-xl font-medium text-parchment-200 tabular-nums">
+          {formatYear(displayYear)}
+        </div>
+        <div className="text-[10px] uppercase tracking-widest text-parchment-600 mt-0.5">
+          {currentEra.label}
+        </div>
+      </div>
+
+      {/* Controls + track */}
+      <div className="flex items-center gap-3 px-4 pb-3">
+        {/* Play/Pause */}
+        <button
+          onClick={onPlayPause}
+          className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full border border-coal-600 text-parchment-400 hover:text-teal-400 hover:border-teal-800 transition-colors"
+          aria-label={playing ? 'Pause' : 'Play'}
+        >
+          {playing ? (
+            <svg width="10" height="12" viewBox="0 0 10 12" fill="currentColor">
+              <rect x="0" y="0" width="3.5" height="12" rx="1"/>
+              <rect x="6.5" y="0" width="3.5" height="12" rx="1"/>
+            </svg>
+          ) : (
+            <svg width="10" height="12" viewBox="0 0 10 12" fill="currentColor">
+              <polygon points="1,0 10,6 1,12"/>
+            </svg>
+          )}
+        </button>
+
+        {/* Speed selector */}
+        <select
+          value={speed}
+          onChange={e => onSpeedChange(e.target.value)}
+          className="flex-shrink-0 text-[10px] bg-coal-800 border border-coal-600 text-parchment-500 rounded px-1.5 py-1 focus:outline-none focus:border-teal-700"
+          aria-label="Playback speed"
+        >
+          {SPEED_OPTIONS.map(s => (
+            <option key={s.value} value={s.value}>{s.label}</option>
+          ))}
+        </select>
+
+        {/* Track with sparkline */}
+        <div className="flex-1 relative" style={{ height: 44 }}>
+          {/* Sparkline SVG */}
+          <svg
+            className="absolute inset-0 w-full"
+            style={{ height: 44, pointerEvents: 'none', zIndex: 1 }}
+            viewBox="0 0 100 20"
+            preserveAspectRatio="none"
+          >
+            {/* Era ticks */}
+            {eraTicks.map(t => (
+              <line key={t.label}
+                x1={t.pct} y1={0} x2={t.pct} y2={20}
+                stroke="#2a3550" strokeWidth={0.3} />
+            ))}
+            {/* Density silhouette */}
+            <path d={sparkPath} fill="rgba(0,168,150,0.08)" />
+            {/* Track line */}
+            <line x1={0} y1={14} x2={100} y2={14}
+              stroke="#2a3550" strokeWidth={0.5} />
+          </svg>
+
+          {/* Range input on top */}
+          <input
+            type="range"
+            min={TIME_START}
+            max={TIME_END}
+            step={10}
+            value={displayYear}
+            onChange={e => onScrub(Number(e.target.value))}
+            className="atlas-scrubber-track"
+            aria-label="Time scrubber"
+          />
+        </div>
+
+        {/* Date range bookends */}
+        <span className="flex-shrink-0 text-[9px] text-parchment-700 tabular-nums">
+          {formatYear(TIME_END)}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+export default function AtlasView({ data }) {
+  const [selectedYear, setSelectedYear] = useState(-2500);
+  const [playing, setPlaying] = useState(false);
+  const [speed, setSpeed] = useState('normal');
+
   const [selectedCivId, setSelectedCivId] = useState(null);
   const [selectedConnectionId, setSelectedConnectionId] = useState(null);
   const [selectedMilestoneId, setSelectedMilestoneId] = useState(null);
+
+  // Animation loop
+  const rafRef = useRef(null);
+  const lastTsRef = useRef(null);
+  const speedRef = useRef(speed);
+  const playingRef = useRef(false);
+  useEffect(() => { speedRef.current = speed; }, [speed]);
+
+  const tick = useCallback((ts) => {
+    if (!playingRef.current) return;
+    if (!lastTsRef.current) lastTsRef.current = ts;
+    const dt = Math.min(ts - lastTsRef.current, 150);
+    lastTsRef.current = ts;
+    const yps = SPEED_OPTIONS.find(s => s.value === speedRef.current)?.yearsPerSec ?? 250;
+    setSelectedYear(y => {
+      const next = y + yps * dt / 1000;
+      if (next >= TIME_END) {
+        setPlaying(false);
+        playingRef.current = false;
+        return TIME_END;
+      }
+      return next;
+    });
+    rafRef.current = requestAnimationFrame(tick);
+  }, []);
+
+  useEffect(() => {
+    playingRef.current = playing;
+    if (playing) {
+      lastTsRef.current = null;
+      rafRef.current = requestAnimationFrame(tick);
+    } else {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+    }
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+    };
+  }, [playing, tick]);
 
   const handleCivSelect = useCallback((civId) => {
     setSelectedCivId(prev => prev === civId ? null : civId);
@@ -36,6 +213,20 @@ export default function AtlasView({ data, selectedYear, onYearChange }) {
     setSelectedMilestoneId(null);
   }, []);
 
+  const handleScrub = useCallback((year) => {
+    setPlaying(false);
+    setSelectedYear(year);
+  }, []);
+
+  const handlePlayPause = useCallback(() => {
+    setPlaying(p => {
+      if (!p && selectedYear >= TIME_END) {
+        setSelectedYear(TIME_START);
+      }
+      return !p;
+    });
+  }, [selectedYear]);
+
   const currentEra = getCurrentEra(selectedYear);
 
   return (
@@ -56,7 +247,7 @@ export default function AtlasView({ data, selectedYear, onYearChange }) {
           />
         </div>
 
-        <div className="hidden md:flex flex-col flex-shrink-0 w-88 border-l border-coal-700 overflow-hidden"
+        <div className="hidden md:flex flex-col flex-shrink-0 border-l border-coal-700 overflow-hidden"
           style={{ width: '22rem' }}>
           <RightRail
             data={data}
@@ -72,16 +263,16 @@ export default function AtlasView({ data, selectedYear, onYearChange }) {
         </div>
       </div>
 
-      {/* Era / year bar — static for Phase 1 */}
-      <div className="flex-shrink-0 flex items-center justify-between px-5 py-2 border-t border-coal-700 bg-coal-900">
-        <div className="flex flex-col leading-none">
-          <span className="text-[10px] uppercase tracking-wider text-parchment-600">{currentEra.label}</span>
-        </div>
-        <span className="serif text-base font-medium text-parchment-300">{formatYear(selectedYear)}</span>
-        <span className="text-[10px] text-parchment-600 italic hidden sm:block">
-          Click a hearth, line, or milestone glyph
-        </span>
-      </div>
+      <AtlasScrubber
+        year={selectedYear}
+        onScrub={handleScrub}
+        playing={playing}
+        onPlayPause={handlePlayPause}
+        speed={speed}
+        onSpeedChange={setSpeed}
+        data={data}
+        currentEra={currentEra}
+      />
     </div>
   );
 }

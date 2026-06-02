@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { CHAIN_STRENGTH_COLORS, CHAIN_STRENGTH_LABELS } from '../utils/constants';
 
 // ── Tree layout ──────────────────────────────────────────────────────────────
@@ -207,6 +207,10 @@ function TrunkSegment({ y1, y2, color, opacity }) {
 
 export default function CausalChain({ data, selectedCivId, onSelectCiv }) {
   const [hoveredId, setHoveredId] = useState(null);
+
+  useEffect(() => {
+    setHoveredId(null);
+  }, [selectedCivId]);
 
   const civ = data.civById[selectedCivId];
   const strength = civ?.chainStrength || {};

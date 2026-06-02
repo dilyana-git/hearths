@@ -1,23 +1,44 @@
 import React, { useMemo } from 'react';
 import { TECH_FAMILIES, STAGE_META, AXIS_COLORS, TYPE_META, NODE_TIERS, formatYear } from '../utils/constants';
 
-function ImageSlot({ prompt }) {
+function ImageSlot({ imageUrl, title, prompt }) {
   return (
-    <div
-      className="w-full rounded"
-      style={{
-        height: 120,
-        background: 'radial-gradient(ellipse at 50% 40%, #2a1f14 0%, #1a1208 60%, #0e0b06 100%)',
-        border: '1px solid #2a2018',
-        display: 'flex',
-        alignItems: 'flex-end',
-        padding: '8px',
-      }}
-    >
-      {prompt && (
-        <span className="text-[9px] italic text-parchment-600 leading-snug opacity-60">
-          {prompt.slice(0, 120)}…
-        </span>
+    <div className="w-full rounded overflow-hidden" style={{ position: 'relative', paddingBottom: '56.25%' }}>
+      {imageUrl ? (
+        <img
+          src={imageUrl}
+          alt={title || ''}
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+      ) : (
+        <div
+          style={{
+            position: 'absolute', inset: 0,
+            background: 'radial-gradient(ellipse at 50% 35%, #2e2014 0%, #1a1208 55%, #0d0a06 100%)',
+            border: '1px solid #2a2018',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 6,
+            padding: '12px 16px',
+          }}
+        >
+          {title && (
+            <span
+              className="text-center text-parchment-400 font-medium tracking-widest"
+              style={{ fontFamily: 'Cormorant Garamond, Georgia, serif', fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.12em' }}
+            >
+              {title}
+            </span>
+          )}
+          <span className="text-parchment-700" style={{ fontSize: 10, letterSpacing: '0.3em' }}>· · ·</span>
+          {prompt && (
+            <span className="text-center text-[9px] italic text-parchment-700 leading-snug" style={{ maxWidth: '90%', opacity: 0.6 }}>
+              {prompt.slice(0, 100)}…
+            </span>
+          )}
+        </div>
       )}
     </div>
   );
@@ -81,7 +102,7 @@ function EraView({ data, currentEra, activeConnections }) {
         <p className="text-[10px] text-parchment-500 mt-0.5 leading-snug">{currentEra.sublabel}</p>
       </div>
 
-      <ImageSlot prompt={eraMeta.imagePrompt} />
+      <ImageSlot title={currentEra.label} prompt={eraMeta.imagePrompt} imageUrl={eraMeta.imageUrl} />
 
       {eraMeta.narrative && (
         <p className="text-xs text-parchment-400 leading-relaxed">{eraMeta.narrative}</p>
@@ -135,7 +156,7 @@ function CivView({ civ, data, selectedYear, activeMilestones, civConnections, on
         <StageBadge stage={stage} />
       </div>
 
-      <ImageSlot prompt={civ.imagePrompt} />
+      <ImageSlot title={civ.name} prompt={civ.imagePrompt} imageUrl={civ.imageUrl} />
 
       {civ.summary && (
         <p className="text-xs text-parchment-400 leading-relaxed">{civ.summary.slice(0, 300)}…</p>
@@ -228,6 +249,8 @@ function ConnectionView({ conn, data }) {
         )}
       </div>
 
+      <ImageSlot title={conn.innovation} prompt={TECH_FAMILIES[conn.enablingTech]?.description} imageUrl={conn.imageUrl} />
+
       {conn.narrative && (
         <p className="text-xs text-parchment-400 leading-relaxed">{conn.narrative}</p>
       )}
@@ -296,6 +319,8 @@ function MilestoneView({ milestone, data }) {
           {civ && <> · {civ.name}</>}
         </p>
       </div>
+
+      <ImageSlot title={milestone.title} prompt={null} imageUrl={milestone.imageUrl} />
 
       {milestone.causalExplanation && (
         <p className="text-xs text-parchment-400 leading-relaxed">{milestone.causalExplanation}</p>

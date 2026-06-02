@@ -78,10 +78,6 @@ export default function MapCanvas({
   const dims = useDimensions(containerRef);
   const proj = useProjection(dims.width, dims.height);
   const pathGen = useMemo(() => d3.geoPath(proj), [proj]);
-  const [animKey, setAnimKey] = useState(0);
-
-  useEffect(() => { setAnimKey(k => k + 1); }, [selectedYear]);
-
   const { land, borders } = useMemo(() => ({
     land: topojson.feature(worldTopology, worldTopology.objects.land),
     borders: topojson.mesh(worldTopology, worldTopology.objects.countries, (a, b) => a !== b),
@@ -95,22 +91,25 @@ export default function MapCanvas({
     return pt ? { ...civ, px: pt[0], py: pt[1] } : null;
   }).filter(Boolean), [data.civilizations, proj]);
 
+  const allConnectionPaths = useMemo(() => {
+    return data.diffusionEvents.map(ev => {
+      const fromCiv = data.civById[ev.fromId];
+      if (!fromCiv) return null;
+      const from = [fromCiv.hearth.lng, fromCiv.hearth.lat];
+      const to = [ev.toRegion.lng, ev.toRegion.lat];
+      const dPath = makeArcPath(proj, from, to);
+      const length = approxPathLength(dPath);
+      const tech = TECH_FAMILIES[ev.enablingTech] || TECH_FAMILIES['foot-river'];
+      return { ...ev, dPath, length, fromCiv, tech };
+    }).filter(Boolean);
+  }, [data, proj]);  // NOT selectedYear — paths don't change when year changes
+
   const activeConnections = useMemo(() => {
-    return data.diffusionEvents
-      .filter(ev => (ev.fromDate != null ? ev.fromDate <= selectedYear : ev.approxDate <= selectedYear))
-      .filter(ev => ev.toDate == null || ev.toDate >= selectedYear)
-      .map(ev => {
-        const fromCiv = data.civById[ev.fromId];
-        if (!fromCiv) return null;
-        const from = [fromCiv.hearth.lng, fromCiv.hearth.lat];
-        const to = [ev.toRegion.lng, ev.toRegion.lat];
-        const dPath = makeArcPath(proj, from, to);
-        const length = approxPathLength(dPath);
-        const tech = TECH_FAMILIES[ev.enablingTech] || TECH_FAMILIES['foot-river'];
-        return { ...ev, dPath, length, fromCiv, tech };
-      })
-      .filter(ev => ev && ev.dPath);
-  }, [data, selectedYear, proj]);
+    return allConnectionPaths.filter(conn =>
+      (conn.fromDate != null ? conn.fromDate <= selectedYear : conn.approxDate <= selectedYear) &&
+      (conn.toDate == null || conn.toDate >= selectedYear)
+    );
+  }, [allConnectionPaths, selectedYear]);  // just filter, no path computation
 
   const visibleConnections = selectedCivId
     ? activeConnections.filter(c => c.fromId === selectedCivId)
@@ -206,7 +205,7 @@ export default function MapCanvas({
 
           return (
             <g
-              key={`${conn.id}-${animKey}`}
+              key={conn.id}
               onClick={e => { e.stopPropagation(); onConnectionSelect(conn.id); }}
               style={{ cursor: 'pointer' }}
             >

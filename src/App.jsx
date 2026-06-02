@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useData } from './hooks/useData';
 import Header from './components/Header';
 import AboutPanel from './components/AboutPanel';
@@ -19,7 +19,6 @@ const VIEWS = [
 export default function App() {
   const data = useData();
   const [activeView, setActiveView] = useState('atlas');
-  const [selectedYear, setSelectedYear] = useState(-2500);
   const [selectedMilestone, setSelectedMilestone] = useState(null);
   const [hoveredMilestone, setHoveredMilestone] = useState(null);
   const [showAbout, setShowAbout] = useState(true);
@@ -38,6 +37,10 @@ export default function App() {
   const handleClosePanel = useCallback(() => {
     setSelectedMilestone(null);
   }, []);
+
+  useEffect(() => {
+    if (activeView !== 'threads') setSelectedMilestone(null);
+  }, [activeView]);
 
   const selectedCiv = selectedMilestone
     ? data.civById[selectedMilestone.civilizationId]
@@ -60,13 +63,11 @@ export default function App() {
         {/* Main content area */}
         <div
           className="flex-1 overflow-hidden transition-all duration-300"
-          style={{ marginRight: (selectedMilestone && activeView !== 'atlas') ? '380px' : '0' }}
+          style={{ marginRight: (selectedMilestone && activeView === 'threads') ? '380px' : '0' }}
         >
           {activeView === 'atlas' && (
             <AtlasView
               data={data}
-              selectedYear={selectedYear}
-              onYearChange={setSelectedYear}
             />
           )}
           {activeView === 'threads' && (
@@ -88,8 +89,8 @@ export default function App() {
           )}
         </div>
 
-        {/* Milestone detail panel — slides in from the right (non-atlas views) */}
-        {selectedMilestone && activeView !== 'atlas' && (
+        {/* Milestone detail panel — slides in from the right (threads view only) */}
+        {selectedMilestone && activeView === 'threads' && (
           <div className="absolute right-0 top-0 bottom-0 w-96 panel-enter z-20">
             <MilestonePanel
               milestone={selectedMilestone}

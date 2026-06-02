@@ -171,3 +171,46 @@ svg path[style*="cursor: crosshair"]:hover {
 .modal-enter {
   animation: fadeIn 0.2s ease forwards;
 }
+
+/* Atlas time scrubber */
+.atlas-scrubber-track {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 44px;
+  background: transparent;
+  cursor: pointer;
+  position: absolute;
+  top: 0; left: 0;
+  margin: 0;
+  z-index: 10;
+}
+.atlas-scrubber-track::-webkit-slider-runnable-track {
+  height: 3px;
+  background: rgba(42,53,80,0.8);
+  border-radius: 1.5px;
+  margin-top: 20.5px;
+}
+.atlas-scrubber-track::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: #00a896;
+  cursor: pointer;
+  margin-top: -5.5px;
+  box-shadow: 0 0 6px rgba(0,168,150,0.4);
+}
+.atlas-scrubber-track:focus {
+  outline: none;
+}
+.atlas-scrubber-track::-moz-range-track {
+  height: 3px;
+  background: rgba(42,53,80,0.8);
+  border-radius: 1.5px;
+}
+.atlas-scrubber-track::-moz-range-thumb {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: #00a896;
+  border: none;
+  box-shadow: 0 0 6px rgba(0,168,150,0.4);
+}
