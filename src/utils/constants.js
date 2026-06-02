@@ -42,38 +42,6 @@ export const CHAIN_STRENGTH_LABELS = {
   'context-specific': 'Complex',
 };
 
-// Era labels use geological / climatological epoch names where possible.
-// Note: terms like "Iron Age" and "Post-Classical" reflect Eurasian
-// archaeological convention; parallel developments elsewhere may not
-// align neatly with these boundaries.
-export const ERAS = [
-  {
-    label: 'Late Pleistocene',
-    sublabel: 'Glacial world · global forager populations · no agriculture anywhere',
-    start: -13000, end: -9700,
-  },
-  {
-    label: 'Holocene Transition',
-    sublabel: 'Post-glacial warming · first sedentism · proto-cultivation emerges independently across regions',
-    start: -9700, end: -4000,
-  },
-  {
-    label: 'First Urban Complexity',
-    sublabel: 'Cities, writing, bronze metalwork — multiple independent centres. Eurasian "Chalcolithic/Bronze Age" is one thread.',
-    start: -4000, end: -1200,
-  },
-  {
-    label: 'Iron Age & Classical',
-    sublabel: 'Iron technology in Eurasia & Africa; complex polities worldwide. "Classical" refers to Mediterranean antiquity — a regional, not global, label.',
-    start: -1200, end: 500,
-  },
-  {
-    label: 'Pre-Colonial Complexity',
-    sublabel: 'Complex polities on every inhabited continent — threshold of European global expansion (c. 1500 CE)',
-    start: 500, end: 1500,
-  },
-];
-
 export const AXIS_LABELS = {
   'east-west': 'East–West Axis (favorable diffusion)',
   'north-south': 'North–South Axis (climate barriers)',

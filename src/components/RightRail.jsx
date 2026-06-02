@@ -91,8 +91,6 @@ function getCurrentStage(civ, year) {
 // ── Default: era view ──────────────────────────────────────────────────────
 
 function EraView({ data, currentEra, activeConnections }) {
-  const eraMeta = data.eraMeta?.[currentEra.label] || {};
-
   return (
     <div className="flex flex-col gap-4 p-4 overflow-y-auto h-full">
       <div>
@@ -102,10 +100,10 @@ function EraView({ data, currentEra, activeConnections }) {
         <p className="text-[10px] text-parchment-500 mt-0.5 leading-snug">{currentEra.sublabel}</p>
       </div>
 
-      <ImageSlot title={currentEra.label} prompt={eraMeta.imagePrompt} imageUrl={eraMeta.imageUrl} />
+      <ImageSlot title={currentEra.label} prompt={currentEra.heroImagePrompt} imageUrl={currentEra.imageUrl} />
 
-      {eraMeta.narrative && (
-        <p className="text-xs text-parchment-400 leading-relaxed">{eraMeta.narrative}</p>
+      {currentEra.narrative && (
+        <p className="text-xs text-parchment-400 leading-relaxed">{currentEra.narrative}</p>
       )}
 
       {activeConnections.length > 0 && (

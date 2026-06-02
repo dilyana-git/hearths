@@ -2,7 +2,7 @@ import React, { useMemo, useState, useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import worldTopology from 'world-atlas/countries-110m.json';
-import { TECH_FAMILIES, STAGE_META, TYPE_META, ERAS } from '../utils/constants';
+import { TECH_FAMILIES, STAGE_META, TYPE_META } from '../utils/constants';
 
 const PROJ_SCALE = 155;
 const MAP_W = 960;
@@ -377,7 +377,7 @@ export default function MapCanvas({
 
         {/* Era inscription — top center */}
         {(() => {
-          const era = [...ERAS].reverse().find(e => selectedYear >= e.start) || ERAS[0];
+          const era = [...data.eras].reverse().find(e => selectedYear >= e.start) || data.eras[0];
           return (
             <text
               x={dims.width / 2}

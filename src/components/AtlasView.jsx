@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import MapCanvas from './MapCanvas';
 import RightRail from './RightRail';
-import { ERAS, formatYear } from '../utils/constants';
+import { formatYear } from '../utils/constants';
 
 const TIME_START = -13000;
 const TIME_END = 1500;
@@ -12,11 +12,8 @@ const SPEED_OPTIONS = [
   { value: 'fast',   label: 'Fast',   yearsPerSec: 800 },
 ];
 
-function getCurrentEra(year) {
-  return (
-    ERAS.find(e => year >= e.start && year < e.end) ||
-    ERAS[ERAS.length - 1]
-  );
+function getCurrentEra(year, eras) {
+  return eras.find(e => year >= e.start && year < e.end) || eras[eras.length - 1];
 }
 
 // Sparkline path for the scrubber — pre-computes event density
@@ -46,7 +43,7 @@ function AtlasScrubber({ year, onScrub, playing, onPlayPause, speed, onSpeedChan
   const displayYear = Math.round(year);
 
   // Era boundaries as tick positions (%)
-  const eraTicks = ERAS.slice(1).map(e => ({
+  const eraTicks = data.eras.slice(1).map(e => ({
     pct: ((e.start - TIME_START) / (TIME_END - TIME_START)) * 100,
     label: e.label,
   }));
@@ -315,7 +312,7 @@ export default function AtlasView({ data, activeTour, onCloseTour, onTourBeat })
     });
   }, [selectedYear]);
 
-  const currentEra = getCurrentEra(selectedYear);
+  const currentEra = getCurrentEra(selectedYear, data.eras);
 
   return (
     <div className="flex flex-col h-full overflow-hidden bg-coal-900">

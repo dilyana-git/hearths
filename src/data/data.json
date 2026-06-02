@@ -1640,31 +1640,96 @@
       }
     ]
   },
-  "eraMeta": {
-    "Late Pleistocene": {
-      "narrative": "The glacial world: ice sheets cover a quarter of the land surface. Sea levels are 120 metres lower — Britain is joined to Europe; Beringia links Asia to the Americas. Anatomically modern humans are present on every continent except Antarctica, living entirely by hunting and gathering. No agriculture exists anywhere. Population is perhaps 500,000 globally. Every human alive is a forager.",
-      "imagePrompt": "The Pleistocene world from above at glacial maximum, vast ice sheets over northern continents, exposed continental shelves, small fires of hunting bands scattered across grassland and tundra, Beksiński cosmic desolation, deep blue-white and charcoal, parchment texture, no text",
-      "defaultYear": -11000
+  "eras": [
+    {
+      "id": "late-pleistocene",
+      "label": "Late Pleistocene",
+      "sublabel": "Glacial world · mobile foragers · megafauna hunting · no agriculture anywhere",
+      "fromDate": -13000,
+      "toDate": -10800,
+      "heroImagePrompt": "A wind-scoured tundra at dusk on the late Pleistocene Eurasian steppe, distant mammoths silhouetted against an indigo sky, frost on grass, Beksiński-meets-Rackham, etched illustration, deep cold tones with a single amber glow on the horizon, parchment texture, no text.",
+      "imageUrl": "",
+      "narrative": "The world is colder, drier, and emptier than it will ever be again. Sea levels are 120 metres lower; whole landmasses — Sundaland, Beringia, Doggerland — are dry. Humans have already reached every continent except Antarctica, but they live in small mobile groups, hunting megafauna and gathering wild plants. There are no villages, no fields, no domesticated animals other than the dog. What there is, almost everywhere, is patience. The conditions for everything that comes next are about to arrive."
     },
-    "Holocene Transition": {
-      "narrative": "The ice retreats and the world warms rapidly. Sea levels rise, reshaping coastlines. In several separate locations — the Fertile Crescent, China, New Guinea, the Andes — people begin tending wild plants and selecting domesticable animals. This is not a planned revolution but a series of gradual, independent experiments. Contact between hearths is local: foot travel, rivers, coastal boats carrying obsidian and shells perhaps 200–300 km.",
-      "imagePrompt": "Post-glacial warming world, green spreading northward across Europe and Asia, river valleys filling with early agricultural settlements, trade routes as faint threads along coasts, Rackham atmospheric panorama, teal-green and amber on parchment, no text",
-      "defaultYear": -7000
+    {
+      "id": "younger-dryas",
+      "label": "Younger Dryas",
+      "sublabel": "A thousand-year cold reversal · first settlements disrupted · sedentism delayed",
+      "fromDate": -10800,
+      "toDate": -9700,
+      "heroImagePrompt": "A sudden return to cold in the early Holocene, a half-frozen river in the Levant cutting through dying grasslands, abandoned stone foundations in the foreground, dark turquoise and slate tones, atmospheric archaeological illustration, etched line work, parchment texture, no text.",
+      "imageUrl": "",
+      "narrative": "Just as the world began to warm, it broke. The Younger Dryas — a thousand-year return to cold, dry conditions — interrupted the post-glacial thaw and rearranged the early Holocene. In the Levant, Natufian villages thinned; in many places, people who had been settling down returned to mobility. The cold ended as abruptly as it began. What it left behind was a different relationship between climate and culture: a new awareness that staying put was conditional."
     },
-    "First Urban Complexity": {
-      "narrative": "The first cities appear — in Mesopotamia, the Indus Valley, the Nile Valley, the Yellow River, and independently in Mesoamerica. Writing emerges to manage the complexity of surplus, trade, and administration. Bronze forces the first long-distance trade networks: tin and copper rarely occur together, so producing bronze requires knowing your trading partner is thousands of kilometres away. The Mediterranean world becomes connected by this necessity.",
-      "imagePrompt": "The eastern Mediterranean world circa 2500 BCE from above at dusk, glowing trade routes threading between coastal cities, Beksiński-meets-Rackham, dark atmospheric cartographic illustration, deep indigo and amber, parchment texture, no text",
-      "defaultYear": -2500
+    {
+      "id": "early-holocene",
+      "label": "Early Holocene · First Cultivation",
+      "sublabel": "Post-glacial warming · first cultivation · independent origins across regions",
+      "fromDate": -9700,
+      "toDate": -7000,
+      "heroImagePrompt": "Dawn over an early Neolithic village in the Fertile Crescent, mud-brick foundations among wild cereal fields, a few figures gathering at a doorway, soft amber sunrise, Rackham-style atmospheric illustration, etched line work, parchment tones, no text.",
+      "imageUrl": "",
+      "narrative": "The Holocene begins. Within a few centuries, people in the Fertile Crescent are planting the cereals they have been gathering, herding the animals they have been hunting. Sedentism and cultivation intertwine. The same shift is beginning, independently and on its own schedule, in the Yangtze, the highlands of New Guinea, the Sahel. None of these communities know about each other. None of them think they are starting anything called agriculture. They are, in the language of their own lives, just managing food."
     },
-    "Iron Age & Classical": {
-      "narrative": "Iron democratizes metal — it is common, and production localises. But states grow powerful enough to maintain diplomatic webs across vast distances. Alphabets multiply, making literacy accessible. The horse and chariot transform warfare. In the Mediterranean, the monsoon-wind pattern becomes understood, opening the Indian Ocean as a reliable sea highway. Austronesian navigators reach Madagascar and eventually Hawaii — the greatest maritime expansion in human prehistory.",
-      "imagePrompt": "The ancient Mediterranean and Indian Ocean circa 500 BCE, quinqueremes and dhows threading between ports, alphabets carved in stone, iron forges glowing in every valley, Piranesi grand architectural etching, umber and silver, aged parchment, no text",
-      "defaultYear": -500
+    {
+      "id": "neolithic-spread",
+      "label": "The Neolithic Spread",
+      "sublabel": "Farming spreads · demic diffusion across continents · first permanent fields",
+      "fromDate": -7000,
+      "toDate": -4500,
+      "heroImagePrompt": "A slow demic wave of farmers reaching the Balkans at dusk, smoke rising from longhouses, wild forest receding, a faint procession of figures and cattle on a ridge, dark earthy tones with a warm amber centre, etched archaeological illustration, parchment texture, no text.",
+      "imageUrl": "",
+      "narrative": "From each hearth, the way of life that began as a local invention starts to move. Farming spreads westward into Europe as a demic wave — actual people, carrying their crops and animals and grammar with them, taking generations to cross the continent. In Mesoamerica, squash and chili come under cultivation. In the Andes, sedentary fishing villages along the Pacific coast pull cultivation inland. The world is still empty of cities, but it is no longer empty of fields."
     },
-    "Pre-Colonial Complexity": {
-      "narrative": "Complex polities exist on every inhabited continent. The Indian Ocean is a web of monsoon-timed trade connecting East Africa, the Arabian Peninsula, South Asia, and Southeast Asia. The Silk Roads carry silk, spice, plague, and ideas across Eurasia. In the Americas, the Inca build the longest road system in the world without the wheel. In West Africa, the Mali Empire controls the gold and salt trade. The threshold of European global expansion approaches.",
-      "imagePrompt": "The medieval world circa 1200 CE, Silk Road caravans crossing Central Asian steppe, dhows on the Indian Ocean, Inca roads descending Andean valleys, Remedios Varo dreamlike global tapestry, deep blue and burnished gold on dark parchment, no text",
-      "defaultYear": 1000
+    {
+      "id": "first-towns",
+      "label": "First Towns · Pottery & Looms",
+      "sublabel": "Villages grow to towns · pottery & textiles · first full-time specialists",
+      "fromDate": -4500,
+      "toDate": -3500,
+      "heroImagePrompt": "An aerial view of Çatalhöyük at midday, mud-brick houses pressed against one another with no streets, smoke from rooftop hearths, the surrounding plain dry and warm, Piranesi-meets-Rackham, etched archaeological illustration, ochre and umber tones, parchment texture, no text.",
+      "imageUrl": "",
+      "narrative": "Çatalhöyük in central Anatolia rises to several thousand people, entered through the roof, painted with bulls and vultures. Jiahu in central China is fermenting rice into something like beer. Pottery — invented separately and earlier in places no one expected, including the Sahel — is now in use almost everywhere people stay. The first specialists appear: someone makes the pots, someone makes the cloth, someone else trades shell and obsidian over hundreds of kilometres. The social shape of complexity is forming before anyone has invented cities."
+    },
+    {
+      "id": "first-cities",
+      "label": "First Urban Complexity",
+      "sublabel": "Cities, writing, bronze metalwork — multiple independent centres on four continents",
+      "fromDate": -3500,
+      "toDate": -2000,
+      "heroImagePrompt": "Uruk at dusk on the Mesopotamian plain, ziggurat silhouetted against an amber sky, irrigation canals threading through grain fields, a procession of figures and donkey carts, atmospheric Piranesi-style etched illustration, deep amber and indigo, parchment texture, no text.",
+      "imageUrl": "",
+      "narrative": "Cities arrive. Uruk in southern Mesopotamia is the first; within centuries there are dozens — Ur, Eridu, Nippur — joined by Mohenjo-daro and Harappa on the Indus, by Liangzhu on the Yangtze, by the Norte Chico complex on the Peruvian coast. Each is a different answer to the same problem: how do you organize ten thousand people around a single irrigated valley? Writing emerges in two of these places independently; bureaucracy, kingship, and accountancy emerge in all of them. The world has just made its loudest invention."
+    },
+    {
+      "id": "bronze-age",
+      "label": "Bronze Age · The First International System",
+      "sublabel": "Tin & copper rarely co-occur · long-distance trade by necessity · the first world",
+      "fromDate": -2000,
+      "toDate": -1200,
+      "heroImagePrompt": "A Bronze Age trading port on the eastern Mediterranean at golden hour, a Cypriot ship loaded with copper ingots, scribes pressing clay tablets in the foreground, glowing trade routes implied across the water, Beksiński-meets-Piranesi, dark atmospheric illustration, deep amber and indigo, parchment texture, no text.",
+      "imageUrl": "",
+      "narrative": "Tin is rare; copper is common; bronze is harder than either and requires both. This single inconvenience makes the Late Bronze Age the first long-haul interconnected world. Tin moves from Afghanistan and Cornwall to the Aegean; copper from Cyprus to Egypt; lapis from Badakhshan to the courts of pharaohs. The Amarna letters preserve a shared diplomatic language across Egypt, Hatti, Babylon, Mitanni, Assyria, Cyprus. There is no globe yet, but there is, briefly, a world."
+    },
+    {
+      "id": "iron-age",
+      "label": "Iron Age · Localization & Empire",
+      "sublabel": "Iron democratizes metal · territorial empires rise · world trade reconverges",
+      "fromDate": -1200,
+      "toDate": 500,
+      "heroImagePrompt": "An Iron Age forge in the eastern Mediterranean at night, a smith working iron at a glowing anvil, the world map of trade routes faded in the background, the room dark with deep red firelight, etched archaeological illustration, smoky tones, parchment texture, no text.",
+      "imageUrl": "",
+      "narrative": "Around 1200 BCE, the Bronze Age world collapses. Cities burn from the Aegean to the Levant; writing systems are lost; long-distance trade contracts. What comes back is different. Iron ore is almost everywhere, which means a village smith with charcoal can produce serviceable weapons and tools. Iron localizes production but also makes possible the territorial empires of the next millennium — Assyrian, Achaemenid, Han, Maurya, Roman. The world has more iron and more empire and, briefly, less connection."
+    },
+    {
+      "id": "pre-colonial",
+      "label": "Pre-Colonial Complexity",
+      "sublabel": "Complex polities on every inhabited continent · Silk Roads · threshold of 1500 CE",
+      "fromDate": 500,
+      "toDate": 1500,
+      "heroImagePrompt": "The medieval world circa 1200 CE, Silk Road caravans crossing Central Asian steppe, dhows on the Indian Ocean, Inca roads descending Andean valleys, Remedios Varo dreamlike global tapestry, deep blue and burnished gold on dark parchment, no text.",
+      "imageUrl": "",
+      "narrative": "Complex polities exist on every inhabited continent. The Indian Ocean is a web of monsoon-timed trade connecting East Africa, the Arabian Peninsula, South Asia, and Southeast Asia. The Silk Roads carry silk, spice, plague, and ideas across Eurasia. In the Americas, the Inca build the longest road system in the world without the wheel. In West Africa, the Mali Empire controls the gold and salt trade. The threshold of European global expansion approaches."
     }
-  }
+  ]
 }

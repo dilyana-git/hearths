@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState, useEffect, useCallback } from 'react';
 import * as d3 from 'd3';
 import {
-  TIME_DOMAIN, TYPE_META, ERAS, AXIS_COLORS,
+  TIME_DOMAIN, TYPE_META, AXIS_COLORS,
   formatYear, getNodeTier,
 } from '../utils/constants';
 
@@ -319,7 +319,7 @@ export default function ThreadsView({ data, selectedMilestone, hoveredMilestone,
 
             {/* ── Layer 0: Era annotation band ─────────────────────────────── */}
             <g clipPath="url(#eraBandClip)">
-              {ERAS.map((era, i) => {
+              {data.eras.map((era, i) => {
                 const x1  = xFromYear(era.start);
                 const x2  = xFromYear(Math.min(era.end, TIME_DOMAIN[1]));
                 const mid = (x1 + x2) / 2;
@@ -416,7 +416,7 @@ export default function ThreadsView({ data, selectedMilestone, hoveredMilestone,
             </g>
 
             {/* ── Layer 2: Era background tints (track area) ───────────────── */}
-            {ERAS.map((era, i) => {
+            {data.eras.map((era, i) => {
               const x1 = xFromYear(era.start);
               const x2 = xFromYear(Math.min(era.end, TIME_DOMAIN[1]));
               return (
@@ -722,7 +722,7 @@ export default function ThreadsView({ data, selectedMilestone, hoveredMilestone,
           <div className="relative w-full h-4 rounded"
             style={{ background: '#0f1117', border: '1px solid #1e2840' }}>
             {/* Era segments */}
-            {ERAS.map((era, i) => {
+            {data.eras.map((era, i) => {
               const p0 = scrubPct(era.start);
               const p1 = scrubPct(Math.min(era.end, TIME_DOMAIN[1]));
               return (
