@@ -1,8 +1,144 @@
 import React, { useMemo, useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import worldTopology from 'world-atlas/countries-110m.json';
-import { TECH_FAMILIES, STAGE_META, TYPE_META } from '../utils/constants';
+import { TECH_FAMILIES, STAGE_META, TYPE_META, formatYear } from '../utils/constants';
+
+// ── Inline map tooltip (Portal) ───────────────────────────────────────────────
+
+const BOX = {
+  position: 'fixed',
+  width: 272,
+  background: 'rgba(7,10,15,0.97)',
+  border: '1px solid #2a3550',
+  borderRadius: 6,
+  backdropFilter: 'blur(8px)',
+  boxShadow: '0 8px 40px rgba(0,0,0,0.75)',
+  zIndex: 60,
+};
+const DIVIDER = { borderTop: '1px solid #1a2235', marginTop: 7, paddingTop: 7 };
+const TITLE_STYLE = {
+  fontFamily: 'Cormorant Garamond, Georgia, serif',
+  fontSize: 14, fontWeight: 500,
+  color: '#c8b49a', margin: '4px 0 3px', lineHeight: 1.3,
+};
+const BODY_STYLE = { fontSize: 10, color: '#7a7060', lineHeight: 1.55, margin: 0 };
+const META_STYLE = { fontSize: 9, color: '#4e4840', margin: '0 0 1px' };
+
+function MapTooltip({ popup, data, selectedYear, onClose }) {
+  if (!popup) return null;
+
+  // Smart flip: avoid viewport edges
+  const W = 272, H_EST = 180;
+  let left = popup.x + 16;
+  let top  = popup.y - 12;
+  if (left + W  > window.innerWidth  - 12) left = popup.x - W - 16;
+  if (top  + H_EST > window.innerHeight - 12) top  = popup.y - H_EST - 12;
+  if (top < 8) top = 8;
+
+  return createPortal(
+    <div style={{ ...BOX, left, top }} onClick={e => e.stopPropagation()}>
+      <button
+        onClick={onClose}
+        aria-label="Close"
+        style={{
+          position: 'absolute', top: 7, right: 9,
+          background: 'none', border: 'none', cursor: 'pointer',
+          color: '#5a5248', fontSize: 15, lineHeight: 1, padding: 0,
+        }}
+      >×</button>
+
+      {popup.type === 'milestone' && (() => {
+        const m = popup.item;
+        const meta = TYPE_META[m.type] || {};
+        const civ  = data.civById[m.civilizationId];
+        return (
+          <div style={{ padding: '10px 28px 13px 13px' }}>
+            <div style={{ display: 'flex', gap: 5, alignItems: 'center', marginBottom: 4 }}>
+              <span style={{
+                fontSize: 8.5, textTransform: 'uppercase', letterSpacing: '0.08em',
+                color: meta.color || '#8a7d65',
+                background: (meta.color || '#8a7d65') + '22',
+                border: `1px solid ${(meta.color || '#8a7d65')}44`,
+                padding: '1px 5px', borderRadius: 3,
+              }}>{meta.label || m.type}</span>
+              {m.contested && <span style={{ fontSize: 8, color: '#c4a840' }}>contested</span>}
+            </div>
+            <p style={TITLE_STYLE}>{m.title}</p>
+            <p style={META_STYLE}>{formatYear(m.date)}{civ ? ` · ${civ.name}` : ''}</p>
+            {m.causalExplanation && (
+              <p style={{ ...BODY_STYLE, ...DIVIDER }}>
+                {m.causalExplanation.length > 180
+                  ? m.causalExplanation.slice(0, 180) + '…'
+                  : m.causalExplanation}
+              </p>
+            )}
+          </div>
+        );
+      })()}
+
+      {popup.type === 'connection' && (() => {
+        const conn = popup.item;
+        const tech = TECH_FAMILIES[conn.enablingTech] || TECH_FAMILIES['foot-river'];
+        const title = conn.innovation || conn.flows?.[0] || conn.id;
+        const fromCiv = data.civById[conn.fromId];
+        const fromLabel = fromCiv?.name || conn.fromRegion || '';
+        const toLabel = typeof conn.toRegion === 'object' ? conn.toRegion?.name : (conn.toRegion || '');
+        return (
+          <div style={{ padding: '10px 28px 13px 13px' }}>
+            <span style={{
+              fontSize: 8.5, textTransform: 'uppercase', letterSpacing: '0.08em',
+              color: tech.color, background: tech.color + '22',
+              border: `1px solid ${tech.color}44`,
+              padding: '1px 5px', borderRadius: 3,
+            }}>{tech.label}</span>
+            <p style={TITLE_STYLE}>{title}</p>
+            <p style={META_STYLE}>{fromLabel} → {toLabel}</p>
+            {(conn.fromDate || conn.toDate) && (
+              <p style={{ ...META_STYLE, marginBottom: 2 }}>
+                {conn.fromDate ? formatYear(conn.fromDate) : '?'}
+                {' – '}
+                {conn.toDate ? formatYear(conn.toDate) : 'ongoing'}
+              </p>
+            )}
+            {conn.narrative && (
+              <p style={{ ...BODY_STYLE, ...DIVIDER }}>
+                {conn.narrative.length > 180
+                  ? conn.narrative.slice(0, 180) + '…'
+                  : conn.narrative}
+              </p>
+            )}
+          </div>
+        );
+      })()}
+
+      {popup.type === 'civ' && (() => {
+        const h = popup.item;
+        const stage = getCurrentStage(h, selectedYear);
+        const stageMeta = STAGE_META[stage] || STAGE_META['foraging'];
+        return (
+          <div style={{ padding: '10px 28px 13px 13px' }}>
+            <div style={{ display: 'flex', gap: 6, alignItems: 'center', marginBottom: 4 }}>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: h.color, flexShrink: 0, display: 'inline-block' }} />
+              <span style={{ fontSize: 8.5, color: '#7a7060', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                {stageMeta.label}
+              </span>
+            </div>
+            <p style={{ ...TITLE_STYLE, fontSize: 15 }}>{h.name}</p>
+            {h.region && <p style={META_STYLE}>{h.region}</p>}
+            {h.summary && (
+              <p style={{ ...BODY_STYLE, ...DIVIDER }}>
+                {h.summary.length > 180 ? h.summary.slice(0, 180) + '…' : h.summary}
+              </p>
+            )}
+          </div>
+        );
+      })()}
+    </div>,
+    document.body
+  );
+}
 
 const PROJ_SCALE = 155;
 const MAP_W = 960;
@@ -77,6 +213,12 @@ export default function MapCanvas({
   const containerRef = useRef(null);
   const dims = useDimensions(containerRef);
   const [hoveredConnId, setHoveredConnId] = useState(null);
+  const [popup, setPopup] = useState(null); // { type, item, x, y } — viewport coords
+
+  const openPopup = (type, item, e) => {
+    e.stopPropagation();
+    setPopup(prev => (prev?.item?.id === item.id ? null : { type, item, x: e.clientX, y: e.clientY }));
+  };
   const proj = useProjection(dims.width, dims.height);
   const pathGen = useMemo(() => d3.geoPath(proj), [proj]);
   const { land, borders } = useMemo(() => ({
@@ -146,7 +288,7 @@ export default function MapCanvas({
   const LEG_H = 116;
 
   return (
-    <div ref={containerRef} className="w-full h-full overflow-hidden" onClick={onBgClick}>
+    <div ref={containerRef} className="w-full h-full overflow-hidden" onClick={() => { onBgClick(); setPopup(null); }}>
       <svg
         width={dims.width}
         height={dims.height}
@@ -240,7 +382,7 @@ export default function MapCanvas({
           return (
             <g
               key={conn.id}
-              onClick={e => { e.stopPropagation(); onConnectionSelect(conn.id); }}
+              onClick={e => { openPopup('connection', conn, e); onConnectionSelect(conn.id); }}
               onMouseEnter={() => setHoveredConnId(conn.id)}
               onMouseLeave={() => setHoveredConnId(null)}
               style={{ cursor: 'pointer' }}
@@ -341,7 +483,7 @@ export default function MapCanvas({
                       strokeWidth={1.2} strokeOpacity={strokeOp}
                       strokeDasharray={contestedDash}
                       style={{ cursor: 'pointer' }}
-                      onClick={e => { e.stopPropagation(); onMilestoneSelect(m.id); }}
+                      onClick={e => { openPopup('milestone', m, e); onMilestoneSelect(m.id); }}
                     />
                   );
                 }
@@ -349,7 +491,7 @@ export default function MapCanvas({
                   return (
                     <g key={m.id}
                       style={{ cursor: 'pointer' }}
-                      onClick={e => { e.stopPropagation(); onMilestoneSelect(m.id); }}
+                      onClick={e => { openPopup('milestone', m, e); onMilestoneSelect(m.id); }}
                     >
                       <circle cx={mx} cy={my} r={r + 2.5}
                         fill="none" stroke={meta.color}
@@ -368,7 +510,7 @@ export default function MapCanvas({
                     stroke={meta.color} strokeWidth={1.2}
                     strokeDasharray={contestedDash}
                     style={{ cursor: 'pointer' }}
-                    onClick={e => { e.stopPropagation(); onMilestoneSelect(m.id); }}
+                    onClick={e => { openPopup('milestone', m, e); onMilestoneSelect(m.id); }}
                   />
                 );
               })}
@@ -383,7 +525,7 @@ export default function MapCanvas({
           return (
             <g
               key={h.id}
-              onClick={e => { e.stopPropagation(); onCivSelect(h.id); }}
+              onClick={e => { openPopup('civ', h, e); onCivSelect(h.id); }}
               style={{ cursor: 'pointer' }}
               role="button"
               aria-label={`Cultural hearth: ${h.name}`}
@@ -535,6 +677,13 @@ export default function MapCanvas({
           Each glow is a region of innovation; each line is contact between cultures, shaped by the technology of the age.
         </text>
       </svg>
+
+      <MapTooltip
+        popup={popup}
+        data={data}
+        selectedYear={selectedYear}
+        onClose={() => setPopup(null)}
+      />
     </div>
   );
 }
