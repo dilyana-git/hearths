@@ -168,6 +168,18 @@ svg path[style*="cursor: crosshair"]:hover {
   animation: slideIn 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
+/* Era title card — re-animates whenever the era changes */
+@keyframes eraTitleIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.era-title-in {
+  animation: eraTitleIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.era-caption-in {
+  animation: fadeIn 1.2s ease both;
+}
+
 .modal-enter {
   animation: fadeIn 0.2s ease forwards;
 }

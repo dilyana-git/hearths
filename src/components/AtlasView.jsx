@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import MapCanvas from './MapCanvas';
-import RightRail from './RightRail';
-import { formatYear } from '../utils/constants';
+import DetailOverlay from './DetailOverlay';
+import { ERA_PALETTES, DEFAULT_PALETTE, formatYear } from '../utils/constants';
 
 const TIME_START = -13000;
 const TIME_END = 1500;
@@ -136,6 +136,62 @@ function AtlasScrubber({ year, onScrub, playing, onPlayPause, speed, onSpeedChan
   );
 }
 
+// Era title card — top-left over the map, re-animates when the era changes
+function EraTitleCard({ era, palette }) {
+  return (
+    <div
+      key={era.id}
+      className="absolute left-6 top-5 z-10 pointer-events-none era-title-in"
+      style={{ maxWidth: 460 }}
+    >
+      <p
+        className="uppercase"
+        style={{ color: palette.accent, fontSize: 10, letterSpacing: '0.24em', opacity: 0.9 }}
+      >
+        {formatYear(era.fromDate)} — {formatYear(era.toDate)}
+      </p>
+      <h1
+        className="serif font-medium"
+        style={{ fontSize: 30, color: '#eadfc4', lineHeight: 1.12, marginTop: 4, textShadow: '0 2px 14px rgba(0,0,0,0.85)' }}
+      >
+        {era.label}
+      </h1>
+      {era.sublabel && (
+        <p className="italic" style={{ fontSize: 11, color: '#8a7d65', marginTop: 5 }}>
+          {era.sublabel}
+        </p>
+      )}
+    </div>
+  );
+}
+
+// Era narrative — documentary-style caption, lower-left over the map
+function EraCaption({ era, onMore }) {
+  const text = era.narrative || '';
+  const short = text.length > 240 ? text.slice(0, 240).replace(/\s+\S*$/, '') + ' …' : text;
+  return (
+    <div
+      key={era.id}
+      className="absolute left-6 bottom-5 z-10 era-caption-in"
+      style={{ maxWidth: 420, pointerEvents: 'none' }}
+    >
+      <p
+        className="serif"
+        style={{ fontSize: 15, lineHeight: 1.6, color: '#c9bda0', textShadow: '0 1px 10px rgba(0,0,0,0.95)' }}
+      >
+        {short}
+      </p>
+      <button
+        onClick={onMore}
+        className="mt-1.5 text-[11px] text-teal-600 hover:text-teal-400 transition-colors"
+        style={{ pointerEvents: 'auto' }}
+      >
+        Read the full era →
+      </button>
+    </div>
+  );
+}
+
 function TourOverlay({ tour, onBeat, onClose }) {
   const { beats, beatIndex } = tour;
   const beat = beats[beatIndex];
@@ -220,6 +276,7 @@ export default function AtlasView({ data, activeTour, onCloseTour, onTourBeat })
   const [selectedCivId, setSelectedCivId] = useState(null);
   const [selectedConnectionId, setSelectedConnectionId] = useState(null);
   const [selectedMilestoneId, setSelectedMilestoneId] = useState(null);
+  const [overlay, setOverlay] = useState(null); // { type, item } — full reading page
 
   // Animation loop
   const rafRef = useRef(null);
@@ -323,12 +380,24 @@ export default function AtlasView({ data, activeTour, onCloseTour, onTourBeat })
   }, [selectedYear]);
 
   const currentEra = getCurrentEra(selectedYear, data.eras);
+  const palette = ERA_PALETTES[currentEra.id] || DEFAULT_PALETTE;
+
+  const handleExpand = useCallback((type, item) => {
+    setOverlay({ type, item });
+  }, []);
 
   return (
     <div className="flex flex-col h-full overflow-hidden bg-coal-900">
-      {/* Map + right rail */}
+      {/* Full-bleed map with cinematic overlays */}
       <div className="flex flex-1 overflow-hidden min-h-0">
         <div className="flex-1 overflow-hidden min-w-0 relative">
+          <EraTitleCard era={currentEra} palette={palette} />
+          {!activeTour && (
+            <EraCaption
+              era={currentEra}
+              onMore={() => setOverlay({ type: 'era', item: currentEra })}
+            />
+          )}
           {activeTour && (
             <TourOverlay
               tour={activeTour}
@@ -339,6 +408,7 @@ export default function AtlasView({ data, activeTour, onCloseTour, onTourBeat })
           <MapCanvas
             data={data}
             selectedYear={selectedYear}
+            era={currentEra}
             selectedCivId={selectedCivId}
             selectedConnectionId={selectedConnectionId}
             selectedMilestoneId={selectedMilestoneId}
@@ -346,24 +416,18 @@ export default function AtlasView({ data, activeTour, onCloseTour, onTourBeat })
             onConnectionSelect={handleConnectionSelect}
             onMilestoneSelect={handleMilestoneSelect}
             onBgClick={handleBgClick}
-          />
-        </div>
-
-        <div className="hidden md:flex flex-col flex-shrink-0 border-l border-coal-700 overflow-hidden"
-          style={{ width: '22rem' }}>
-          <RightRail
-            data={data}
-            selectedYear={selectedYear}
-            currentEra={currentEra}
-            selectedCivId={selectedCivId}
-            selectedConnectionId={selectedConnectionId}
-            selectedMilestoneId={selectedMilestoneId}
-            onCivSelect={handleCivSelect}
-            onConnectionSelect={handleConnectionSelect}
-            onMilestoneSelect={handleMilestoneSelect}
+            onExpand={handleExpand}
           />
         </div>
       </div>
+
+      <DetailOverlay
+        overlay={overlay}
+        data={data}
+        selectedYear={selectedYear}
+        onClose={() => setOverlay(null)}
+        onNavigate={setOverlay}
+      />
 
       <AtlasScrubber
         year={selectedYear}

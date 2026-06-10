@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import worldTopology from 'world-atlas/countries-110m.json';
-import { TECH_FAMILIES, STAGE_META, TYPE_META, formatYear } from '../utils/constants';
+import { TECH_FAMILIES, STAGE_META, TYPE_META, ERA_PALETTES, DEFAULT_PALETTE, formatYear } from '../utils/constants';
 
 // ── Inline map tooltip (Portal) ───────────────────────────────────────────────
 
@@ -26,7 +26,7 @@ const TITLE_STYLE = {
 const BODY_STYLE = { fontSize: 10, color: '#7a7060', lineHeight: 1.55, margin: 0 };
 const META_STYLE = { fontSize: 9, color: '#4e4840', margin: '0 0 1px' };
 
-function MapTooltip({ popup, data, selectedYear, onClose }) {
+function MapTooltip({ popup, data, selectedYear, onClose, onExpand }) {
   if (!popup) return null;
 
   // Smart flip: avoid viewport edges
@@ -135,6 +135,20 @@ function MapTooltip({ popup, data, selectedYear, onClose }) {
           </div>
         );
       })()}
+
+      {onExpand && (
+        <div style={{ padding: '0 13px 11px' }}>
+          <button
+            onClick={() => onExpand(popup.type, popup.item)}
+            style={{
+              background: 'none', border: 'none', cursor: 'pointer',
+              padding: 0, fontSize: 10, color: '#7a9e8e', letterSpacing: '0.04em',
+            }}
+          >
+            Read more →
+          </button>
+        </div>
+      )}
     </div>,
     document.body
   );
@@ -198,17 +212,19 @@ function getCurrentStage(civ, year) {
   return stage;
 }
 
-const TECH_ORDER = ['foot-river', 'farming-wave', 'wheel-caravan', 'bronze-trade', 'iron-maritime', 'sail-monsoon'];
-const STAGE_LEGEND = [
-  { key: 'incipient-cultivation', label: 'Incipient Cultivation' },
-  { key: 'established-farming',   label: 'Established Farming' },
-  { key: 'towns-chiefdoms',       label: 'Towns / Chiefdoms' },
-  { key: 'cities-states',         label: 'Cities / States' },
-];
+// Deterministic per-milestone placement around its hearth, so pulses don't stack
+function hashId(s) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = ((h * 31) + s.charCodeAt(i)) | 0;
+  return Math.abs(h);
+}
+
+// How long (in years) an event pulse stays visible after its date passes
+const PULSE_WINDOW = 700;
 
 export default function MapCanvas({
-  data, selectedYear, selectedCivId, selectedConnectionId, selectedMilestoneId,
-  onCivSelect, onConnectionSelect, onMilestoneSelect, onBgClick,
+  data, selectedYear, era, selectedCivId, selectedConnectionId, selectedMilestoneId,
+  onCivSelect, onConnectionSelect, onMilestoneSelect, onBgClick, onExpand,
 }) {
   const containerRef = useRef(null);
   const dims = useDimensions(containerRef);
@@ -281,11 +297,31 @@ export default function MapCanvas({
 
   const scale = dims.width / MAP_W;
   const glowR = 88 * scale;
+  const palette = ERA_PALETTES[era?.id] || DEFAULT_PALETTE;
 
-  // Legend geometry
-  const LEG_TOP = dims.height - 124;
-  const LEG_W = 268;
-  const LEG_H = 116;
+  // Event pulses: milestones whose date was crossed within the trailing window.
+  // The map shows what is happening *now*, not everything that ever happened.
+  const pulses = useMemo(() => {
+    const out = [];
+    hearths.forEach(h => {
+      (data.milestonesByCiv[h.id] || []).forEach(m => {
+        const age = selectedYear - m.date;
+        if (age < 0 || age > PULSE_WINDOW) return;
+        const hash = hashId(m.id);
+        const angle = (hash % 360) * Math.PI / 180;
+        const rad = (22 + (hash >> 3) % 18) * Math.max(scale, 0.7);
+        out.push({
+          m, civ: h,
+          x: h.px + rad * Math.cos(angle),
+          y: h.py + rad * Math.sin(angle),
+          t: age / PULSE_WINDOW,
+        });
+      });
+    });
+    // Freshest first — they get the captions
+    out.sort((a, b) => b.m.date - a.m.date);
+    return out;
+  }, [hearths, data.milestonesByCiv, selectedYear, scale]);
 
   return (
     <div ref={containerRef} className="w-full h-full overflow-hidden" onClick={() => { onBgClick(); setPopup(null); }}>
@@ -297,8 +333,8 @@ export default function MapCanvas({
       >
         <defs>
           <radialGradient id="mc-ocean" cx="50%" cy="50%" r="70%">
-            <stop offset="0%" stopColor="#0d1620" />
-            <stop offset="100%" stopColor="#080c12" />
+            <stop offset="0%" style={{ stopColor: palette.oceanIn, transition: 'stop-color 1.4s ease' }} />
+            <stop offset="100%" style={{ stopColor: palette.oceanOut, transition: 'stop-color 1.4s ease' }} />
           </radialGradient>
           <radialGradient id="mc-vig" cx="50%" cy="50%" r="70%">
             <stop offset="55%" stopColor="transparent" />
@@ -345,11 +381,15 @@ export default function MapCanvas({
           fill="none" stroke="#1a2235" strokeWidth={0.5} opacity={0.75}
         />
 
-        {/* Land */}
-        <path d={landPath} fill="#151e2d" stroke="#253045" strokeWidth={0.6} />
+        {/* Land — tinted by the current era's palette */}
+        <path
+          d={landPath}
+          strokeWidth={0.6}
+          style={{ fill: palette.land, stroke: palette.landStroke, transition: 'fill 1.4s ease, stroke 1.4s ease' }}
+        />
 
         {/* Country borders */}
-        <path d={bordersPath} fill="none" stroke="#1a2840" strokeWidth={0.3} />
+        <path d={bordersPath} fill="none" stroke="#1a2840" strokeWidth={0.3} opacity={0.5} />
 
         {/* Stage tints */}
         {hearths.map(h => {
@@ -433,17 +473,17 @@ export default function MapCanvas({
                   pointerEvents="none"
                 />
               )}
-              {/* Arc label at midpoint — always readable, more prominent on hover/select */}
-              {conn.midPt && !isDimmed && (
+              {/* Arc label at midpoint — progressive disclosure: only on hover/select */}
+              {conn.midPt && (isSelected || isHovered) && (
                 <text
                   x={conn.midPt[0]}
-                  y={conn.midPt[1] - 5}
+                  y={conn.midPt[1] - 6}
                   textAnchor="middle"
                   fill={tech.color}
-                  fontSize={isSelected || isHovered ? 8.5 : 7}
+                  fontSize={9}
                   fontFamily="sans-serif"
-                  fontWeight={isSelected || isHovered ? 600 : 400}
-                  opacity={isSelected || isHovered ? 0.9 : 0.42}
+                  fontWeight={600}
+                  opacity={0.92}
                   filter="url(#mc-textHalo)"
                   pointerEvents="none"
                   style={{ letterSpacing: '0.04em' }}
@@ -455,65 +495,50 @@ export default function MapCanvas({
           );
         })}
 
-        {/* Milestone markers */}
-        {hearths.map(h => {
-          const ms = (data.milestonesByCiv[h.id] || []).filter(m => m.date <= selectedYear);
-          if (!ms.length) return null;
-          // Show up to 20 most recent, sorted oldest-first so the ring builds chronologically
-          const recent = ms.slice(-20);
-          // Larger ring radius so dots are individually distinguishable
-          const mr = (30 * scale) + 14;
+        {/* Event pulses — milestones bloom at their location as time crosses them, then fade.
+            The map shows what is happening now; full histories live in the detail overlay. */}
+        {pulses.map(({ m, x, y, t }, idx) => {
+          const meta = TYPE_META[m.type] || {};
+          const color = meta.color || '#8a7d65';
+          const fade = 1 - t;
+          const isSel = m.id === selectedMilestoneId;
           return (
-            <g key={`mm-${h.id}`}>
-              {recent.map((m, idx) => {
-                const angle = (idx / recent.length) * 2 * Math.PI - Math.PI / 2;
-                const mx = h.px + mr * Math.cos(angle);
-                const my = h.py + mr * Math.sin(angle);
-                const meta = TYPE_META[m.type] || { color: '#8a7d65', tier: 'filled' };
-                const isSel = m.id === selectedMilestoneId;
-                const r = isSel ? 6 : 4.5;
-                const contestedDash = m.contested ? '2,2' : undefined;
-                const fillOp = m.contested ? 0.20 : 0.38;
-                const strokeOp = m.contested ? 0.50 : 0.75;
-
-                if (meta.tier === 'ring') {
-                  return (
-                    <circle key={m.id} cx={mx} cy={my} r={r}
-                      fill="none" stroke={meta.color}
-                      strokeWidth={1.2} strokeOpacity={strokeOp}
-                      strokeDasharray={contestedDash}
-                      style={{ cursor: 'pointer' }}
-                      onClick={e => { openPopup('milestone', m, e); onMilestoneSelect(m.id); }}
-                    />
-                  );
-                }
-                if (meta.tier === 'double') {
-                  return (
-                    <g key={m.id}
-                      style={{ cursor: 'pointer' }}
-                      onClick={e => { openPopup('milestone', m, e); onMilestoneSelect(m.id); }}
-                    >
-                      <circle cx={mx} cy={my} r={r + 2.5}
-                        fill="none" stroke={meta.color}
-                        strokeWidth={0.7} strokeOpacity={strokeOp * 0.5}
-                        strokeDasharray={contestedDash} />
-                      <circle cx={mx} cy={my} r={r}
-                        fill={meta.color} fillOpacity={fillOp}
-                        stroke={meta.color} strokeWidth={1}
-                        strokeDasharray={contestedDash} />
-                    </g>
-                  );
-                }
-                return (
-                  <circle key={m.id} cx={mx} cy={my} r={r}
-                    fill={meta.color} fillOpacity={fillOp}
-                    stroke={meta.color} strokeWidth={1.2}
-                    strokeDasharray={contestedDash}
-                    style={{ cursor: 'pointer' }}
-                    onClick={e => { openPopup('milestone', m, e); onMilestoneSelect(m.id); }}
-                  />
-                );
-              })}
+            <g
+              key={m.id}
+              onClick={e => { openPopup('milestone', m, e); onMilestoneSelect(m.id); }}
+              style={{ cursor: 'pointer' }}
+            >
+              {/* Expanding ripple */}
+              <circle
+                cx={x} cy={y}
+                r={5 + t * 24}
+                fill="none" stroke={color} strokeWidth={1}
+                opacity={fade * 0.32}
+                pointerEvents="none"
+              />
+              {/* Core dot */}
+              <circle
+                cx={x} cy={y}
+                r={isSel ? 5 : 3.2}
+                fill={color} fillOpacity={0.25 + fade * 0.55}
+                stroke={color} strokeWidth={1} strokeOpacity={0.35 + fade * 0.55}
+                strokeDasharray={m.contested ? '2,2' : undefined}
+              />
+              {/* Caption for the freshest few events */}
+              {idx < 7 && (
+                <text
+                  x={x + 9} y={y + 3}
+                  fill={color}
+                  fontSize={8.5}
+                  fontFamily="sans-serif"
+                  opacity={Math.min(1, fade * 1.5) * 0.88}
+                  filter="url(#mc-textHalo)"
+                  pointerEvents="none"
+                  style={{ letterSpacing: '0.02em' }}
+                >
+                  {m.title}
+                </text>
+              )}
             </g>
           );
         })}
@@ -557,125 +582,9 @@ export default function MapCanvas({
           );
         })}
 
-        {/* Era inscription — top center */}
-        {(() => {
-          const era = [...data.eras].reverse().find(e => selectedYear >= e.start) || data.eras[0];
-          return (
-            <text
-              x={dims.width / 2}
-              y={20}
-              textAnchor="middle"
-              fill="#b8960c"
-              fontSize={12}
-              fontFamily="Cormorant Garamond, Georgia, serif"
-              fontWeight={500}
-              opacity={0.22}
-              pointerEvents="none"
-              style={{ textTransform: 'uppercase', letterSpacing: '0.14em' }}
-            >
-              {era.label.toUpperCase()}
-            </text>
-          );
-        })()}
-
-        {/* Empty-state interaction hint — fades once user clicks something */}
-        {!selectedCivId && !selectedConnectionId && !selectedMilestoneId && (
-          <text
-            x={dims.width / 2}
-            y={36}
-            textAnchor="middle"
-            fill="rgba(138,125,101,0.28)"
-            fontSize={9.5}
-            fontFamily="Cormorant Garamond, Georgia, serif"
-            fontStyle="italic"
-            pointerEvents="none"
-          >
-            click a circle · connection line · or milestone dot to explore
-          </text>
-        )}
-
         {/* Vignette */}
         <rect width={dims.width} height={dims.height}
           fill="url(#mc-vig)" pointerEvents="none" />
-
-        {/* On-canvas legend */}
-        <g transform={`translate(12, ${LEG_TOP})`} pointerEvents="none">
-          <rect x={0} y={0} width={LEG_W} height={LEG_H}
-            fill="rgba(8,12,18,0.82)" rx={3} />
-
-          {/* Connection type column */}
-          <text x={10} y={13} fill="#5c5245" fontSize={7}
-            fontFamily="sans-serif" fontWeight={600} letterSpacing="0.7">
-            CONNECTION TYPE
-          </text>
-          {TECH_ORDER.map((key, i) => {
-            const tech = TECH_FAMILIES[key];
-            return (
-              <g key={key} transform={`translate(10, ${22 + i * 14})`}>
-                <line x1={0} y1={4} x2={22} y2={4}
-                  stroke={tech.color} strokeWidth={1.5}
-                  strokeDasharray={tech.dash !== 'none' ? tech.dash : undefined}
-                  strokeOpacity={0.85} />
-                <text x={28} y={8} fill="#8a7d65" fontSize={7} fontFamily="sans-serif">
-                  {tech.label}
-                </text>
-              </g>
-            );
-          })}
-
-          {/* Development stage column */}
-          <text x={144} y={13} fill="#5c5245" fontSize={7}
-            fontFamily="sans-serif" fontWeight={600} letterSpacing="0.7">
-            DEVELOPMENT STAGE
-          </text>
-          {STAGE_LEGEND.map(({ key, label }, i) => {
-            const meta = STAGE_META[key];
-            return (
-              <g key={key} transform={`translate(144, ${22 + i * 14})`}>
-                <rect x={0} y={0} width={9} height={8}
-                  fill={meta.color} rx={1}
-                  stroke={meta.color} strokeWidth={0.5} strokeOpacity={0.6} />
-                <text x={14} y={8} fill="#8a7d65" fontSize={7} fontFamily="sans-serif">
-                  {label}
-                </text>
-              </g>
-            );
-          })}
-        </g>
-
-        {/* Compass rose — bottom right */}
-        <g
-          transform={`translate(${dims.width - 38}, ${dims.height - 42})`}
-          pointerEvents="none"
-          opacity={0.42}
-        >
-          {/* N arrow */}
-          <polygon points="0,-20 -3.5,-10 3.5,-10" fill="#8a7d65" />
-          <line x1={0} y1={-10} x2={0} y2={2} stroke="#8a7d65" strokeWidth={1.5} />
-          <text x={0} y={-23} textAnchor="middle" fill="#8a7d65" fontSize={8}
-            fontFamily="sans-serif" fontWeight={700}>N</text>
-          {/* Cardinal ticks S, E, W */}
-          <line x1={0} y1={14} x2={0} y2={8} stroke="#5a5045" strokeWidth={1} />
-          <line x1={-14} y1={0} x2={-8} y2={0} stroke="#5a5045" strokeWidth={1} />
-          <line x1={14} y1={0} x2={8} y2={0} stroke="#5a5045" strokeWidth={1} />
-          {/* Center ring */}
-          <circle cx={0} cy={0} r={3.5} fill="none" stroke="#6a6050" strokeWidth={0.8} />
-          <circle cx={0} cy={0} r={1.5} fill="#8a7d65" />
-        </g>
-
-        {/* Helper text */}
-        <text
-          x={dims.width / 2}
-          y={dims.height - 7}
-          textAnchor="middle"
-          fill="#3a3028"
-          fontSize={9}
-          fontFamily="Cormorant Garamond, Georgia, serif"
-          fontStyle="italic"
-          pointerEvents="none"
-        >
-          Each glow is a region of innovation; each line is contact between cultures, shaped by the technology of the age.
-        </text>
       </svg>
 
       <MapTooltip
@@ -683,6 +592,7 @@ export default function MapCanvas({
         data={data}
         selectedYear={selectedYear}
         onClose={() => setPopup(null)}
+        onExpand={onExpand ? (type, item) => { setPopup(null); onExpand(type, item); } : null}
       />
     </div>
   );
