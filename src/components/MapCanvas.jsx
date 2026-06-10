@@ -30,7 +30,7 @@ function MapTooltip({ popup, data, selectedYear, onClose, onExpand }) {
   if (!popup) return null;
 
   // Smart flip: avoid viewport edges
-  const W = 272, H_EST = 180;
+  const W = 272, H_EST = popup.item?.imageUrl ? 280 : 180;
   let left = popup.x + 16;
   let top  = popup.y - 12;
   if (left + W  > window.innerWidth  - 12) left = popup.x - W - 16;
@@ -43,11 +43,25 @@ function MapTooltip({ popup, data, selectedYear, onClose, onExpand }) {
         onClick={onClose}
         aria-label="Close"
         style={{
-          position: 'absolute', top: 7, right: 9,
-          background: 'none', border: 'none', cursor: 'pointer',
-          color: '#5a5248', fontSize: 15, lineHeight: 1, padding: 0,
+          position: 'absolute', top: 6, right: 7, zIndex: 1,
+          width: 18, height: 18, borderRadius: '50%',
+          background: popup.item?.imageUrl ? 'rgba(7,10,15,0.65)' : 'none',
+          border: 'none', cursor: 'pointer',
+          color: popup.item?.imageUrl ? '#a89a80' : '#5a5248',
+          fontSize: 13, lineHeight: 1, padding: 0,
         }}
       >×</button>
+
+      {popup.item?.imageUrl && (
+        <img
+          src={popup.item.imageUrl}
+          alt=""
+          style={{
+            display: 'block', width: '100%', height: 96,
+            objectFit: 'cover', borderRadius: '5px 5px 0 0',
+          }}
+        />
+      )}
 
       {popup.type === 'milestone' && (() => {
         const m = popup.item;

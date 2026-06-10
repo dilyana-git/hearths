@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
+import ImageSlot from './ImageSlot';
 import { TECH_FAMILIES, STAGE_META, TYPE_META, NODE_TIERS, formatYear } from '../utils/constants';
 
 function getCurrentStage(civ, year) {
@@ -36,6 +37,9 @@ function EraContent({ era }) {
       {era.sublabel && (
         <p className="text-sm text-parchment-500 italic mt-2">{era.sublabel}</p>
       )}
+      <div className="mt-8">
+        <ImageSlot imageUrl={era.imageUrl} title={era.label} prompt={era.heroImagePrompt} />
+      </div>
       {era.narrative && (
         <p className="serif text-lg text-parchment-300 leading-relaxed mt-8">
           {era.narrative}
@@ -68,6 +72,10 @@ function CivContent({ civ, data, selectedYear, onNavigate }) {
         {civ.name}
       </h1>
       {civ.region && <p className="text-sm text-parchment-500 mt-1">{civ.region}</p>}
+
+      <div className="mt-8">
+        <ImageSlot imageUrl={civ.imageUrl} title={civ.name} prompt={civ.imagePrompt} />
+      </div>
 
       {civ.summary && (
         <p className="serif text-lg text-parchment-300 leading-relaxed mt-8">{civ.summary}</p>
@@ -140,8 +148,12 @@ function ConnectionContent({ conn, data }) {
         )}
       </p>
 
+      <div className="mt-8">
+        <ImageSlot imageUrl={conn.imageUrl} title={title} prompt={conn.imagePrompt} />
+      </div>
+
       {conn.narrative && (
-        <p className="serif text-lg text-parchment-300 leading-relaxed mt-8">{conn.narrative}</p>
+        <p className="serif text-lg text-parchment-300 leading-relaxed mt-6">{conn.narrative}</p>
       )}
       {conn.description && conn.description !== conn.narrative && (
         <p className="text-sm text-parchment-400 leading-relaxed mt-4">{conn.description}</p>
@@ -199,6 +211,12 @@ function MilestoneContent({ milestone, data, onNavigate }) {
           </>
         )}
       </p>
+
+      {milestone.imageUrl && (
+        <div className="mt-8">
+          <ImageSlot imageUrl={milestone.imageUrl} title={milestone.title} />
+        </div>
+      )}
 
       {milestone.causalExplanation && (
         <p className="serif text-lg text-parchment-300 leading-relaxed mt-8">

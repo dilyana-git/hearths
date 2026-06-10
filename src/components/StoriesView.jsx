@@ -19,20 +19,41 @@ function StoryCard({ story, onOpen }) {
     >
       {/* Image / title area */}
       <div
-        className="flex flex-col items-center justify-center gap-2 px-4"
+        className="relative flex flex-col items-center justify-center gap-2 px-4 overflow-hidden"
         style={{
           height: 120,
           background: `radial-gradient(ellipse at 50% 40%, ${story.badgeColor}18 0%, #0d1018 70%)`,
           borderBottom: '1px solid #1a2235',
         }}
       >
+        {story.imageUrl && (
+          <>
+            <img
+              src={story.imageUrl}
+              alt=""
+              loading="lazy"
+              className="absolute inset-0 w-full h-full"
+              style={{ objectFit: 'cover' }}
+            />
+            <div
+              className="absolute inset-0"
+              style={{ background: 'linear-gradient(180deg, rgba(8,12,18,0.15) 0%, rgba(8,12,18,0.72) 100%)' }}
+            />
+          </>
+        )}
         <span
-          className="text-center font-medium tracking-widest text-parchment-400"
-          style={{ fontFamily: 'Cormorant Garamond, Georgia, serif', fontSize: 14, textTransform: 'uppercase', letterSpacing: '0.1em' }}
+          className="relative text-center font-medium tracking-widest text-parchment-400"
+          style={{
+            fontFamily: 'Cormorant Garamond, Georgia, serif', fontSize: 14,
+            textTransform: 'uppercase', letterSpacing: '0.1em',
+            textShadow: story.imageUrl ? '0 1px 6px rgba(0,0,0,0.9)' : 'none',
+          }}
         >
           {story.title}
         </span>
-        <span className="text-parchment-700" style={{ fontSize: 9, letterSpacing: '0.3em' }}>· · ·</span>
+        {!story.imageUrl && (
+          <span className="text-parchment-700" style={{ fontSize: 9, letterSpacing: '0.3em' }}>· · ·</span>
+        )}
       </div>
 
       {/* Content */}
@@ -87,6 +108,7 @@ export default function StoriesView({ data, chainCivId, onChainCivChange, onOpen
       badge: s.badge,
       badgeColor: s.badgeColor,
       beatCount: s.beats?.length,
+      imageUrl: s.imageUrl,
       available: true,
     })),
   ];
