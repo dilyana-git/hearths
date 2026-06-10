@@ -5,6 +5,7 @@ import AboutPanel from './components/AboutPanel';
 import AtlasView from './components/AtlasView';
 import ThreadsView from './components/ThreadsView';
 import StoriesView from './components/StoriesView';
+import LabView from './components/LabView';
 import MilestonePanel from './components/MilestonePanel';
 import TypeLegend from './components/TypeLegend';
 import OnboardingModal from './components/OnboardingModal';
@@ -13,6 +14,7 @@ const VIEWS = [
   { id: 'atlas',   label: 'Atlas',    description: 'World map · space & time' },
   { id: 'stories', label: 'Stories',  description: 'Frameworks & guided tours' },
   { id: 'threads', label: 'Timeline', description: 'Civilizations through time' },
+  { id: 'lab',     label: 'Lab',      description: 'What-if · counterfactual simulations' },
 ];
 
 export default function App() {
@@ -101,6 +103,9 @@ export default function App() {
               onChainCivChange={setChainCivId}
               onOpenTour={handleOpenTour}
             />
+          )}
+          {activeView === 'lab' && (
+            <LabView data={data} />
           )}
           {activeView === 'threads' && (
             <ThreadsView
