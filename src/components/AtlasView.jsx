@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import MapCanvas from './MapCanvas';
 import DetailOverlay from './DetailOverlay';
-import { ERA_PALETTES, DEFAULT_PALETTE, formatYear } from '../utils/constants';
+import { ERA_PALETTES, DEFAULT_PALETTE, TYPE_META, formatYear } from '../utils/constants';
 
 const TIME_START = -13000;
 const TIME_END = 1500;
@@ -16,52 +16,41 @@ function getCurrentEra(year, eras) {
   return eras.find(e => year >= e.start && year < e.end) || eras[eras.length - 1];
 }
 
-// Sparkline path for the scrubber — pre-computes event density
-function useSparkline(data) {
-  return useMemo(() => {
-    const BINS = 160;
-    const range = TIME_END - TIME_START;
-    const counts = new Array(BINS).fill(0);
-    data.milestones.forEach(m => {
-      const idx = Math.floor(((m.date - TIME_START) / range) * BINS);
-      if (idx >= 0 && idx < BINS) counts[idx]++;
-    });
-    data.diffusionEvents.forEach(ev => {
-      const date = ev.fromDate ?? ev.approxDate;
-      if (date == null) return;
-      const idx = Math.floor(((date - TIME_START) / range) * BINS);
-      if (idx >= 0 && idx < BINS) counts[idx]++;
-    });
-    const max = Math.max(...counts, 1);
-    const pts = counts.map((c, i) => `${(i / BINS) * 100},${20 - (c / max) * 18}`);
-    return `M 0,20 L ${pts.join(' L ')} L 100,20 Z`;
-  }, [data]);
-}
-
-function AtlasScrubber({ year, onScrub, playing, onPlayPause, speed, onSpeedChange, data, currentEra }) {
-  const sparkPath = useSparkline(data);
+// Chapter filmstrip scrubber: the nine eras as palette-tinted chapters.
+// Drag to scrub, click to glide, ‹ › to jump between pivotal moments.
+function AtlasScrubber({ year, onScrub, onJump, playing, onPlayPause, speed, onSpeedChange, data, currentEra, moments, palette }) {
+  const stripRef = useRef(null);
+  const drag = useRef(null);
   const displayYear = Math.round(year);
+  const RANGE = TIME_END - TIME_START;
+  const pct = (y) => ((y - TIME_START) / RANGE) * 100;
 
-  // Era boundaries as tick positions (%)
-  const eraTicks = data.eras.slice(1).map(e => ({
-    pct: ((e.start - TIME_START) / (TIME_END - TIME_START)) * 100,
-    label: e.label,
-  }));
+  const yearFromEvent = (e) => {
+    const rect = stripRef.current.getBoundingClientRect();
+    const frac = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+    return Math.round(TIME_START + frac * RANGE);
+  };
+
+  const prevMoment = useMemo(
+    () => [...moments].reverse().find(m => m.date < displayYear - 80),
+    [moments, displayYear]
+  );
+  const nextMoment = useMemo(
+    () => moments.find(m => m.date > displayYear + 80),
+    [moments, displayYear]
+  );
 
   return (
     <div className="flex-shrink-0 border-t border-coal-700 bg-coal-900 select-none">
-      {/* Year + era header */}
+      {/* Year header */}
       <div className="text-center pt-2 pb-1 leading-none">
         <div className="serif text-xl font-medium text-parchment-200 tabular-nums">
           {formatYear(displayYear)}
         </div>
-        <div className="text-[10px] uppercase tracking-widest text-parchment-600 mt-0.5">
-          {currentEra.label}
-        </div>
       </div>
 
-      {/* Controls + track */}
-      <div className="flex items-center gap-3 px-4 pb-3">
+      {/* Controls + filmstrip */}
+      <div className="flex items-center gap-2.5 px-4 pb-3 pt-1">
         {/* Play/Pause */}
         <button
           onClick={onPlayPause}
@@ -92,45 +81,126 @@ function AtlasScrubber({ year, onScrub, playing, onPlayPause, speed, onSpeedChan
           ))}
         </select>
 
-        {/* Track with sparkline */}
-        <div className="flex-1 relative" style={{ height: 44 }}>
-          {/* Sparkline SVG */}
-          <svg
-            className="absolute inset-0 w-full"
-            style={{ height: 44, pointerEvents: 'none', zIndex: 1 }}
-            viewBox="0 0 100 20"
-            preserveAspectRatio="none"
+        {/* Previous / next moment */}
+        <div className="flex-shrink-0 flex items-center gap-1">
+          <button
+            onClick={() => prevMoment && onJump(prevMoment.date + 60)}
+            disabled={!prevMoment}
+            title={prevMoment ? `${prevMoment.title} · ${formatYear(prevMoment.date)}` : ''}
+            aria-label="Previous moment"
+            className="w-7 h-7 flex items-center justify-center rounded border border-coal-600 text-parchment-500 hover:text-parchment-200 hover:border-coal-500 disabled:opacity-25 transition-colors"
           >
-            {/* Era ticks */}
-            {eraTicks.map(t => (
-              <line key={t.label}
-                x1={t.pct} y1={0} x2={t.pct} y2={20}
-                stroke="#2a3550" strokeWidth={0.3} />
-            ))}
-            {/* Density silhouette */}
-            <path d={sparkPath} fill="rgba(0,168,150,0.08)" />
-            {/* Track line */}
-            <line x1={0} y1={14} x2={100} y2={14}
-              stroke="#2a3550" strokeWidth={0.5} />
-          </svg>
-
-          {/* Range input on top */}
-          <input
-            type="range"
-            min={TIME_START}
-            max={TIME_END}
-            step={10}
-            value={displayYear}
-            onChange={e => onScrub(Number(e.target.value))}
-            className="atlas-scrubber-track"
-            aria-label="Time scrubber"
-          />
+            <svg width="9" height="9" viewBox="0 0 9 9" fill="currentColor">
+              <polygon points="9,0 3.5,4.5 9,9"/><rect x="0" y="0" width="1.6" height="9"/>
+            </svg>
+          </button>
+          <button
+            onClick={() => nextMoment && onJump(nextMoment.date + 60)}
+            disabled={!nextMoment}
+            title={nextMoment ? `${nextMoment.title} · ${formatYear(nextMoment.date)}` : ''}
+            aria-label="Next moment"
+            className="w-7 h-7 flex items-center justify-center rounded border border-coal-600 text-parchment-500 hover:text-parchment-200 hover:border-coal-500 disabled:opacity-25 transition-colors"
+          >
+            <svg width="9" height="9" viewBox="0 0 9 9" fill="currentColor">
+              <polygon points="0,0 5.5,4.5 0,9"/><rect x="7.4" y="0" width="1.6" height="9"/>
+            </svg>
+          </button>
         </div>
 
-        {/* Date range bookends */}
-        <span className="flex-shrink-0 text-[9px] text-parchment-700 tabular-nums">
-          {formatYear(TIME_END)}
-        </span>
+        {/* Era filmstrip */}
+        <div
+          ref={stripRef}
+          className="relative flex-1 rounded-sm overflow-hidden cursor-pointer focus:outline-none focus:ring-1 focus:ring-teal-800"
+          style={{ height: 46, background: '#0a0e16', border: '1px solid #1e2840', touchAction: 'none' }}
+          tabIndex={0}
+          role="slider"
+          aria-label="Time scrubber — drag to scrub, click to travel"
+          aria-valuemin={TIME_START}
+          aria-valuemax={TIME_END}
+          aria-valuenow={displayYear}
+          aria-valuetext={formatYear(displayYear)}
+          onPointerDown={e => {
+            stripRef.current.setPointerCapture(e.pointerId);
+            drag.current = { moved: false };
+          }}
+          onPointerMove={e => {
+            if (!drag.current || e.buttons !== 1) return;
+            drag.current.moved = true;
+            onScrub(yearFromEvent(e));
+          }}
+          onPointerUp={e => {
+            if (drag.current && !drag.current.moved) onJump(yearFromEvent(e));
+            drag.current = null;
+          }}
+          onKeyDown={e => {
+            if (e.key === 'ArrowLeft') { e.preventDefault(); onScrub(Math.max(TIME_START, displayYear - 100)); }
+            if (e.key === 'ArrowRight') { e.preventDefault(); onScrub(Math.min(TIME_END, displayYear + 100)); }
+          }}
+        >
+          {/* Era chapters, width proportional to duration, tinted by their palette */}
+          {data.eras.map(e2 => {
+            const pal = ERA_PALETTES[e2.id] || DEFAULT_PALETTE;
+            const active = currentEra.id === e2.id;
+            const short = e2.label.split('·')[0].trim();
+            return (
+              <div
+                key={e2.id}
+                className="absolute top-0 bottom-0 overflow-hidden"
+                title={e2.label}
+                style={{
+                  left: pct(e2.start) + '%',
+                  width: (pct(e2.end) - pct(e2.start)) + '%',
+                  background: `linear-gradient(180deg, ${pal.accent}${active ? '38' : '12'} 0%, transparent 85%)`,
+                  borderLeft: '1px solid rgba(30,40,64,0.9)',
+                  transition: 'background 0.6s ease',
+                }}
+              >
+                <span
+                  className="absolute bottom-1 left-1.5 whitespace-nowrap uppercase"
+                  style={{
+                    fontSize: 8,
+                    letterSpacing: '0.08em',
+                    color: active ? '#d8cdb0' : '#6a604f',
+                    transition: 'color 0.4s ease',
+                  }}
+                >
+                  {short}
+                </span>
+              </div>
+            );
+          })}
+
+          {/* Future dimmed */}
+          <div
+            className="absolute top-0 bottom-0 right-0 pointer-events-none"
+            style={{ left: pct(displayYear) + '%', background: 'rgba(5,7,11,0.5)' }}
+          />
+
+          {/* Pivotal-moment ticks */}
+          {moments.map(m => (
+            <div
+              key={m.id}
+              className="absolute pointer-events-none"
+              style={{
+                left: `calc(${pct(m.date)}% - 1px)`,
+                top: 0, width: 2, height: 5,
+                background: TYPE_META[m.type]?.color || '#8a7d65',
+                opacity: 0.8,
+              }}
+            />
+          ))}
+
+          {/* Playhead */}
+          <div
+            className="absolute pointer-events-none"
+            style={{
+              left: `calc(${pct(displayYear)}% - 1px)`,
+              top: 0, bottom: 0, width: 2,
+              background: palette.accent,
+              boxShadow: `0 0 8px ${palette.accent}99`,
+            }}
+          />
+        </div>
       </div>
     </div>
   );
@@ -285,6 +355,43 @@ export default function AtlasView({ data, activeTour, onCloseTour, onTourBeat })
   const playingRef = useRef(false);
   useEffect(() => { speedRef.current = speed; }, [speed]);
 
+  // Eased glide for chapter clicks and moment jumps
+  const yearRef = useRef(selectedYear);
+  useEffect(() => { yearRef.current = selectedYear; }, [selectedYear]);
+  const jumpAnimRef = useRef(null);
+  const cancelJump = useCallback(() => {
+    if (jumpAnimRef.current) {
+      cancelAnimationFrame(jumpAnimRef.current);
+      jumpAnimRef.current = null;
+    }
+  }, []);
+  const handleJump = useCallback((target) => {
+    setPlaying(false);
+    cancelJump();
+    const from = yearRef.current;
+    if (Math.abs(target - from) < 1) return;
+    const start = performance.now();
+    const dur = 900;
+    const step = (ts) => {
+      const t = Math.min(1, (ts - start) / dur);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setSelectedYear(from + (target - from) * eased);
+      if (t < 1) jumpAnimRef.current = requestAnimationFrame(step);
+      else jumpAnimRef.current = null;
+    };
+    jumpAnimRef.current = requestAnimationFrame(step);
+  }, [cancelJump]);
+  useEffect(() => cancelJump, [cancelJump]);
+
+  // Pivotal moments — peak-complexity milestones (writing, cities, states, epidemics)
+  const moments = useMemo(
+    () => data.milestones
+      .filter(m => TYPE_META[m.type]?.tier === 'double')
+      .slice()
+      .sort((a, b) => a.date - b.date),
+    [data]
+  );
+
   const tick = useCallback((ts) => {
     if (!playingRef.current) return;
     if (!lastTsRef.current) lastTsRef.current = ts;
@@ -367,17 +474,19 @@ export default function AtlasView({ data, activeTour, onCloseTour, onTourBeat })
 
   const handleScrub = useCallback((year) => {
     setPlaying(false);
+    cancelJump();
     setSelectedYear(year);
-  }, []);
+  }, [cancelJump]);
 
   const handlePlayPause = useCallback(() => {
+    cancelJump();
     setPlaying(p => {
       if (!p && selectedYear >= TIME_END) {
         setSelectedYear(TIME_START);
       }
       return !p;
     });
-  }, [selectedYear]);
+  }, [selectedYear, cancelJump]);
 
   const currentEra = getCurrentEra(selectedYear, data.eras);
   const palette = ERA_PALETTES[currentEra.id] || DEFAULT_PALETTE;
@@ -432,12 +541,15 @@ export default function AtlasView({ data, activeTour, onCloseTour, onTourBeat })
       <AtlasScrubber
         year={selectedYear}
         onScrub={handleScrub}
+        onJump={handleJump}
         playing={playing}
         onPlayPause={handlePlayPause}
         speed={speed}
         onSpeedChange={setSpeed}
         data={data}
         currentEra={currentEra}
+        moments={moments}
+        palette={palette}
       />
     </div>
   );
