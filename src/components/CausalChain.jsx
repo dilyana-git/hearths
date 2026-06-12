@@ -1,22 +1,12 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React from 'react';
+import ImageSlot from './ImageSlot';
 import { CHAIN_STRENGTH_COLORS, CHAIN_STRENGTH_LABELS } from '../utils/constants';
 
-// ── Tree layout ──────────────────────────────────────────────────────────────
-// The chain is a vertical spine that branches at the bottom:
-//
-//   Biogeography
-//       │
-//   Domesticable Species
-//       │
-//   Food Production
-//       │
-//   Surplus
-//       │
-//   Specialization
-//   ╱   ╱   ╲   ╲
-//  W   T   PC   ED
-//
-// All coordinates are percentages of SVG width so it scales naturally.
+// ── Diamond's causal chain, read top to bottom ──────────────────────────────
+// Geographic endowment → agricultural transition → social complexity →
+// branching into four civilizational outcomes. Each step is a card whose
+// color and description reflect how strongly it applied to the selected
+// civilization; a connector between cards carries that color downstream.
 
 const SPINE = [
   'biogeography',
@@ -33,275 +23,126 @@ const LEAVES = [
   'epidemic-disease',
 ];
 
-const DESCRIPTIONS = {
-  'biogeography':        'Axis orientation, landmass area, climate zones, and the native species pool.',
-  'domesticable-species':'Wild plants and animals with traits compatible with human domestication.',
-  'food-production':     'Agriculture and pastoralism as the primary caloric base.',
-  'surplus':             'Food production exceeding immediate needs — the engine of everything else.',
-  'specialization':      'Surplus frees people from farming: artisans, scribes, soldiers, priests.',
-  'writing':             'Information storage enabling administration at scale and cumulative knowledge.',
-  'technology':          'Metallurgy, the wheel, the plough, navigation — specialization made physical.',
-  'political-complexity':'States, taxation, law, professional armies — coercive power organised.',
-  'epidemic-disease':    'Crowd diseases from livestock. Millennia of exposure → immunity. Contact = catastrophe for those without it.',
-};
-
-const SHORT_LABELS = {
-  'biogeography':        'Biogeography',
-  'domesticable-species':'Domesticable\nSpecies',
-  'food-production':     'Food\nProduction',
-  'surplus':             'Food Surplus',
-  'specialization':      'Specialization',
-  'writing':             'Writing &\nRecords',
-  'technology':          'Technology',
-  'political-complexity':'Political\nComplexity',
-  'epidemic-disease':    'Epidemic\nDisease',
-};
-
-// SVG dimensions — tree fits inside this viewport
-const VW = 620;
-const VH = 540;
-const CX = VW / 2;       // centre x
-const NODE_R = 34;        // spine node radius (pill half-width)
-const NODE_H = 26;        // spine node height
-const SPINE_GAP = 64;     // vertical gap between spine nodes (centre-to-centre)
-const LEAF_R = 50;        // leaf pill half-width
-const LEAF_H = 40;        // leaf pill height
-const SPINE_TOP = 40;     // y of first spine node centre
-
-// Precompute spine positions
-const spineY = i => SPINE_TOP + i * SPINE_GAP;
-const spineNodes = SPINE.map((id, i) => ({ id, x: CX, y: spineY(i) }));
-
-// Leaf positions — fan below the last spine node
-const leafBaseY = spineY(SPINE.length - 1) + 88;
-const totalLeafW = LEAVES.length * LEAF_R * 2 + (LEAVES.length - 1) * 16;
-const leafStartX = CX - totalLeafW / 2 + LEAF_R;
-const leafNodes = LEAVES.map((id, i) => ({
-  id,
-  x: leafStartX + i * (LEAF_R * 2 + 16),
-  y: leafBaseY,
-}));
-
-// Bezier branch from last spine node to each leaf
-function branchPath(fromX, fromY, toX, toY) {
-  const midY = (fromY + toY) / 2;
-  return `M ${fromX},${fromY} C ${fromX},${midY} ${toX},${midY} ${toX},${toY}`;
-}
-
-function strengthOpacity(s) {
-  if (s === 'strong') return 1;
-  if (s === 'moderate') return 0.65;
-  if (s === 'weak') return 0.35;
-  return 0.15;
-}
-
-function SpineNode({ node, strength, isHovered, onEnter, onLeave }) {
-  const color = CHAIN_STRENGTH_COLORS[strength] || '#2a3550';
-  const op = strengthOpacity(strength);
-  const lines = (SHORT_LABELS[node.id] || node.id).split('\n');
-  const absent = strength === 'absent';
-
-  return (
-    <g
-      transform={`translate(${node.x},${node.y})`}
-      onMouseEnter={onEnter}
-      onMouseLeave={onLeave}
-      style={{ cursor: 'default' }}
-    >
-      {/* Outer glow ring when hovered */}
-      {isHovered && (
-        <ellipse rx={NODE_R + 6} ry={NODE_H / 2 + 6}
-          fill={color} fillOpacity={0.07}
-        />
-      )}
-
-      {/* Node pill */}
-      <ellipse
-        rx={NODE_R} ry={NODE_H / 2}
-        fill={absent ? '#0a0d12' : color}
-        fillOpacity={absent ? 1 : op * 0.18}
-        stroke={color}
-        strokeWidth={absent ? 0.6 : isHovered ? 2 : 1.5}
-        strokeOpacity={absent ? 0.25 : op}
-        strokeDasharray={absent ? '4,3' : 'none'}
-      />
-
-      {/* Label */}
-      {lines.map((line, li) => (
-        <text
-          key={li}
-          y={(li - (lines.length - 1) / 2) * 13}
-          textAnchor="middle"
-          fill={absent ? '#3a4560' : isHovered ? color : '#b8a882'}
-          fontSize={10.5}
-          fontWeight={isHovered ? 500 : 400}
-          style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-        >
-          {line}
-        </text>
-      ))}
-    </g>
-  );
-}
-
-function LeafNode({ node, strength, isHovered, onEnter, onLeave }) {
-  const color = CHAIN_STRENGTH_COLORS[strength] || '#2a3550';
-  const op = strengthOpacity(strength);
-  const lines = (SHORT_LABELS[node.id] || node.id).split('\n');
-  const absent = strength === 'absent';
-
-  return (
-    <g
-      transform={`translate(${node.x},${node.y})`}
-      onMouseEnter={onEnter}
-      onMouseLeave={onLeave}
-      style={{ cursor: 'default' }}
-    >
-      {isHovered && (
-        <rect x={-LEAF_R - 6} y={-LEAF_H / 2 - 6} width={(LEAF_R + 6) * 2} height={LEAF_H + 12}
-          rx={8} fill={color} fillOpacity={0.07}
-        />
-      )}
-
-      <rect
-        x={-LEAF_R} y={-LEAF_H / 2} width={LEAF_R * 2} height={LEAF_H}
-        rx={6}
-        fill={absent ? '#0a0d12' : color}
-        fillOpacity={absent ? 1 : op * 0.18}
-        stroke={color}
-        strokeWidth={absent ? 0.6 : isHovered ? 2 : 1.5}
-        strokeOpacity={absent ? 0.25 : op}
-        strokeDasharray={absent ? '4,3' : 'none'}
-      />
-
-      {lines.map((line, li) => (
-        <text
-          key={li}
-          y={(li - (lines.length - 1) / 2) * 13 + 1}
-          textAnchor="middle"
-          fill={absent ? '#3a4560' : isHovered ? color : '#b8a882'}
-          fontSize={10}
-          fontWeight={isHovered ? 500 : 400}
-          style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-        >
-          {line}
-        </text>
-      ))}
-    </g>
-  );
-}
-
-// Animated trunk line between two spine nodes
-function TrunkSegment({ y1, y2, color, opacity }) {
-  return (
-    <line
-      x1={CX} y1={y1 + NODE_H / 2}
-      x2={CX} y2={y2 - NODE_H / 2}
-      stroke={color}
-      strokeWidth={opacity > 0.4 ? 2 : 1}
-      strokeOpacity={opacity * 0.8}
-      strokeLinecap="round"
-    />
-  );
-}
+const GROUPS = [
+  { label: 'Geographic endowment', ids: ['biogeography', 'domesticable-species'] },
+  { label: 'Agricultural transition', ids: ['food-production', 'surplus'] },
+  { label: 'Social complexity', ids: ['specialization'] },
+];
 
 const CHAIN_STRENGTH_DESCRIPTIONS = {
-  'strong':           'Clear, well-evidenced causal contribution for this civilisation.',
+  'strong':           'Clear, well-evidenced causal contribution for this civilization.',
   'moderate':         'Present and meaningful — but not the primary driver.',
   'weak':             'Limited, indirect, or contested contribution.',
   'context-specific': 'Significant only under specific historical circumstances.',
   'absent':           'No evidence of this factor; the causal chain breaks here.',
 };
 
+// Slightly lightened "absent" tone — the raw chain color (#2a3550) reads as
+// near-invisible against the dark background, so cards/badges use this
+// instead while the legend keeps the true color.
+const DISPLAY_COLORS = { ...CHAIN_STRENGTH_COLORS, absent: '#6b7488' };
+
+function ChainCard({ link, strength, compact }) {
+  const color = DISPLAY_COLORS[strength] || DISPLAY_COLORS.absent;
+  const label = CHAIN_STRENGTH_LABELS[strength] || CHAIN_STRENGTH_LABELS.absent;
+  const absent = strength === 'absent';
+
+  return (
+    <div
+      className="w-full rounded-lg transition-colors duration-300"
+      style={{
+        border: `1px solid ${color}${absent ? '30' : '4d'}`,
+        borderStyle: absent ? 'dashed' : 'solid',
+        background: absent ? 'rgba(255,255,255,0.02)' : `${color}14`,
+        padding: compact ? '12px 16px' : '18px 22px',
+      }}
+    >
+      <div className="flex items-center justify-between gap-3 mb-1.5">
+        <h3 className={`serif font-medium leading-snug ${compact ? 'text-base' : 'text-lg'}`} style={{ color: absent ? color : '#f0e9d2' }}>
+          {link.label}
+        </h3>
+        <span
+          className="text-[9px] uppercase tracking-[0.15em] px-2 py-0.5 rounded-full flex-shrink-0"
+          style={{ color, border: `1px solid ${color}55` }}
+        >
+          {label}
+        </span>
+      </div>
+      <p className={`leading-relaxed ${compact ? 'text-xs' : 'text-sm'}`} style={{ color: absent ? '#5c5245' : '#b8a882' }}>
+        {link.description}
+      </p>
+      {absent && (
+        <p className="text-[11px] italic mt-2" style={{ color: '#5c5245' }}>
+          No evidence of this for this civilization — the chain breaks here.
+        </p>
+      )}
+    </div>
+  );
+}
+
+function Connector({ color }) {
+  return (
+    <div className="flex justify-center py-1.5" aria-hidden="true">
+      <div className="flex flex-col items-center">
+        <div style={{ width: 2, height: 20, background: color }} />
+        <div style={{ width: 0, height: 0, borderLeft: '4px solid transparent', borderRight: '4px solid transparent', borderTop: `5px solid ${color}` }} />
+      </div>
+    </div>
+  );
+}
+
+function Stem({ color }) {
+  return <div className="mx-auto" style={{ width: 2, height: 14, background: color }} aria-hidden="true" />;
+}
+
+function GroupLabel({ children }) {
+  return (
+    <div className="flex items-center gap-3 mt-1 mb-3">
+      <div className="flex-1 h-px bg-coal-700" />
+      <span className="text-[10px] uppercase tracking-[0.25em] flex-shrink-0" style={{ color: '#5c5245' }}>{children}</span>
+      <div className="flex-1 h-px bg-coal-700" />
+    </div>
+  );
+}
+
 export default function CausalChain({ data, selectedCivId, onSelectCiv }) {
-  const [hoveredId, setHoveredId] = useState(null);
-  const [hoveredStrength, setHoveredStrength] = useState(null);
-
-  useEffect(() => {
-    setHoveredId(null);
-  }, [selectedCivId]);
-
   const civ = data.civById[selectedCivId];
   const strength = civ?.chainStrength || {};
 
-  const linkById = useMemo(() => {
-    const map = {};
-    data.causalChain.links.forEach(l => { map[l.id] = l; });
-    return map;
-  }, [data.causalChain]);
+  const linkById = {};
+  data.causalChain.links.forEach(l => { linkById[l.id] = l; });
 
-  // Arrow color between two adjacent nodes in the chain
+  function linkStrength(id, fallback) {
+    return strength[id] || fallback || 'absent';
+  }
+
+  // The connector between two steps carries the weaker of the two colors —
+  // if either side is absent, the line itself goes dim and dashed-grey.
   function edgeColor(fromId, toId) {
-    const s1 = strength[fromId] || 'absent';
-    const s2 = strength[toId] || 'absent';
-    if (s1 === 'absent' || s2 === 'absent') return '#1e2840';
-    if (s1 === 'strong' && s2 === 'strong') return CHAIN_STRENGTH_COLORS.strong;
-    if (s1 === 'weak' || s2 === 'weak') return CHAIN_STRENGTH_COLORS.weak;
-    return CHAIN_STRENGTH_COLORS.moderate;
+    const s1 = linkStrength(fromId);
+    const s2 = linkStrength(toId);
+    if (s1 === 'absent' || s2 === 'absent') return DISPLAY_COLORS.absent;
+    if (s1 === 'weak' || s2 === 'weak') return DISPLAY_COLORS.weak;
+    if (s1 === 'strong' && s2 === 'strong') return DISPLAY_COLORS.strong;
+    return DISPLAY_COLORS.moderate;
   }
-
-  function edgeOpacity(fromId, toId) {
-    const s1 = strength[fromId] || 'absent';
-    const s2 = strength[toId] || 'absent';
-    if (s1 === 'absent' || s2 === 'absent') return 0.15;
-    return strengthOpacity(s1 === 'strong' && s2 === 'strong' ? 'strong' : s1 === 'weak' || s2 === 'weak' ? 'weak' : 'moderate') * 0.7;
-  }
-
-  const lastSpine = spineNodes[spineNodes.length - 1];
-  const hoveredDescription = hoveredId
-    ? (DESCRIPTIONS[hoveredId] || linkById[hoveredId]?.description || '')
-    : null;
-  const hoveredLabel = hoveredId ? (SHORT_LABELS[hoveredId] || '').replace('\n', ' ') : null;
 
   return (
-    <div className="flex flex-col h-full overflow-hidden">
-      {/* Top header */}
-      <div className="flex-shrink-0 px-5 py-4 border-b border-coal-700">
-        <h2 className="serif text-xl text-parchment-200 font-semibold">Diamond's Causal Chain</h2>
-        <p className="text-xs text-parchment-500 mt-0.5">
-          After <em>Guns, Germs, and Steel</em> (Diamond, 1997). Select a civilization; hover any node to read its role.
-        </p>
-        <p className="text-[10px] text-parchment-600 mt-1.5 leading-snug">
-          One influential framework — critiqued for environmental determinism and underweighting agency, institutions, and contingency. Strength ratings are heuristic, not measurements.
+    <div className="flex h-full overflow-hidden">
+      {/* Left rail — framing + civ picker + strength key */}
+      <div className="flex-shrink-0 w-52 border-r border-coal-700 overflow-y-auto py-5 px-3.5">
+        <h2 className="serif text-lg text-parchment-200 font-medium mb-1.5 px-1">Diamond's Causal Chain</h2>
+        <p className="text-[11px] leading-snug mb-4 px-1" style={{ color: '#8a7d65' }}>
+          After <em>Guns, Germs, and Steel</em> (1997) — one influential framework, critiqued for environmental determinism and underweighting agency. Ratings are heuristic, not measurements.
         </p>
 
-        {/* Connection-strength key — color + dash pattern so it's not color-only */}
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2.5">
-          {Object.entries(CHAIN_STRENGTH_COLORS).map(([s, c]) => (
-            <span
-              key={s}
-              className="flex items-center gap-1.5 cursor-default"
-              onMouseEnter={() => setHoveredStrength(s)}
-              onMouseLeave={() => setHoveredStrength(null)}
-            >
-              <svg width="18" height="8" aria-hidden="true" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
-                <line x1="1" y1="4" x2="17" y2="4"
-                  stroke={c} strokeWidth="2.5" strokeLinecap="round"
-                  strokeDasharray={s === 'absent' ? '3,3' : s === 'context-specific' ? '1,2' : 'none'}
-                />
-              </svg>
-              <span className="text-xs text-parchment-400">{CHAIN_STRENGTH_LABELS[s]}</span>
-            </span>
-          ))}
-        </div>
-        {/* Strength description tooltip row */}
-        <div className="min-h-4 mt-1.5">
-          {hoveredStrength && (
-            <p className="text-[10px] text-parchment-500 italic">
-              {CHAIN_STRENGTH_DESCRIPTIONS[hoveredStrength]}
-            </p>
-          )}
-        </div>
-      </div>
-
-      <div className="flex flex-1 overflow-hidden">
-        {/* Civ selector sidebar */}
-        <div className="flex-shrink-0 w-44 border-r border-coal-700 overflow-y-auto py-2">
+        <p className="text-[10px] uppercase tracking-widest px-1 mb-2" style={{ color: '#5c5245' }}>Civilization</p>
+        <div className="flex flex-col gap-0.5 mb-5">
           {data.civilizations.map(c => (
             <button
               key={c.id}
               onClick={() => onSelectCiv(c.id)}
-              className={`w-full text-left px-3 py-2 rounded-none transition-colors duration-100 flex items-center gap-2 ${
+              className={`w-full text-left px-2.5 py-1.5 rounded transition-colors duration-100 flex items-center gap-2 ${
                 c.id === selectedCivId
                   ? 'bg-coal-700 text-parchment-200'
                   : 'text-parchment-400 hover:bg-coal-800 hover:text-parchment-300'
@@ -313,130 +154,68 @@ export default function CausalChain({ data, selectedCivId, onSelectCiv }) {
           ))}
         </div>
 
-        {/* Tree visualization + description area */}
-        <div className="flex-1 overflow-auto flex flex-col items-center">
-          {civ ? (
-            <>
-              {/* Civ title */}
-              <div className="flex-shrink-0 pt-5 pb-2 text-center px-4">
-                <div className="flex items-center justify-center gap-2 mb-1">
-                  <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: civ.color }} />
-                  <span className="serif text-xl text-parchment-200 font-medium">{civ.name}</span>
-                </div>
-                <p className="text-xs text-parchment-500">{civ.region}</p>
-              </div>
-
-              {/* SVG tree */}
-              <div className="flex-shrink-0 overflow-x-auto w-full flex justify-center">
-                <svg width={VW} height={VH} style={{ display: 'block' }}>
-                  <defs>
-                    <filter id="nodeGlow2">
-                      <feGaussianBlur stdDeviation="5" result="b"/>
-                      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-                    </filter>
-                  </defs>
-
-                  {/* ── Category group headers ── */}
-                  {[
-                    { y: 18,  label: 'Geographic endowment' },
-                    { y: 136, label: 'Agricultural transition' },
-                    { y: 264, label: 'Social complexity' },
-                    { y: 337, label: 'Civilizational outcomes' },
-                  ].map(({ y, label }) => (
-                    <g key={label} transform={`translate(${CX}, ${y})`}>
-                      <line x1={-100} y1={0} x2={-(NODE_R + 12)} y2={0} stroke="#2a3550" strokeWidth={0.7} />
-                      <line x1={NODE_R + 12} y1={0} x2={100} y2={0} stroke="#2a3550" strokeWidth={0.7} />
-                      {/* Background rect so the trunk line doesn't bisect the text */}
-                      <rect x={-58} y={-8} width={116} height={13} fill="#0a0d12" />
-                      <text y={4} textAnchor="middle" fill="#4a5570" fontSize={8} letterSpacing={1.5}
-                        style={{ fontFamily: 'Inter, system-ui, sans-serif', textTransform: 'uppercase' }}>
-                        {label}
-                      </text>
-                    </g>
-                  ))}
-
-                  {/* ── Spine connectors ── */}
-                  {SPINE.slice(0, -1).map((id, i) => (
-                    <TrunkSegment
-                      key={id}
-                      y1={spineNodes[i].y}
-                      y2={spineNodes[i + 1].y}
-                      color={edgeColor(id, SPINE[i + 1])}
-                      opacity={edgeOpacity(id, SPINE[i + 1])}
-                    />
-                  ))}
-
-                  {/* ── Branch curves to leaves ── */}
-                  {leafNodes.map(leaf => {
-                    const color = edgeColor('specialization', leaf.id);
-                    const op = edgeOpacity('specialization', leaf.id);
-                    return (
-                      <path
-                        key={leaf.id}
-                        d={branchPath(lastSpine.x, lastSpine.y + NODE_H / 2, leaf.x, leaf.y - LEAF_H / 2)}
-                        fill="none"
-                        stroke={color}
-                        strokeWidth={op > 0.4 ? 1.5 : 1}
-                        strokeOpacity={op * 0.85}
-                        strokeLinecap="round"
-                      />
-                    );
-                  })}
-
-                  {/* ── Spine nodes ── */}
-                  {spineNodes.map(node => (
-                    <SpineNode
-                      key={node.id}
-                      node={node}
-                      strength={strength[node.id] || 'absent'}
-                      isHovered={hoveredId === node.id}
-                      onEnter={() => setHoveredId(node.id)}
-                      onLeave={() => setHoveredId(null)}
-                    />
-                  ))}
-
-                  {/* ── Leaf nodes ── */}
-                  {leafNodes.map(node => (
-                    <LeafNode
-                      key={node.id}
-                      node={node}
-                      strength={strength[node.id] || 'absent'}
-                      isHovered={hoveredId === node.id}
-                      onEnter={() => setHoveredId(node.id)}
-                      onLeave={() => setHoveredId(null)}
-                    />
-                  ))}
-
-                </svg>
-              </div>
-
-              {/* Hovered node description */}
-              <div className="flex-shrink-0 min-h-20 px-6 py-3 text-center max-w-lg">
-                {hoveredDescription ? (
-                  <div>
-                    <p className="serif text-base text-parchment-200 mb-1.5">{hoveredLabel}</p>
-                    <p className="text-xs text-parchment-400 leading-relaxed">{hoveredDescription}</p>
-                  </div>
-                ) : (
-                  <p className="text-xs text-parchment-500 mt-4">
-                    Hover a node to read its role in the chain
-                  </p>
-                )}
-              </div>
-
-              {/* Civ summary */}
-              <div className="flex-shrink-0 mx-6 mb-5 px-4 py-3 rounded border border-coal-600 max-w-lg w-full">
-                <p className="text-xs text-parchment-400 leading-relaxed">{civ.summary}</p>
-              </div>
-            </>
-          ) : (
-            <div className="flex-1 flex items-center justify-center text-parchment-500 text-sm">
-              Select a civilization to trace its causal chain
+        <p className="text-[10px] uppercase tracking-widest px-1 mb-2" style={{ color: '#5c5245' }}>Strength key</p>
+        <div className="flex flex-col gap-1.5 px-1">
+          {Object.entries(DISPLAY_COLORS).map(([s, c]) => (
+            <div key={s} className="flex items-center gap-2 cursor-default" title={CHAIN_STRENGTH_DESCRIPTIONS[s]}>
+              <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: c }} />
+              <span className="text-[11px] text-parchment-400">{CHAIN_STRENGTH_LABELS[s]}</span>
             </div>
-          )}
+          ))}
         </div>
       </div>
 
+      {/* Reading column */}
+      <div className="flex-1 overflow-y-auto bg-coal-900">
+        {civ ? (
+          <div className="max-w-2xl mx-auto px-6 sm:px-10 py-10">
+            <div className="flex items-center gap-2.5 mb-1">
+              <span className="w-3 h-3 rounded-full flex-shrink-0" style={{ background: civ.color }} />
+              <h1 className="serif text-3xl text-parchment-100 font-medium">{civ.name}</h1>
+            </div>
+            <p className="text-sm text-parchment-500 mb-6">{civ.region}</p>
+
+            <div className="mb-8">
+              <ImageSlot imageUrl={civ.imageUrl} title={civ.name} prompt={civ.imagePrompt} />
+            </div>
+
+            {civ.summary && (
+              <p className="serif text-base text-parchment-300 leading-relaxed mb-10">{civ.summary}</p>
+            )}
+
+            {GROUPS.map((group, gi) => (
+              <React.Fragment key={group.label}>
+                <GroupLabel>{group.label}</GroupLabel>
+                {group.ids.map((id, idx) => (
+                  <React.Fragment key={id}>
+                    <ChainCard link={linkById[id]} strength={linkStrength(id)} />
+                    {idx < group.ids.length - 1 && (
+                      <Connector color={edgeColor(id, group.ids[idx + 1])} />
+                    )}
+                  </React.Fragment>
+                ))}
+                {gi < GROUPS.length - 1 && (
+                  <Connector color={edgeColor(group.ids[group.ids.length - 1], GROUPS[gi + 1].ids[0])} />
+                )}
+              </React.Fragment>
+            ))}
+
+            <GroupLabel>Civilizational outcomes</GroupLabel>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {LEAVES.map(id => (
+                <div key={id}>
+                  <Stem color={edgeColor('specialization', id)} />
+                  <ChainCard link={linkById[id]} strength={linkStrength(id)} compact />
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="h-full flex items-center justify-center text-parchment-500 text-sm">
+            Select a civilization to trace its causal chain
+          </div>
+        )}
+      </div>
     </div>
   );
 }
