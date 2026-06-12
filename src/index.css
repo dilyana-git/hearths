@@ -153,6 +153,36 @@ svg path[style*="cursor: crosshair"]:hover {
   50% { opacity: 0.7; }
 }
 
+/* Causal-chain tree: limbs draw themselves root-to-tip on (re)growth */
+@keyframes treeGrow {
+  to { stroke-dashoffset: 0; }
+}
+
+.tree-grow {
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+  animation: treeGrow 0.7s cubic-bezier(0.33, 1, 0.5, 1) forwards;
+}
+
+@keyframes leafIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.leaf-in {
+  opacity: 0;
+  animation: leafIn 0.8s ease-out forwards;
+}
+
+@keyframes foliageSway {
+  0%, 100% { transform: rotate(-1.4deg); }
+  50%      { transform: rotate(1.4deg); }
+}
+
+.foliage-sway {
+  animation: foliageSway 7s ease-in-out infinite;
+}
+
 /* Panel slide-in */
 @keyframes slideIn {
   from { transform: translateX(100%); opacity: 0; }
