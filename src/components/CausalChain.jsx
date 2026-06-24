@@ -234,7 +234,7 @@ function TreeNode({ id, label, strength, selected, hovered, onClick, onHover, la
 
 // ── Root component ───────────────────────────────────────────────────────────
 
-export default function CausalChain({ data, selectedCivId, onSelectCiv }) {
+export default function CausalChain({ data, selectedCivId, onSelectCiv, onNavigate, onNavigateToMap }) {
   const [selectedId, setSelectedId] = useState(null);
   const [hoveredId, setHoveredId] = useState(null);
 
@@ -432,6 +432,27 @@ export default function CausalChain({ data, selectedCivId, onSelectCiv }) {
           <div key={civ.id} className="era-caption-in">
             <ImageSlot imageUrl={civ.imageUrl} title={civ.name} prompt={civ.imagePrompt} />
             <p className="serif text-sm text-parchment-300 leading-relaxed mt-5">{civ.summary}</p>
+            <div className="flex flex-wrap gap-3 mt-5">
+              {onNavigate && (
+                <button
+                  onClick={() => onNavigate({ type: 'civ', item: civ })}
+                  className="inline-flex items-center gap-1 text-[11px] text-teal-500 hover:text-teal-300 transition-colors"
+                >
+                  Read full profile →
+                </button>
+              )}
+              {onNavigateToMap && (
+                <button
+                  onClick={() => onNavigateToMap(civ.id)}
+                  className="inline-flex items-center gap-1 text-[11px] text-teal-500 hover:text-teal-300 transition-colors"
+                >
+                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="8" cy="7" r="3"/><path d="M8 14s5-4.5 5-7a5 5 0 1 0-10 0c0 2.5 5 7 5 7z"/>
+                  </svg>
+                  See on map
+                </button>
+              )}
+            </div>
             <p className="text-[11px] italic leading-snug mt-6" style={{ color: '#5c5245' }}>
               Click any root, trunk ring, or branch of the tree to read that link in Diamond's chain.
             </p>

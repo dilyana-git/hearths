@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import MapCanvas from './MapCanvas';
-import DetailOverlay from './DetailOverlay';
 import { ERA_PALETTES, DEFAULT_PALETTE, TYPE_META, formatYear } from '../utils/constants';
 
 const TIME_START = -13000;
@@ -338,15 +337,27 @@ function TourOverlay({ tour, onBeat, onClose }) {
   );
 }
 
-export default function AtlasView({ data, activeTour, onCloseTour, onTourBeat }) {
-  const [selectedYear, setSelectedYear] = useState(-2500);
+export default function AtlasView({ data, activeTour, onCloseTour, onTourBeat, overlay, onOverlayChange, mapTarget, selectedYear: parentYear, onSelectedYearChange }) {
+  const setOverlay = onOverlayChange;
+  const [selectedYear, _setSelectedYear] = useState(parentYear ?? -2500);
+  const setSelectedYear = useCallback((v) => {
+    _setSelectedYear(v);
+    if (typeof v === 'function') onSelectedYearChange?.(prev => { const n = v(prev); return n; });
+    else onSelectedYearChange?.(v);
+  }, [onSelectedYearChange]);
   const [playing, setPlaying] = useState(false);
   const [speed, setSpeed] = useState('normal');
 
   const [selectedCivId, setSelectedCivId] = useState(null);
   const [selectedConnectionId, setSelectedConnectionId] = useState(null);
   const [selectedMilestoneId, setSelectedMilestoneId] = useState(null);
-  const [overlay, setOverlay] = useState(null); // { type, item } — full reading page
+
+  // Respond to cross-view navigation targets (e.g., "See on map" from Causal Chain)
+  useEffect(() => {
+    if (!mapTarget) return;
+    if (mapTarget.civId) setSelectedCivId(mapTarget.civId);
+    if (mapTarget.year != null) handleJump(mapTarget.year);
+  }, [mapTarget]);
 
   // Animation loop
   const rafRef = useRef(null);
@@ -529,14 +540,6 @@ export default function AtlasView({ data, activeTour, onCloseTour, onTourBeat })
           />
         </div>
       </div>
-
-      <DetailOverlay
-        overlay={overlay}
-        data={data}
-        selectedYear={selectedYear}
-        onClose={() => setOverlay(null)}
-        onNavigate={setOverlay}
-      />
 
       <AtlasScrubber
         year={selectedYear}

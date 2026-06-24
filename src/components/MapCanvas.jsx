@@ -67,9 +67,11 @@ function MapTooltip({ popup, data, selectedYear, onClose, onExpand }) {
         const m = popup.item;
         const meta = TYPE_META[m.type] || {};
         const civ  = data.civById[m.civilizationId];
+        const tierKey = meta.tier || 'filled';
+        const tierInfo = { ring: 'Foundational step', filled: 'Emerging complexity', double: 'Peak complexity' }[tierKey];
         return (
           <div style={{ padding: '10px 28px 13px 13px' }}>
-            <div style={{ display: 'flex', gap: 5, alignItems: 'center', marginBottom: 4 }}>
+            <div style={{ display: 'flex', gap: 5, alignItems: 'center', flexWrap: 'wrap', marginBottom: 4 }}>
               <span style={{
                 fontSize: 8.5, textTransform: 'uppercase', letterSpacing: '0.08em',
                 color: meta.color || '#8a7d65',
@@ -77,6 +79,7 @@ function MapTooltip({ popup, data, selectedYear, onClose, onExpand }) {
                 border: `1px solid ${(meta.color || '#8a7d65')}44`,
                 padding: '1px 5px', borderRadius: 3,
               }}>{meta.label || m.type}</span>
+              <span style={{ fontSize: 8, color: '#5a5248', fontStyle: 'italic' }}>{tierInfo}</span>
               {m.contested && <span style={{ fontSize: 8, color: '#c4a840' }}>contested</span>}
             </div>
             <p style={TITLE_STYLE}>{m.title}</p>
@@ -116,6 +119,11 @@ function MapTooltip({ popup, data, selectedYear, onClose, onExpand }) {
                 {conn.toDate ? formatYear(conn.toDate) : 'ongoing'}
               </p>
             )}
+            {tech.description && (
+              <p style={{ fontSize: 9, color: '#5a5248', fontStyle: 'italic', margin: '4px 0 0' }}>
+                {tech.description}
+              </p>
+            )}
             {conn.narrative && (
               <p style={{ ...BODY_STYLE, ...DIVIDER }}>
                 {conn.narrative.length > 180
@@ -141,6 +149,11 @@ function MapTooltip({ popup, data, selectedYear, onClose, onExpand }) {
             </div>
             <p style={{ ...TITLE_STYLE, fontSize: 15 }}>{h.name}</p>
             {h.region && <p style={META_STYLE}>{h.region}</p>}
+            {stageMeta.caption && (
+              <p style={{ fontSize: 9, color: '#5a5248', fontStyle: 'italic', margin: '3px 0 0' }}>
+                {stageMeta.caption}
+              </p>
+            )}
             {h.summary && (
               <p style={{ ...BODY_STYLE, ...DIVIDER }}>
                 {h.summary.length > 180 ? h.summary.slice(0, 180) + '…' : h.summary}

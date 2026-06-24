@@ -23,6 +23,20 @@ function Badge({ color, children }) {
   );
 }
 
+function MapLink({ onClick, children }) {
+  return (
+    <button
+      onClick={onClick}
+      className="inline-flex items-center gap-1 text-[11px] text-teal-500 hover:text-teal-300 transition-colors mt-3"
+    >
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="8" cy="7" r="3"/><path d="M8 14s5-4.5 5-7a5 5 0 1 0-10 0c0 2.5 5 7 5 7z"/>
+      </svg>
+      {children || 'See on map'}
+    </button>
+  );
+}
+
 // ── Era reading page ─────────────────────────────────────────────────────────
 
 function EraContent({ era }) {
@@ -51,7 +65,7 @@ function EraContent({ era }) {
 
 // ── Civilization reading page ────────────────────────────────────────────────
 
-function CivContent({ civ, data, selectedYear, onNavigate }) {
+function CivContent({ civ, data, selectedYear, onNavigate, onNavigateToMap }) {
   const stage = getCurrentStage(civ, selectedYear);
   const achieved = useMemo(
     () => (data.milestonesByCiv[civ.id] || []).filter(m => m.date <= selectedYear),
@@ -72,6 +86,12 @@ function CivContent({ civ, data, selectedYear, onNavigate }) {
         {civ.name}
       </h1>
       {civ.region && <p className="text-sm text-parchment-500 mt-1">{civ.region}</p>}
+
+      {onNavigateToMap && (
+        <MapLink onClick={() => onNavigateToMap(civ.id)}>
+          See {civ.name} on map
+        </MapLink>
+      )}
 
       <div className="mt-8">
         <ImageSlot imageUrl={civ.imageUrl} title={civ.name} prompt={civ.imagePrompt} />
@@ -123,7 +143,7 @@ function CivContent({ civ, data, selectedYear, onNavigate }) {
 
 // ── Connection reading page ──────────────────────────────────────────────────
 
-function ConnectionContent({ conn, data }) {
+function ConnectionContent({ conn, data, onNavigate }) {
   const tech = TECH_FAMILIES[conn.enablingTech];
   const fromCiv = data.civById[conn.fromId];
   const title = conn.innovation || conn.flows?.[0] || conn.id;
@@ -140,7 +160,16 @@ function ConnectionContent({ conn, data }) {
         {title}
       </h1>
       <p className="text-sm text-parchment-500 mt-2">
-        {fromLabel} → {toLabel}
+        {fromCiv && onNavigate ? (
+          <button
+            onClick={() => onNavigate({ type: 'civ', item: fromCiv })}
+            className="underline decoration-dotted underline-offset-2 hover:text-parchment-300 transition-colors"
+          >
+            {fromLabel}
+          </button>
+        ) : fromLabel}
+        {' → '}
+        {toLabel}
         {(conn.fromDate || conn.toDate) && (
           <span className="text-parchment-600">
             {' · '}{conn.fromDate ? formatYear(conn.fromDate) : '?'} – {conn.toDate ? formatYear(conn.toDate) : 'ongoing'}
@@ -184,7 +213,7 @@ function ConnectionContent({ conn, data }) {
 
 // ── Milestone reading page ───────────────────────────────────────────────────
 
-function MilestoneContent({ milestone, data, onNavigate }) {
+function MilestoneContent({ milestone, data, onNavigate, onNavigateToMap }) {
   const civ = data.civById[milestone.civilizationId];
   const meta = TYPE_META[milestone.type] || {};
 
@@ -212,6 +241,12 @@ function MilestoneContent({ milestone, data, onNavigate }) {
         )}
       </p>
 
+      {onNavigateToMap && civ && (
+        <MapLink onClick={() => onNavigateToMap(civ.id, milestone.date)}>
+          See on map at {formatYear(milestone.date)}
+        </MapLink>
+      )}
+
       {milestone.imageUrl && (
         <div className="mt-8">
           <ImageSlot imageUrl={milestone.imageUrl} title={milestone.title} />
@@ -236,7 +271,7 @@ function MilestoneContent({ milestone, data, onNavigate }) {
 
 // ── Root ─────────────────────────────────────────────────────────────────────
 
-export default function DetailOverlay({ overlay, data, selectedYear, onClose, onNavigate }) {
+export default function DetailOverlay({ overlay, data, selectedYear, onClose, onNavigate, onNavigateToMap }) {
   useEffect(() => {
     if (!overlay) return;
     const onKey = e => { if (e.key === 'Escape') onClose(); };
@@ -266,9 +301,9 @@ export default function DetailOverlay({ overlay, data, selectedYear, onClose, on
           </button>
 
           {type === 'era' && <EraContent era={item} />}
-          {type === 'civ' && <CivContent civ={item} data={data} selectedYear={selectedYear} onNavigate={onNavigate} />}
-          {type === 'connection' && <ConnectionContent conn={item} data={data} />}
-          {type === 'milestone' && <MilestoneContent milestone={item} data={data} onNavigate={onNavigate} />}
+          {type === 'civ' && <CivContent civ={item} data={data} selectedYear={selectedYear} onNavigate={onNavigate} onNavigateToMap={onNavigateToMap} />}
+          {type === 'connection' && <ConnectionContent conn={item} data={data} onNavigate={onNavigate} />}
+          {type === 'milestone' && <MilestoneContent milestone={item} data={data} onNavigate={onNavigate} onNavigateToMap={onNavigateToMap} />}
 
           <div className="mt-12 pb-8">
             <button

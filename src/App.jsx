@@ -6,6 +6,7 @@ import AtlasView from './components/AtlasView';
 import ThreadsView from './components/ThreadsView';
 import StoriesView from './components/StoriesView';
 import LabView from './components/LabView';
+import DetailOverlay from './components/DetailOverlay';
 import MilestonePanel from './components/MilestonePanel';
 import TypeLegend from './components/TypeLegend';
 import OnboardingModal from './components/OnboardingModal';
@@ -30,6 +31,13 @@ export default function App() {
   const [showOnboarding, setShowOnboarding] = useState(
     () => !localStorage.getItem('hearths-onboarded')
   );
+
+  // Global overlay — DetailOverlay is rendered at App level so any view can open it
+  const [overlay, setOverlay] = useState(null);
+  const [atlasSelectedYear, setAtlasSelectedYear] = useState(-2500);
+
+  // Navigation target for the Atlas — when set, AtlasView glides to this civ/year
+  const [mapTarget, setMapTarget] = useState(null);
 
   const handleSelectMilestone = useCallback((milestone) => {
     setSelectedMilestone(prev => prev?.id === milestone?.id ? null : milestone);
@@ -59,6 +67,18 @@ export default function App() {
   const handleCloseOnboarding = useCallback(() => {
     localStorage.setItem('hearths-onboarded', '1');
     setShowOnboarding(false);
+  }, []);
+
+  // Navigate to the Atlas with a specific civ highlighted and year set
+  const handleNavigateToMap = useCallback((civId, year) => {
+    setOverlay(null);
+    setActiveView('atlas');
+    setMapTarget({ civId, year, ts: Date.now() });
+  }, []);
+
+  // Navigate: open a reading page from any view
+  const handleNavigate = useCallback((target) => {
+    setOverlay(target);
   }, []);
 
   useEffect(() => {
@@ -94,6 +114,11 @@ export default function App() {
               activeTour={activeTour}
               onCloseTour={handleCloseTour}
               onTourBeat={handleTourBeat}
+              overlay={overlay}
+              onOverlayChange={setOverlay}
+              mapTarget={mapTarget}
+              selectedYear={atlasSelectedYear}
+              onSelectedYearChange={setAtlasSelectedYear}
             />
           )}
           {activeView === 'stories' && (
@@ -102,6 +127,8 @@ export default function App() {
               chainCivId={chainCivId}
               onChainCivChange={setChainCivId}
               onOpenTour={handleOpenTour}
+              onNavigate={handleNavigate}
+              onNavigateToMap={handleNavigateToMap}
             />
           )}
           {activeView === 'lab' && (
@@ -134,6 +161,16 @@ export default function App() {
           </div>
         )}
       </main>
+
+      {/* Global detail overlay — available from any view */}
+      <DetailOverlay
+        overlay={overlay}
+        data={data}
+        selectedYear={atlasSelectedYear}
+        onClose={() => setOverlay(null)}
+        onNavigate={handleNavigate}
+        onNavigateToMap={handleNavigateToMap}
+      />
 
       {/* Legend overlay */}
       {showLegend && (

@@ -86,7 +86,7 @@ function StoryCard({ story, onOpen }) {
   );
 }
 
-export default function StoriesView({ data, chainCivId, onChainCivChange, onOpenTour }) {
+export default function StoriesView({ data, chainCivId, onChainCivChange, onOpenTour, onNavigate, onNavigateToMap }) {
   const [activeStory, setActiveStory] = useState(null);
 
   function handleOpen(storyId) {
@@ -136,6 +136,8 @@ export default function StoriesView({ data, chainCivId, onChainCivChange, onOpen
             data={data}
             selectedCivId={chainCivId}
             onSelectCiv={onChainCivChange}
+            onNavigate={onNavigate}
+            onNavigateToMap={onNavigateToMap}
           />
         </div>
       </div>

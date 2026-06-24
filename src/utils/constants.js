@@ -105,9 +105,9 @@ export const ERA_PALETTES = {
 export const DEFAULT_PALETTE = { accent: '#b8960c', oceanIn: '#0d1620', oceanOut: '#080c12', land: '#151e2d', landStroke: '#253045' };
 
 export const STAGE_META = {
-  'foraging':              { label: 'Foraging',              color: '#1a2840', glowOpacity: 0 },
-  'incipient-cultivation': { label: 'Incipient Cultivation', color: '#1e3530', glowOpacity: 0.06 },
-  'established-farming':   { label: 'Established Farming',   color: '#2a4830', glowOpacity: 0.12 },
-  'towns-chiefdoms':       { label: 'Towns / Chiefdoms',     color: '#4a4020', glowOpacity: 0.20 },
-  'cities-states':         { label: 'Cities / States',       color: '#8a5a18', glowOpacity: 0.30 },
+  'foraging':              { label: 'Foraging',              color: '#1a2840', glowOpacity: 0,    caption: 'Mobile bands subsisting on wild plants and game' },
+  'incipient-cultivation': { label: 'Incipient Cultivation', color: '#1e3530', glowOpacity: 0.06, caption: 'Early experiments with planting and tending wild species' },
+  'established-farming':   { label: 'Established Farming',   color: '#2a4830', glowOpacity: 0.12, caption: 'Settled communities dependent on domesticated crops' },
+  'towns-chiefdoms':       { label: 'Towns / Chiefdoms',     color: '#4a4020', glowOpacity: 0.20, caption: 'Surplus-driven hierarchy and monumental building' },
+  'cities-states':         { label: 'Cities / States',       color: '#8a5a18', glowOpacity: 0.30, caption: 'Urban centres with writing, taxation, and standing armies' },
 };
